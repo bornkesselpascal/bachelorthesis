@@ -1,0 +1,123 @@
+\documentclass[
+	a4paper, 		%Seitengröße
+	11pt,			%Schriftgröße
+	DIV=13,			% Satzspiel
+%	parskip=none, 	%Maybe unused....
+	oneside,
+	%twoside,
+	cleardoublepage=empty,
+	%BCOR=5mm,		%Bindekorrektur
+	%openright,		%Chapter fangen immer rechts an
+	%draft,
+	listof=totoc,		%Tabellen- und Abbildungsverzeichnis im Inhaltsverzeichnis
+	%bibliography=totoc,		%Literaturverzeichnis im Inhaltsverzeichnis UNUSED
+	toc=flat,
+	]{scrreprt}
+
+
+
+%Zeilenabstand Faktor 1.63 (Bei 11pt mit Abstand 18pt)
+\usepackage{setspace}
+
+%Package um PDF Files zu includieren
+\usepackage{pdfpages}
+
+%Erzeugung von Tabellen mit über mehrere Seiten
+\usepackage{longtable}
+
+%Absatzabstand
+%\usepackage[skip=6pt plus1pt, indent=0pt]{parskip}
+
+%Automatische Verlinkung im Dokument einfügen
+\usepackage[
+	hidelinks,
+	%citecolor=black,
+]{hyperref}
+
+%Vorbereitung Mathesymbole
+\usepackage{amsmath, amssymb}
+
+%Bildereinbindung
+\usepackage{graphicx}
+\graphicspath{{bilder/}}
+\usepackage{color}
+
+\usepackage{import}
+
+%Tabellen-Pakete
+\usepackage{booktabs}
+
+%Literaturverzeichnis
+\usepackage{csquotes} %Anführungszeichen
+
+%Erstellung der Kopf- und Fußzeile
+\usepackage[
+	headsepline, %Trennline
+	automark,	
+]{scrlayer-scrpage}
+\pagestyle{scrheadings}
+
+
+%\usepackage{blindtext}
+
+% Angaben im Dokument
+\title{Projektdokumentation Flugdrohnenprojekt \\
+Team Blau}
+\author{\textbf{Projektteam:} Alissa Kosin, Christian Schmidt, Daniel Schien, Daniel Stotz,\\ Jan Fischer, Johannes Walz, Kai Wilkowski, Pascal Bornkessel, Tim Gumbold}
+\date{Projektdokumentation Flugdrohnenprojekt\\ Studiengang LT \& FFI }
+	\publishers{
+	\begin{tabular}{rl}
+		\textbf{Dozent}	 		& Prof. Dr. A. Soika \\
+		\textbf{Dozent} 		& Prof. Dr. L. König \\
+		\textbf{Dozent} 		& Prof. Dr. U. Burger \\
+		\textbf{Dozent} 		& Prof. Dr. G. Elsbacher \\
+		\textbf{Dozent} 		& E. Obermeier \\
+		\textbf{Dozent} 		& Prof. Dr. H. Göllinger \\
+		\textbf{Abgabedatum}	& 25.06.2023\\
+		
+	\end{tabular}	
+}
+
+\begin{document}
+	\titlehead{
+		\centering
+		\hfil
+		\includegraphics[width=\linewidth]{thi_logo_wb_S}
+		\hfil
+		
+}
+	\maketitle
+	
+	\tableofcontents
+	
+	%Aenderung des Zeilenabstands auf ca. 18pt
+	\setstretch{1.6}
+	
+	\include{kapitel/Einfuehrung}
+	
+	
+	\include{kapitel/Studiengruppe}
+		
+	\include{kapitel/Projektorganisation}
+	
+	\include{kapitel/Morphologischer_Kasten}
+	
+	\include{kapitel/Entwurf}
+	
+	\include{kapitel/Berechnung}
+	
+	\include{kapitel/Softwareentwicklung}
+	
+	\include{kapitel/Kostenplanung}
+	
+	\include{kapitel/Ausarbeitung}
+	
+	\include{kapitel/Test_Bench}
+	
+	\include{kapitel/Auswerung}
+
+	\listoffigures
+	
+	\listoftables
+	
+\end{document}
