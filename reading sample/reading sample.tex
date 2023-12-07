@@ -1,4 +1,14 @@
-\documentclass[11pt]{article}
+\documentclass[	a4paper,
+				11pt,
+				DIV=11,
+				bigheadings,
+				idxtotoc,
+				listof=totoc,	
+				bibtotoc,		
+				halfparskip,
+				cleardoubleempty,
+				oneside,
+				openright]{scrartcl}
 \usepackage{graphicx}
 \usepackage{titlesec}
 \setcounter{secnumdepth}{4}
@@ -26,7 +36,8 @@
 		\huge\textbf{Reading Sample}\\[2.5em]
 		\normalsize
 		
-		Reading sample of the bachelor thesis with the topic
+		
+		of the bachelor thesis with the topic
 		
 		"Analysis of an Ethernet-Based Implementation for a Distributed Test Support System"
 \end{center}
@@ -238,7 +249,7 @@ A test duration of 10 minutes was selected. Datagrams of 80, 8900, and 65000 byt
 
 Figure \ref{fig:fig6} shows the average CPU utilization during this test campaign and compares it with the execution of the realistic load scenario without the execution of tests with TestSuite.
 
-The realistic scenario utilizes 18.6\% of the system. The most of the CPU time is spent in user space (17.6\%) and 1\% of CPU time is spent in kernel space. The average CPU load during the execution of the test campaign is between 72\% and 78\% for all 3 datagram sizes. No overload situation due to the additional system load can be identified. The transmission data transfer rate at the center is also comparable to the transfer rate without additional load (Figure \ref{fig:load1}).
+The realistic scenario utilizes 18.6\% of the system. The most of the CPU time is spent in user space (17.6\%) and 1\% of CPU time is spent in kernel space. The average CPU load during the execution of the test campaign is between 72\% and 78\% for all 3 datagram sizes. No overload situation due to the additional system load can be identified. The transmission data transfer rate at the center is also comparable to the transfer rate without additional load (Figure \ref{fig:su3}).
 
 \begin{figure}[h]
 	\includegraphics[width=\textwidth]{fig7.png}
