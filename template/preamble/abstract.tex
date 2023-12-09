@@ -1,0 +1,38 @@
+% needed hear to properly insert blank pages for double page layout
+\cleardoublepage
+
+% use two mini pages for abstract
+\begin{minipage}[0.95\textheight]{0.95\textwidth}
+    \large
+    \textbf{Kurzfassung}\par
+    \vspace{\baselineskip}
+    \small
+    \input{preamble/abstract_ger}
+
+    
+    \vspace{\baselineskip}
+    \normalsize
+    \textbf{Schlüsselwörter}\par
+    \vspace{0.5\baselineskip}
+    \small    
+    \input{preamble/keywords_ger}
+\end{minipage}
+
+%\vspace{1cm}
+\newpage
+
+\begin{minipage}[0.95\textheight]{0.95\textwidth}
+    \large
+    \textbf{Abstract}\par
+    \vspace{\baselineskip}
+    \small
+    \input{preamble/abstract_eng}
+
+
+    \vspace{\baselineskip}
+    \normalsize
+    \textbf{Keywords}\par
+    \vspace{0.5\baselineskip}
+    \small
+    \input{preamble/keywords_eng}
+\end{minipage}

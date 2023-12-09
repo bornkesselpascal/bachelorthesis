@@ -1,0 +1,35 @@
+
+
+\section{LaTeX Eigenarten}
+Hier noch ein paar latexspezifische Dinge beim Schreiben.
+
+\paragraph{Non-Breaking Space.}
+Mit dem Tildezeichen $\sim{}$ bekommt man ein sog. non-breaking Space~(nbsp). Das ist hilfreich, wenn man verhindern möchte, dass z.B. die Zeile mit einer Referenz beginnt (Beispiel: Listing~\ref{lst:example_listing} -- Hier wird Listing niemals von der Zahl getrennt werden).
+Das nbsp wird auch verwendet, um den Abstand nach einem Punkt in einer Abkürzung (1 Einheit) nicht auf die Länge des Abstandes nach dem Satzende zu setzen (1,5 Einheiten). Das fällt nicht immer jedem auf, wenn man es aber einmal sieht, kann man es schwer wieder abschalten.\\
+Beispiel: Dies ist eine Abk.~in einem Satz. (korrekt) Die Leertaste wird hier immer gleich lang gehalten.\\
+Beispiel: Dies ist eine Abk. in einem Satz. (falsch) Die Leertaste kann (!) hier vom Setzer verlängert werden, um die Satztrennung deutlicher zu machen.\\
+
+\paragraph{Binde- und Gedankenstriche.}
+ Es gibt drei Stricharten in Latex. Diese haben unterschiedliche Bedeutungen.
+ Der Bindestrich~-~(engl. hyphen) ist ein einfaches Minus und wird verwendet, um Trennung von Silben anzuzeigen oder Mehrsprachige Komposita zu ermöglichen (z.B. Dashboard-Anzeige). Siehe auch \url{https://www.duden.de/sprachwissen/rechtschreibregeln/bindestrich}.
+ 
+ Der deutsche Gedankenstrich (engl. en-dash) -- der selten (!) bei Einschüben verwendet wird -- sind zwei Minuszeichen und wird mit Leerzeichen (oder nbsp) abgesetzt. Siehe auch \url{https://www.duden.de/sprachwissen/rechtschreibregeln/gedankenstrich}.
+ Im Englischen wird der en-dash u.a. dazu benutzt, Zahlenbereiche zu beschreiben: z.B.~pages 4--9.
+
+ Der englische Gedankenstrich --- (engl. em-dash) sind drei Minuszeichen und wird im Englischen für Einschübe benutzt und wird \textbf{nicht} mit Leertasten abgesetzt. Beispiel:
+ People---at least most of them---are suprised at how the em-dash is used properly. Im Deutschen kommt dieser Gedankenstrich nicht vor. 
+ Verwendung im Englischen siehe auch: \url{https://www.merriam-webster.com/words-at-play/em-dash-en-dash-how-to-use}
+
+\paragraph{Anführungszeichen.}
+Wichtig: Anführungszeichen im Deutschen sind anders als im Englischen und Französischen. 
+
+Deutsche Anführungszeichen -- nach innen gewölbte doppelte Tief- und Hochkommata~-- werden mit Anführungszeichen und Backtick ("{}\`{}) geöffnet und mit Anführungszeichen und Apostroph ("{}'{}) geschlossen.
+Beispiel: 
+"`Latex sollte bei korrekt eingestellter Dokumentsprache aber die korrekten Anführungszeichen wählen."' sagte er leichtsinnig und irrte sich.
+
+\url{https://www.duden.de/sprachwissen/rechtschreibregeln/anfuehrungszeichen}
+
+Englische Anführungszeichen -- nach außen gewölbte doppelte Hochkommata -- werden mit doppeltem Backtick geöffnet (\`{}\`{}) und mit doppeltem Apostroph ('{}'{}) geschlossen. Beispiel:
+``This is a correct direct citation in British English''. Der Punkt steht im englischen Zitat ausserhalb der Anführungszeichen (nicht im American English).
+
+Mit dem Command \textbackslash flqq erhält man das einleitende französische Anführungszeichen~(\flqq). Mit \textbackslash frqq{} bekommt man das Gegenstück (\frqq).
