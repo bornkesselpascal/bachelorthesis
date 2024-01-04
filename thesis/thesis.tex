@@ -48,13 +48,21 @@
 \usetikzlibrary{shapes.geometric, arrows}
 \tikzset{font={\fontsize{10pt}{12}\selectfont}}
 
+\setcounter{tocdepth}{5}
+\setcounter{secnumdepth}{5}
+\RedeclareSectionCommand[runin=false,afterskip=0pt,afterindent=false]{paragraph}
+
 %%% additions by ACV
+\usepackage{hyperref}
+\usepackage{url}
 % Citations using APA style with biblatex
-\usepackage[style=apa,backend=biber,backref=true,maxbibnames=20]{biblatex}
+%\usepackage[style=apa,backend=biber,backref=true,maxbibnames=20]{biblatex}
 % Biblatex allows multiple bib-files
-\addbibresource{bibliography/references.bib}
-\addbibresource{bibliography/websources.bib}
-\addbibresource{bibliography/normen.bib}
+%\addbibresource{bibliography/references.bib}
+%\addbibresource{bibliography/websources.bib}
+%\addbibresource{bibliography/normen.bib}
+%\bibliographystyle{plain} % We choose the "plain" reference style
+
 
 % Tables using APA Style
 \usepackage{booktabs}
@@ -148,10 +156,10 @@
     \include{chapters/99_tutorial}		% Tutorial
 
 ´
-
-    \printbibliography[nottype=online,notkeyword=norm]
-    \printbibliography[type=online,heading=subbibliography, title={Online-Quellen}]
-    \printbibliography[keyword=norm,heading=subbibliography, title={Normen}]
+	
+	
+	\bibliography{bibliography/references.bib}
+	\bibliographystyle{plainurl}
     
     
     \begin{appendix}
