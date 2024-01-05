@@ -6,7 +6,7 @@
 % TODO
 
 
-\section{TCP/IP Reference Model}
+\section{TCP/IP Reference Model} \label{chap:RefModel}
 
 Protocols are the basis for communication between instances in a network. They specify rules that must be followed by all communication partners \cite{Tanenbaum2010}. Reference models arrange protocols hierarchically in layers. Each layer solves a specific part of the communication task and uses the services of the layer below while providing certain services to the layer above \cite{Weigel2021}.
 
@@ -54,7 +54,7 @@ The following section presents a explanation of the TCP/IP reference model. Thro
 
 
 
-\subsection{Protocols of the Reference Model}
+\subsection{Protocols of the Reference Model} \label{chap:ProtosRefModel}
 
 \begin{figure}[h]
     \centering
@@ -224,40 +224,340 @@ Compared to TCP, UDP can achieve higher data transmission speeds due to its lowe
 
 
 
-\section{Linux-Kernel}
-% TODO
+
+
+
+
+
+\section{Linux Kernel}
+
+The Linux kernel is an operating system kernel that is available under a free software license and has been under development since 1991 \cite{like01}. The Linux kernel is the main component of a Linux operating system and is used by a large number of operating systems, called distributions. Popular examples of such distributions are Ubuntu or Linux Mint, which are used in this thesis.
+
+This chapter will take a closer look at the Linux kernel. However, due to the scope of the Linux kernel, readers are referred to \cite{like02}, \cite{like03} and \cite{like08}, which provide a detailed and comprehensible insight into the Linux kernel. Additionally, a basic knowledge of operating systems is required, which can be obtained from \cite{like05}.
+
+An operating system kernel serves as the interface between the hardware and the processes of a computer system \cite{like04}. It manages hardware resources, schedules processes, and facilitates communication between application software and hardware \cite{like06}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\linewidth]{figures/linux_kernel/image01.png}
+    \caption[Simplified representation of the Linux Kernel with selected Subsystems]{Simplified representation of the Linux Kernel with selected Subsystems.}
+    \label{fig:LinuxKernel}
+\end{figure}
+
+Figure \ref{fig:LinuxKernel} presents a condensed overview of the architecture of a Linux operating system. The illustration highlights some selected features of the kernel.
+
+Linux consists of a monolithic kernel. This means that the entire kernel is implemented as a single program, and all kernel services run in a single address space. Communication within the kernel is achieved through function calls \cite{like02}.
+
+This is in contrast to the microkernel, which divides functionalities into separate modules and uses message passing for communication between them. Although the Linux kernel is based on a monolithic approach, it adopts some aspects of a microkernel, such as a modular architecture with different subsystems or the ability to load modules dynamically. However, communication within the kernel occurs through function calls, which provides better performance compared to message passing \cite{like08}.
+
+In the following, the characteristics of the Linux kernel and its environment shown in Figure \ref{fig:LinuxKernel} are described.
+
+
+\subsection{User Mode and Kernel Mode}
+
+The Linux architecture distinguishes between two basic execution environments: user mode and kernel mode. Application processes run in user mode with restricted rights, while the Linux kernel, which is the main part of the operating system, runs in kernel mode \cite{like02}.
+
+This separation requires corresponding support in the processor. This system monitors aspects such as memory access, branches, or the executed instruction set in user mode and intervenes in the event of unauthorized access, for example, by stopping the process \cite{like06}. The transition between the different execution environments occurs as part of a system call.
+
+
+\subsection{System Call Interface}
+
+Processes that request a service from the Linux kernel use system calls. These calls are made through a software interrupt (trap), which causes the CPU to switch to kernel mode and call the so-called system call handler. In the handler, the requested service is identified using an ID transmitted by the user process, and the corresponding instructions are invoked \cite{like02}. A process or application executes a system call in kernel space. This is also referred to as the kernel running in the context of the process.
+
+In the monolithic kernel, individual instructions call other instructions of the kernel.  This sequence of instructions, executed during a system call, is referred to as the \textit{kernel control path} \cite{like07}.
+
+The Linux kernel is a \textit{reentrant kernel}. Several processes can be executed simultaneously in kernel mode, which also means that the process can be interrupted while instructions are being executed in kernel mode. Functions in a reentrant kernel should therefore only change local variables and not affect global data structures. However, there are also non-reentrant functions in the kernel, for which corresponding locking mechanisms are used \cite{like02}.
+
+It should be noted here that system calls are not the only way to execute instructions in the kernel. According to \cite{like02}, there exist other ways besides system calls:
+
+\begin{itemize}
+\item A exception is reported by the CPU, which are handled by the kernel for the originating process. An example of this is the execution of an invalid instruction.
+\item A peripheral device sends an interrupt signal to the CPU, which is processed by a function called the interrupt handler. As peripheral devices work asynchronously to the CPU, interrupts occur at unpredictable times.
+\item A kernel thread is executed. These run in kernel mode and are mainly used to perform certain tasks periodically.
+\end{itemize}
+
+
+\subsection{Hardware and Hardware Dependent Code}
+
+As already mentioned, the kernel is the interface between the hardware and the processes of a system. Many operations in the kernel are related to the access of physical hardware.
+
+The Linux kernel distinguishes between three different types of hardware devices [8]:
+
+\begin{itemize}
+\item \textbf{Block Devices} – devices with block-oriented addressable data storage (e.g. hard drives)
+\item \textbf{Character Devices} – devices that handle data as a stream of characters or bytes (e.g. keyboards)
+\item \textbf{Network Devices} – devices that provide access to a network
+\end{itemize}
+
+The abstraction layer between the physical hardware and the Linux kernel are device drivers. Their primary function is to initialize the device and register its capabilities with the kernel. Additionally, drivers enable the kernel to access, control, and communicate with the device. Each driver is specific to a device and implements certain predefined interface functions to the Linux kernel, depending on the type of the device. The device drivers are available as modules that can be loaded dynamically at runtime \cite{like09}.
+
+One way for the physical hardware to interact with the kernel via the device drivers is through interrupts, which is referred to as interrupt-driven I/O. The hardware uses \textit{interrupt requests} to inform about certain events, and the driver implements the associated \textit{interrupt handler} to process the request \cite{like09}.
+
+\textit{Direct Memory Access} (DMA) is another way of interaction between the hardware and a system, which is mainly used by block devices or network devices [9]. DMA is a mechanism that allows hardware devices to transfer data directly to or from system memory, bypassing the CPU. This method enhances data throughput and system performance, as it reduces CPU overhead during high-volume data transfers \cite{like05}.
+
+Additional information regarding the interface between the Linux kernel and hardware, as well as device drivers, can be found in \cite{like09}.
+
+
+\subsection{Kernel Subsystems}
+
+As previously stated, the Linux kernel is a monolithic kernel that is subdivided into various subsystems. A subsystem is a group of functions that work together to perform a specific task \cite{like10}. Figure \ref{fig:LinuxKernel} displays the most significant subsystems, which are further explained below based on \cite{like03} and \cite{like09}.
+
+\subsubsection{Process Management Subsystem}
+The process management subsystem is responsible for the administration of processes. This task can be divided into three main parts:
+
+\begin{itemize}
+\item Creation and termination of processes and their related resources
+\item Communication between different processes (e.g. with \textit{Signals} or \textit{Pipes})
+\item Scheduling
+\end{itemize}
+
+\subsubsection{Memory Management Subsystem}
+The primary function of the memory management subsystem is \textit{Virtual Memory Management}. This enables more efficient use of RAM. Each process is assigned a virtual address space, and parts of it that are not currently required can be swapped to disk. This is based on the locality principle of programs. Additionally, \textit{Virtual Memory Management} enables isolation between processes.
+
+The memory management subsystem in the Linux kernel provides memory for other kernel modules, for example through malloc/free operations.
+
+\subsubsection{Storage Subsystem}
+The storage subsystem is responsible for creating and managing the file system on the physical media, such as the disk.
+
+
+\subsubsection{Networking Subsystem}
+The networking subsystem handles the sending and receiving of packets in networks and their distribution to applications in user space. Additionally, it implements network protocols such as those used by the TCP/IP protocol stack presented in \ref{chap:ProtosRefModel}.
+
+A detailed description of specific parts of the networking subsystem can be found in chapter \ref{chap:LinuxUDPNWStack}.
 
 
 
 
 
 
-\section{UDP communication with a Linux Operating System}
-% TODO
 
-\subsection{Socket Types}
-% TODO
+\section{UDP communication with a Linux Operating System} \label{chap:LinuxUDPNWStack}
+The purpose of this chapter is to explain UDP communication using a Linux operating system. The fundamental processes are described, with an emphasis on the interaction among the different components.
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\linewidth]{figures/linux_nwstack/image03.png}
+    \caption[Simplified Representation of the Linux Network Stack with associated Layers of the hybrid TCP/IP Reference Model]{Simplified Representation of the Linux Network Stack with associated Layers of the hybrid TCP/IP Reference Model. Adapted from: \cite{lins06}.}
+    \label{fig:NWStack}
+\end{figure}
 
-\subsubsection{UDP Sockets}
-% TODO
+Figure \ref{fig:NWStack} presents a simplified schematic of the components of the Linux network stack and how they relate to the layers of the hybrid TCP/IP reference model presented in chapter \ref{chap:RefModel}. This section provides a simplified representation, based on \cite{lins06}, that illustrates the relationship between the components of the network stack. 
 
-
-\subsubsection{Raw Sockets}
-% TODO
-
-
-\subsubsection{Packet Sockets}
-% TODO
+First, the components of the network stack will be presented, with a focus on the protocols represented in the TCP/IP reference model. Then, the interaction between the components will be explained by following the path of a packet through the network stack during transmission and reception.
 
 
-\subsection{Sending and Receiving a Packet}
-% TODO
+\subsection{Components in the Linux Network Stack}
+
+\subsubsection{Sockets and the Socket API}
+
+Sockets are objects in the operating system that allow data to be exchanged between two applications, usually on a client-server basis. Data can also be exchanged across computer boundaries. Sockets are part of the networking subsystem in the Linux kernel. The socket API represents the associated programming interface \cite{sock01}\cite{sock11}.
+
+Sockets serve as the interface between the application layer and the transport layer in the Linux kernel. Sockets can be defined as the endpoints of a communication channel between two applications. They do not form a separate layer, but allow the application to access the services of the underlying layer, usually the transport layer. The operating system manages all sockets and their associated information \cite{sock02}.
+
+\paragraph{Characteristics of Sockets}
+
+A socket is a generic interface that supports various protocols and protocol families, also known as communication domains. This section focuses on sockets for the TCP/IP protocol family, also known as Internet sockets \cite{like03}.
+
+\subparagraph{Socket Descriptor}
+In line with the Linux philosophy of '\textit{everything is a file}', sockets in a system are also represented by an integer, called a socket descriptor in this context. This descriptor can be obtained through a specific call to the operating system and can be used to perform operations such as \texttt{write()} or \texttt{read()}, similar to handling files. Additionally, there are specialized methods like \texttt{send()} or \texttt{receive()} that provide further options.
+
+\subparagraph{Socket Types}
+There are different types of sockets that vary in their properties. The two most common types are stream sockets and datagram sockets \cite{like03}.
+
+\begin{itemize}
+\item \textbf{Stream sockets} operate in a connection-oriented manner between a client and server application. A connection must be established between the partners before data can be transferred. The TCP protocol is used for this type for Internet sockets.
+\item \textbf{Datagram sockets} enable the exchange of individual messages. The sockets operate without a connection. The User Datagram Protocol (UDP) is utilized as the transport layer protocol, resulting in the provision of unreliable transmission.
+\end{itemize}
+
+Other socket types, such as raw sockets or packet sockets, also exist.
+
+
+\subparagraph{Socket Address}
+A socket can be identified externally using the socket address. In the context of Internet sockets, this address consists of the IP address and a port number and uniquely identifies the socket in the network \cite{sock02}.
+
+
+\paragraph{Operation of Sockets}
+
+The following section presents important concepts and aspects of working with sockets. The focus is limited to connectionless datagram sockets, as this is the type of socket used in this thesis. For a detailed description of datagram sockets and stream sockets, please refer to \cite{like03}, which serves as the basis for this section.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.75\linewidth]{figures/linux_nwstack/image01.png}
+    \caption[Overview of System Calls used with Datagram Sockets]{Overview of System Calls used with Datagram Sockets. Source: \cite{like03}.}
+    \label{fig:SocketOperations}
+\end{figure}
+
+Figure \ref{fig:SocketOperations} displays the system calls commonly used with a datagram socket for a client-server application. These calls are briefly described below:
+
+\begin{itemize}
+\item The \texttt{socket()} call requests the corresponding socket from the operating system, specifying the protocol family and socket type. The return value is the socket descriptor.
+\item The \texttt{bind()} call is used to bind the socket to a server address. For Internet sockets, the address consists of the IP address and the port of the server application. This enables the application to receive datagrams sent to this address.
+\item The client calls \texttt{sendto()} with both the data to be sent and the address of the socket to which the datagram is to be sent. This call will send the data.
+\item \begin{minipage}[t]{\linewidth}
+            To receive a datagram, \texttt{recvfrom()} is called. The argument can be used to specify the address of the sender's socket from which the data is to be received. If no restrictions should be defined for the sender's address, \texttt{recv()} can also be used.\\
+            Both calls save exactly one received datagram in a buffer, a pointer to which is also passed as an argument to the function. If no data has been received when \texttt{recv()} or \texttt{recvfrom()} is called, the call is blocked.\\
+            If multiple datagrams are received, they are stored in the receive buffer of the corresponding socket. However, when one of these functions is called, only one message is passed to the application via the socket.
+      \end{minipage}
+\item If the socket is no longer needed, it can be closed using \texttt{close()}.
+\end{itemize}
+
+
+\paragraph{Raw Sockets and Packet Sockets}
+
+Raw sockets and packet sockets are additional types of Internet sockets. These are an addition to the stream and datagram sockets already mentioned and allow access to lower layers of the network stack instead of hiding them from the user \cite{sock07}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/linux_nwstack/image02.png}
+    \caption[OOverview of Network Layers and Access Possibilities with different Socket Types]{Overview of Network Layers and Access Possibilities with different Socket Types. Adapted from: \cite{sock07}.}
+    \label{fig:SocketAccessPossib}
+\end{figure}
+
+Figure \ref{fig:SocketAccessPossib} displays the access possibilities with different socket types. Raw sockets provide access to the transport layer (4) and network layer (3) of the network stack \cite{sock08}, including TCP or UDP as well as IP in the case of the TCP/IP reference model. Packet sockets can also be utilized to access the link layer (2), enabling access to almost the entire Ethernet frame, except for the preamble and trailer \cite{sock09}.
+
+The concept underlying raw and packet sockets involves the implementation of separate protocol layers in the application. Depending on the chosen socket type, the application can implement layers 2 to 4 \cite{sock08}. Furthermore, packet sockets can also be used to capture the entire communication of a system, as used by Wireshark, for example.
+
+Raw or packet sockets eliminate the overhead of the respective protocol layer in the Linux kernel, which can potentially accelerate processing. They also increase flexibility, as certain fields in the header can be easily modified.
+
+A disadvantage, however, is that in order to maintain compatibility with other TCP/IP implementations, the corresponding protocols must be fully and correctly implemented in the application. Additionally, using raw or packet sockets requires that the application be executed with root privileges.
+
+The technical report 'Introduction to RAW sockets' \cite{sock07} provides a comprehensive overview of raw and packet sockets and their application. This report was also used for programming in this thesis.
+
+
+
+\subsubsection{Layers 3 and 4 in the Networking Subsystem}
+The networking subsystem of the Linux kernel includes not only sockets but also layers 3 and 4, namely the transport and network layers. These layers implement the protocols described in \label{chap:ProtosRefModel}, while sockets provide an interface between the application and the network stack.
+
+\paragraph{Protocol Handler}
+The corresponding protocols are implemented in layers 3 and 4, including implementations for protocols from the TCP/IP reference model and other protocols in their respective layers. It is also possible to develop handlers for your own protocols \cite{lins06}.
+
+An important task in the network subsystem is to execute the correct protocol handler for the corresponding layer. For outgoing packets, this is determined by the socket. For instance, an Internet socket that uses the datagram type employs the UDP protocol at layer 4 and the IPv4 protocol at layer 3. The protocol handler to be executed for incoming packets is determined from the header of the underlying layer. Both the Ethernet header and the IP header contain a corresponding field for the service-using protocol \cite{lins06}.
+
+The protocol handlers of the respective layer implement the standardized behavior for this protocol. These are described in the chapter \label{chap:ProtosRefModel}. Implementation details will not be discussed further at this point. For more information, please refer to \cite{lins01}.
+
+\paragraph{Data Structures in the Networking Subsystem of the Linux Kernel}
+This chapter presents two significant data structures of the networking subsystem in the Linux kernel, as described in \cite{lins06}.
+
+\subparagraph{Socket Buffer Structure}
+The socket buffer structure, also known as \texttt{sk\_buff}, is the most important data structure in the network stack. It represents a packet that has been received or is to be sent and is used by layers 2, 3, and 4. This structure eliminates the need to copy packet data between layers.
+
+The structure contains control information associated with a network packet, but not the actual data itself. Included in this structure are:
+
+\begin{itemize}
+\item Information on the organization of the socket buffers by the kernel
+\item Pointers to the data and to the headers of layers 2, 3 and 4
+\item Length of the data and the headers
+\item Data on the internal coordination of the packet
+\item Information on the associated network device (see \ref{chap:netdevice})
+\end{itemize}
+
+The mentioned pointers to the data point to a data field associated with the socket buffer. This field contains the packet data and associated headers and is created when a socket buffer is allocated. The socket buffer has pointers to different locations in this data field, depending on the layer currently using the socket buffer.
+
+Additionally, there are management functions related to the socket buffers. These functions can be utilized by individual network layers to add or remove their headers to the packet during processing. There are also functions to modify the size of the data field.
+
+\subparagraph{Network Device Structure} \label{chap:netdevice}
+The network device structure, also known as \texttt{net\_device}, contains information about a specific network interface. This structure is present in the kernel for every network interface of the system.
+
+Some important fields of this structure are (according to \cite{lins01}):
+\begin{itemize}
+\item Identifier of the interface
+\item MTU of the network interface
+\item MAC address of the interface
+\item Configurations and flags of the interface
+\item Pointer to the transmit method of the interface
+\end{itemize}
+
+\subsubsection{Network Device and Device Driver}
+The network device, also known as the network interface, along with its associated device driver, is the lowest component in the Linux network stack. The device driver performs the tasks of layer 2 of the TCP/IP reference model, while the network interface physically transmits the data, working on layer 1 of the reference model \cite{lins01}.
+
+The main tasks of the device driver are to receive packets addressed to the system and forward them to layer 3 of the network stack, and to send packets generated by the system.
+
+The driver interacts with the network interface, which transmits the data according to the respective transmission standard \cite{lins01}. To exchange data with the interface, the driver creates two ring buffers: the TX\_Ring and the RX\_Ring, which are used for sending and receiving data. These buffers are located in the system memory and contain a fixed number of descriptors pointing to buffers where packets can be stored. They are empty during initialization and accessed by the interface via DMA \cite{lins03, lins14}.
+
+The implementation of the driver depends on the hardware and is therefore not standardized. However, the Linux kernel defines how the driver interacts with the networking subsystem.
+
+\subsection{Path of a Network Packet} \label{chap:sedrecpath}
+This section explains how a packet travels through the Linux network stack by examining the interactions of the components described above. Specifically, this section will focus on the reception and transmission of a UDP packet.
+
+The following overview provides a general understanding of the process and will serve as a foundation. For a more detailed explanation of the packet's path, please refer to \cite{lins01} and \cite{lins06}.
+
+\subsubsection{Receiving a Packet} \label{chap:recpath}
+When a frame is received by the network card, it first checks for errors using the Ethernet frame checksum and then verifies if it is intended for the network interface by using the MAC address. The frame is then written to a free buffer in the RX\_Ring via DMA, which was created by the device driver during initialization. If no buffers are available, the frame is dropped \cite{lins03, lins06, lins14}.
+
+Interrupts are utilized to notify the system about a packet. Different strategies can be employed for this purpose. In the simplest case, a hardware interrupt is triggered for each received frame \cite{lins06}.
+
+To minimize processing in the interrupt context, softirqs are utilized \cite{lins03}. Softirqs are non-urgent interruptible functions in the Linux kernel that are designed to handle tasks that do not need to be done in the interrupt context. The handlers for the softirqs are executed by ksoftirq kernel threads, with one thread for each CPU core on the system \cite{like02}.
+
+The network driver's hardware interrupt handler schedules a softirq to process packets for the device by adding the it to a poll list. When the corresponding softirq kernel thread is scheduled, it executes the function \texttt{net\_rx\_action} \cite{lins03}.
+
+This function, executed in the context a softirq, processes all devices in the poll list. During the processing of the RX\_Ring of a network device, the hardware interrupts for this device are deactivated. Each  packet is wrapped in an \texttt{sk\_buff} structure and handled by an appropriate Layer 3 protocol handler. In the case of IP packets, the \texttt{ip\_rcv()} function is used. The process is repeated until there are no frames left in the RX\_Ring of the Interface or until a limit, called device weight, is reached. Additionally, a new descriptors are allocated and added to the RX\_Ring \cite{lins03, lins13, lins14}.
+
+The \texttt{ip\_rcv()} function processes the packets as defined in the protocol, including defragmentation and routing. It then calls the appropriate protocol handler of the layer above. For UDP, this is \texttt{udp\_rcv()} \cite{lins01}.
+
+During processing by UDP, the system verifies the availability of a socket with the corresponding port number. If available, the packet is copied into the receive buffer of the socket. If no corresponding socket is found, the packet is dropped \cite{lins01}.
+
+Processing of the packet in the context of the softirq is now complete. The application can retrieve the packet from the receive buffer of the socket using the \texttt{receive()} call.
+
+
+\subsubsection{Sending a Packet}
+To send a packet, an application needs an appropriate socket, in the case of UDP packets an Internet socket of type datagram. The \texttt{sendto()} function is used to send the data, which contains the actual data as well as the address of the socket to which the data should be sent.
+
+In the Linux kernel, calls to \texttt{sendto()} for a UDP socket are handled by the \texttt{udp\_sendmsg()} function in context of the application. This creates a socket buffer for the packet. Additionally, the UDP packet undergoes initial checks such as the compliance with the maximum length, and the UDP header is generated. Subsequently, the packet is forwarded to the IP protocol handler \cite{lins01}.
+
+The Internet Protocol handler generates the IP header and fragments the packet if required. In addition, the protocol handler performs routing to determine which network device the packet should be sent to. This process is also performed in the context of the application \cite{lins01, lins03}.
+
+To implement traffic management and prioritization, a layer called queueing discipline (QDisc) is placed between the protocol handler of layer 3 and the device driver. By default, a QDisc called 'pfifo\_fast' is used, which is essentially a FIFO queue. The queuing of the packet is also handled in the context of the application \cite{lins03, lins12}.
+
+The actual transmission of the packet over the network interface card is usually done in the context of a softirq. The device driver for the interface adds the Ethernet header and places it in the transmission queue of the interface, known as the TX\_Ring. The NIC hardware then fetches the packets from the TX\_Ring using DMA and transmits them over the physical medium. An interrupt is generated by the interface to indicate a successful transmission \cite{lins06, lins14}.
+
+
 
 
 \section{Tuning Options}
 
+\subsection{Buffers in the Network Stack}
+
+\subsubsection{Socket Receive Queue Memory}
+%TODO
+
+\subsubsection{RX\_Ring}
+%TODO
+
 \subsection{Quality of Service} \label{background:tuning:qualityofservice}
+%TODO
+
+\subsection{Offloading}
+%TODO
+
+\subsection{Receive Side Scaling}
+Receive Side Scaling, or RSS for short, is a technology used to improve network performance. The procedure for receiving a packet is described in \ref{chap:recpath}. The interrupt and softirq described there, which carry out the processing of the received packet, are handled by a single CPU \cite{rss01}.
+
+The concept behind RSS is to distribute network data processing across multiple CPU cores instead of keeping it confined to a single core. Incoming network packets are distributed to different processor cores based on a hash function \cite{rss02}.
+
+For Intel network cards, the hash is calculated based on the packet type. The network interface parses all packet headers and uses specific fields as input values for the hash function. In the case of a non-fragmented UDP packet, the destination and source IP addresses, along with the destination and source port, are used to calculate a 32-bit hash value. This hash value determines the queue and CPU core for processing the packet. All packets with the same input parameters are considered a related communication flow and have the same hash value. As a result, they are processed by the same CPU \cite{rss03}.
+
+\subsection{Interrupt Moderation}
+As explained in \ref{chap:sedrecpath}, the system generates an interrupt for both incoming and outgoing packets, which can negatively impact performance, particularly at high transmission rates due to the high number of interrupts generated [1]. Interrupt moderation can be used to mitigate this issue by delaying the generation of interrupts until multiple packets have been sent or received, or a timeout has occurred, thereby reducing CPU utilization [2].
+
+The Intel network interface drivers enable the configuration of a fixed timeout value for interrupt moderation or the complete deactivation of interrupt moderation [3]. By default, adaptive interrupt moderation is active, which, according to Intel, provides a balanced approach between low CPU utilization and high performance [3]. The interrupt rate is dynamically set based on the number of packets, packet size, and number of connections. The associated patent [4] provides a detailed description of this process. The interrupt rate is typically set to achieve either low latency or high throughput, depending on the type of traffic. For small datagrams, a low interrupt moderation rate (i.e., a high number of interrupts/s) is selected, while for large datagrams, a high interrupt moderation rate (i.e., a lower number of interrupts/s) is selected.
+
+The interrupt moderation rate of Intel network interfaces can be configured using the 'ethtool' configuration tool within the range of 0 to 235\,$\mu s$. A value of 0 µs deactivates interrupt moderation. Listing \ref{lst:intermodconfig} shows the configuration of the interrupt moderation rate when sending and receiving on interface 'ethX' to a value of 62\,$\mu s$.
+
+\begin{lstlisting}[language=Bash, caption=Configuration of the Interrupt Moderation Rate of the ethX Interface., label=lst:intermodconfig]
+ethtool -C ethX rx-usecs 62 tx-usecs 62
+\end{lstlisting}
 
 
-% TODO
+
+
+
+
+
+
+
+
+
+
+
+
+

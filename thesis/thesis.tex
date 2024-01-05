@@ -22,7 +22,7 @@
     numbers = noendperiod
 ]{scrreprt}
 
-\setcounter{secnumdepth}{5}
+\setcounter{secnumdepth}{6}
 % use some additional package, add your own below if required
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -48,9 +48,18 @@
 \usetikzlibrary{shapes.geometric, arrows}
 \tikzset{font={\fontsize{10pt}{12}\selectfont}}
 
-\setcounter{tocdepth}{5}
-\setcounter{secnumdepth}{5}
+\setcounter{tocdepth}{6}
+\setcounter{secnumdepth}{6}
 \RedeclareSectionCommand[runin=false,afterskip=0pt,afterindent=false]{paragraph}
+\RedeclareSectionCommand[afterskip=1sp]{subparagraph} % 1sp is the smallest non-zero unit
+
+\makeatletter
+\renewcommand\subparagraph{\@startsection{subparagraph}{5}{0pt}% no indentation
+  {\z@}% no additional space before the title
+  {1sp}% minimal space after the title, forces a new line
+  {\raggedsection\normalfont\sectfont\nobreak\size@subparagraph}% style of the title
+}
+\makeatother
 
 %%% additions by ACV
 \usepackage{hyperref}
