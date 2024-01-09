@@ -48,6 +48,11 @@
 \usetikzlibrary{shapes.geometric, arrows}
 \tikzset{font={\fontsize{10pt}{12}\selectfont}}
 
+\usepackage{tabularx}
+\usepackage{rotating}
+\usepackage{subcaption}
+
+
 \setcounter{tocdepth}{6}
 \setcounter{secnumdepth}{6}
 \RedeclareSectionCommand[runin=false,afterskip=0pt,afterindent=false]{paragraph}
@@ -140,8 +145,8 @@
 
     \pagenumbering{Roman}				% römische Seitenzahlen
     
-    \input{preamble/titlepage}			% Titelseite
-    \input{preamble/abstract}			% Abstract
+    %\input{preamble/titlepage}			% Titelseite
+    %\input{preamble/abstract}			% Abstract
     
     \tableofcontents					% Inhaltsverzeichnis
     
@@ -162,9 +167,15 @@
     \include{chapters/02_background}
     \include{chapters/03_method}
 
-    \include{chapters/99_tutorial}		% Tutorial
 
-´
+	NOCH NICHT IN DIESEM TEIL:
+	\begin{itemize}
+		\item Kapitel 4 – Tests zur Zuverlässigkeit mit Switch und iHawk Topologien
+		\item Kapitel 5 – Performancemessungen unter versch. Betriebszuständen
+		\item Kapitel 6 – Conclusion, Zusammenfassung der Konfigurationen / Punkte woduch UDP geeignet ist
+		\item Kapitel 7 – Ausblick: Fragmentierung und DPDK (User Space Driver)
+		\item Code im Anhang
+	\end{itemize}
 	
 	
 	\bibliography{bibliography/references.bib}

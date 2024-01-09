@@ -263,7 +263,6 @@
 @article{lins03,
 	author = {Chimata, Ashwin},
 	year = {2005},
-	month = {07},
 	title = {PATH OF A PACKET IN THE LINUX KERNEL STACK}
 	institution = {University of Kansas},
 	url = {https://www.cs.dartmouth.edu/~sergey/netreads/path-of-packet/Network_stack.pdf}
@@ -314,7 +313,6 @@
   author = {Joe Damato},
   title = {{Monitoring and Tuning the Linux Networking Stack: Receiving Data}},
   year = {2016},
-  month = {June},
   url = {https://blog.packagecloud.io/monitoring-tuning-linux-networking-stack-receiving-data/},
   note = {Accessed on 27.12.2023}
 }
@@ -346,75 +344,454 @@
 }
 
 
+@misc{intermod01,
+  title={{Advanced Driver Settings for Intel Ethernet 10 Gigabit Server Adapters}},
+  url={https://www.intel.com/content/www/us/en/support/articles/000005783/ethernet-products.html},
+  note={Accessed on 13.11.2023},
+  year={2020},
+  author={{Intel Corporation}}
+}
 
+@misc{intermod02,
+  title={{Interrupt Moderation}},
+  url={https://learn.microsoft.com/en-us/windows-hardware/drivers/network/interrupt-moderation},
+  note={Accessed on 13.11.2023},
+  year={2021},
+  author={{Microsoft Corporation}}
+}
 
+@techreport{intermod03,
+  title        = {Intel Ethernet 700 Series Linux Performance Tuning Guide},
+  author       = {{Intel Corporation NEX Cloud Networking Group (NCNG)}},
+  year         = 2023,
+  institution  = {Intel Corporation},
+  type         = {Technical Report},
+  number       = {334019},
+  revision     = {1.1},
+  note         = {Document No.: 334019 Rev.: 1.1}
+}
 
-
-
-
-
-
-%Hinweis:
-%Jeglicher Text, der nicht in einem Element ist, ist ein %Kommentar in Bibtex.
-%Kommentare lösen mit BibLatex allerdings Warnungen in %BibTex aus (Junk charakters). Diese Warnungen können %ignoriert werden.
-%
-%%
-%% von Google automatisch generiertes BibTex 
-%% enthält häufig Fehler
-%% Industry 4.0 wird hier nicht korrekt angezeigt.
-@inproceedings{valdez2015reducing,
-  title={Reducing complexity with simplicity-usability methods for Industry 4.0},
-  author={Calero Valdez, Andr{\'e} and Brauner, Philipp and Schaar, Anne Kathrin and Holzinger, Andreas and Ziefle, Martina},
-  booktitle={Proceedings 19th {Triennial} congress of the {IEA}},
-  volume={9},
-  pages={14},
-  year={2015}
+@patent{intermod04,
+  author       = {Yadong Li and Linden Cornett and Manasi Deval and Anil Vasudevan and Parthasarathy Sarangam},
+  title        = {Adaptive Interrupt Moderation},
+  year         = 2015,
+  publisher    = {Intel Corporation},
+  location     = {Santa Clara, CA},
+  country      = {US},
+  number       = {US20150186307A1},
+  filingdate   = {2015-03-10},
+  applicationnumber = {14/642967}
 }
 
 
-%% Buchbeispiel
-@book{zobel2014writing,
-  doi = {10.1007/978-1-4471-6639-9},
-  url = {https://doi.org/10.1007/978-1-4471-6639-9},
-  year = {2014},
-  publisher = {Springer London},
-  author = {Justin Zobel},
-  title = {Writing for Computer Science}
+
+
+
+@misc{setup01,
+  title={{CompactPCI Serial Overview}},
+  url={https://www.picmg.org/openstandards/compactpci-serial/},
+  note={Accessed on 10.12.2023},
+  year={2023},
+  author={{PICMG}}
 }
 
-%% Beispiel für einen Konferenzbeitrag
-@inproceedings{Nielsen1990,
-author = {Nielsen, Jakob and Molich, Rolf},
-title = {Heuristic Evaluation of User Interfaces},
-year = {1990},
-isbn = {0201509326},
+@manual{setup02,
+  title        = {SC5-FESTIVAL - CompactPCI Serial CPU Card},
+  author       = {{EKF Elektronik GmbH}},
+  year         = 2023,
+  note         = {Document No. 8459},
+  organization = {EKF Elektronik GmbH}
+}
+
+@misc{setup03,
+  title={{Comparison of Intel Core i3-7100 and Intel Core i7-3770S}},
+  url={https://cpu.userbenchmark.com/Compare/Intel-Core-i3-7100-vs-Intel-Core-i7-3770S/3891vsm2218},
+  note={Accessed on 10.12.2023},
+  year={2023},
+  author={{UserBenchmark}}
+}
+
+@misc{setup04,
+  title={{iHawk}},
+  url={https://concurrent-rt.com/products/hardware/ihawk/},
+  note={Accessed on 14.12.2023},
+  year={2023},
+  author={{Concurrent Real-Time}}
+}
+
+@manual{setup05,
+  title        = {X11DPi-N X11DPi-NT User's Manual},
+  author       = {{Super Micro Computer, Inc.}},
+  year         = 2021,
+  note         = {Document No. 8459},
+  organization = {Super Micro Computer, Inc.}
+}
+
+@article{setup06,
+author = {Lameter, Christoph},
+title = {NUMA (Non-Uniform Memory Access): An Overview: NUMA Becomes More Common Because Memory Controllers Get Close to Execution Units on Microprocessors.},
+year = {2013},
+issue_date = {July 2013},
 publisher = {Association for Computing Machinery},
 address = {New York, NY, USA},
-url = {https://doi.org/10.1145/97243.97281},
-doi = {10.1145/97243.97281},
-booktitle = {Proceedings of the SIGCHI Conference on Human Factors in Computing Systems},
-pages = {249–256},
-numpages = {8},
-location = {Seattle, Washington, USA},
-series = {CHI '90}
+volume = {11},
+number = {7},
+issn = {1542-7730},
+url = {https://doi.org/10.1145/2508834.2513149},
+doi = {10.1145/2508834.2513149},
+journal = {Queue},
+month = {jul},
+pages = {40–51},
+numpages = {12}
 }
 
-@article{hollan2000,
-author = {Hollan, James and Hutchins, Edwin and Kirsh, David},
-title = {Distributed Cognition: Toward a New Foundation for Human-Computer Interaction Research},
-year = {2000},
-issue_date = {June 2000},
-publisher = {Association for Computing Machinery},
-address = {New York, NY, USA},
-volume = {7},
-number = {2},
-issn = {1073-0516},
-url = {https://doi.org/10.1145/353485.353487},
-doi = {10.1145/353485.353487},
-journal = {ACM Trans. Comput.-Hum. Interact.},
-pages = {174–196},
-numpages = {23},
-keywords = {distributed cognition, ethnography, cognitive science, research methodology, human-computer interaction}
+@misc{setup07,
+  title={{Endeavour Configuration Details}},
+  url={https://www.nas.nasa.gov/hecc/support/kb/endeavour-configuration-details_662.html},
+  note={Accessed on 14.12.2023},
+  year={2021},
+  author={{National Aeronautics and Space Administration}}
 }
+
+@misc{setup08,
+  title={{Skylake Processors}},
+  url={https://www.nas.nasa.gov/hecc/support/kb/skylake-processors_550.html},
+  note={Accessed on 14.12.2023},
+  year={2021},
+  author={{National Aeronautics and Space Administration}}
+}
+
+@misc{setup09,
+  title={{Cisco Business 350 Series Managed Switches Data Sheet}},
+  url={https://www.cisco.com/c/en/us/products/collateral/switches/business-350-series-managed-switches/datasheet-c78-744156.html},
+  note={Accessed on 14.12.2023},
+  year={2022},
+  author={{Cisco Systems, Inc.}}
+}
+
+@misc{setup10,
+  title={{Intel Core i9-13900K Processor}},
+  url={https://ark.intel.com/content/www/us/en/ark/products/230496/intel-core-i9-13900k-processor-36m-cache-up-to-5-80-ghz.html},
+  note={Accessed on 09.11.2023},
+  year={2023},
+  author={{Intel Corporation}}
+}
+
+
+@misc{setupnw01,
+  title={{Intel Ethernet Converged Network Adapter X520-DA2}},
+  url={https://ark.intel.com/content/www/us/en/ark/products/39776/intel-ethernet-converged-network-adapter-x520-da2.html},
+  note={Accessed on 19.11.2023},
+  year={2023},
+  author={{Intel Corporation}}
+}
+
+
+
+@misc{setupnw02,
+  title={{Intel Ethernet Converged Network Adapter X540-T2}},
+  url={https://ark.intel.com/content/www/us/en/ark/products/58954/intel-ethernet-converged-network-adapter-x540-t2.html},
+  note={Accessed on 19.11.2023},
+  year={2023},
+  author={{Intel Corporation}}
+}
+
+@misc{setupnw03,
+  title={{Intel Ethernet Network Adapter X710-T2L}},
+  url={https://ark.intel.com/content/www/us/en/ark/products/189463/intel-ethernet-network-adapter-x710-t2l.html},
+  note={Accessed on 19.11.2023},
+  year={2023},
+  author={{Intel Corporation}}
+}
+
+@misc{setupnw04,
+  title={{ThinkSystem Marvell QL41132 and QL41134 10GBASE-T Ethernet Adapters}},
+  url={https://lenovopress.lenovo.com/lp0902-marvell-ql41132-ql41134-10gbase-t-ethernet-adapters},
+  note={Accessed on 19.11.2023},
+  year={2021},
+  author={{Lenovo (Beijing) Limited}}
+}
+
+@manual{setupnw05,
+  title        = {SN5-TOMBAK - CompactPCI Serial Dual-Port SFP+ 10Gbps Ethernet NIC},
+  author       = {{EKF Elektronik GmbH}},
+  year         = 2016,
+  note         = {Document No. 8117},
+  organization = {EKF Elektronik GmbH}
+}
+
+
+
+
+
+@misc{swsetup01,
+  title={{RedHawk Linux RTOS}},
+  url={https://concurrent-rt.com/products/software/redhawk-linux/},
+  note={Accessed on 19.12.2023},
+  year={2023},
+  author={{Concurrent Real-Time}}
+}
+
+@misc{swsetup02,
+  title={{RedHawk Linux: Real-Time Linux Development Environment}},
+  note={Brochure for RedHawk Linux, highlighting its features and applications in various industries.},
+  year={2017},
+  author={{Concurrent Real-Time}}
+}
+
+@techreport{swsetup03,
+  title = {{Jumbo Frames or Not: That is the Question!}},
+  author = {Pawan Prakash and Myungjin Lee and Y. Charlie Hu and Ramana Rao Kompella and Twitter Inc.},
+  year = {2013},
+  institution = {Purdue University
+Purdue University},
+  type = {Technical Report},
+  number = {13-006},
+}
+
+@misc{swsetup04,
+  title={{Jumbo Frames and Jumbo Packets Notes}},
+  url={https://www.intel.com/content/www/us/en/support/articles/000006639/ethernet-products.html},
+  note={Accessed on 18.12.2023},
+  year={2019},
+  author={{Intel Corporation}}
+}
+
+@misc{swsetup05,
+  title = {{chrt(1) — Linux Manual Page}},
+  author = {{Linux Manual Page Contributors}},
+  year = {2023},
+  howpublished = {Man7.org},
+  url = {https://man7.org/linux/man-pages/man1/chrt.1.html},
+  note = {Accessed on 18.12.2023}
+}
+
+@misc{swsetup06,
+  title={{Priorities and Policies - Red Hat Enterprise Linux for Real Time 7}},
+  url={https://access.redhat.com/documentation/de-de/red_hat_enterprise_linux_for_real_time/7/html/reference_guide/chap-priorities_and_policies},
+  note={Accessed on 18.12.2023},
+  year={2023},
+  author={{Red Hat, Inc.}}
+}
+
+@misc{topo01,
+  title={{A Quick Guide to STAR Topology}},
+  url={https://www.boardinfinity.com/blog/star-topology/},
+  note={Accessed on 02.12.2023},
+  year={2023},
+  author={{Board Infinity}}
+}
+
+
+@misc{testsuite01,
+  title={{iPerf Homepage}},
+  url={https://iperf.fr},
+  note={Accessed on 01.12.2023},
+  year={2023},
+  author={{iPerf Development Team}}
+}
+
+
+
+@book{tsd01,
+  title     = {{XML Bible}},
+  author    = {Elliotte Rusty Harold},
+  year      = 2001,
+  publisher = {Wiley},
+  isbn      = {9780764548192},
+}
+
+@misc{tsd02,
+  title={{pugixml 1.14 Quick Start Guide}},
+  url={https://pugixml.org/docs/quickstart.html},
+  note={Accessed on 23.11.2023},
+  year={2023},
+  author={{Arseny Kapoulkine}}
+}
+
+@misc{tsd03,
+  title = {{Interface statistics - The Linux Kernel Documentation}},
+  author = {{Kernel Development Community}},
+  year = {2023},
+  url = {https://docs.kernel.org/networking/statistics.html},
+  note = {Accessed on 23.11.2023}
+}
+
+@misc{tsd04,
+  title = {{nmon for Linux}},
+  author = {{Kernel Development Community}},
+  year = {2023},
+  url = {https://nmon.sourceforge.io/pmwiki.php},
+  note = {nmon Development Team}
+}
+
+
+@misc{tsgen01,
+  title = {{send(2) — Linux Manual Page}},
+  author = {{Linux Manual Page Contributors}},
+  year = {2023},
+  howpublished = {Man7.org},
+  url = {https://man7.org/linux/man-pages/man2/send.2.html},
+  note = {Accessed on 05.12.2023}
+}
+
+@misc{tsgen02,
+  title = {{clock\_gettime(3) — Linux Manual Page}},
+  author = {{Linux Manual Page Contributors}},
+  year = {2023},
+  howpublished = {Man7.org},
+  url = {https://man7.org/linux/man-pages/man3/clock\_gettime.3.html},
+  note = {Accessed on 05.12.2023}
+}
+
+@misc{tsgen03,
+  author = {Joe Damato},
+  title = {{Monitoring and Tuning the Linux Networking Stack: Sending Data}},
+  year = {2017},
+  url = {https://blog.packagecloud.io/monitoring-tuning-linux-networking-stack-sending-data/},
+  note = {Accessed on 05.12.2023}
+}
+
+
+@book{datacalc01,
+    title     = {Computer Networking: A Top-Down Approach},
+    author    = {Kurose, James F. and Ross, Keith W.},
+    edition   = {8},
+    year      = {2021},
+    publisher = {Pearson},
+    isbn      = {9780136681557}
+}
+
+@book{datacalc02,
+    title     = {Data Communications and Networking},
+    author    = {Forouzan, Behrouz A. and Fegan, Sophia Chung},
+    edition   = {4},
+    year      = {2007},
+    publisher = {McGraw-Hill},
+    isbn      = {9780072967753}
+}
+
+
+
+
+
+
+@misc{stress01,
+  author = {Colin Ian King},
+  title = {{stress-ng. A stress-testing Swiss army knife.}},
+  year = {2019},
+  url = {https://elinux.org/images/5/5c/Lyon-stress-ng-presentation-oct-2019.pdf},
+  note = {Presentation. Accessed on 13.10.2023}
+}
+
+@misc{stress02,
+  title={{Stress testing real-time systems with stress-ng - Red Hat Enterprise Linux for Real Time 8}},
+  url={https://access.redhat.com/documentation/de-de/red_hat_enterprise_linux_for_real_time/8/html/optimizing_rhel_8_for_real_time_for_low_latency_operation/assembly_stress-testing-real-time-systems-with-stress-ng_optimizing-rhel8-for-real-time-for-low-latency-operation},
+  note={Accessed on 13.10.2023},
+  year={2023},
+  author={{Red Hat, Inc.}}
+}
+
+@misc{stress03,
+  title={{Ubuntu Manpage: stress-ng}},
+  url={https://manpages.ubuntu.com/manpages/jammy/en/man1/stress-ng.1.html},
+  note={Accessed on 13.10.2023},
+  year={2023},
+  author={{Canonical Ltd.}}
+}
+
+@misc{stress04,
+  title = {{fork(2) — Linux Manual Page}},
+  author = {{Linux Manual Page Contributors}},
+  year = {2023},
+  howpublished = {Man7.org},
+  url = {https://man7.org/linux/man-pages/man2/fork.2.html},
+  note = {Accessed on 13.10.2023}
+}
+
+@misc{stress05,
+  title = {{exec(3) — Linux Manual Page}},
+  author = {{Linux Manual Page Contributors}},
+  year = {2023},
+  howpublished = {Man7.org},
+  url = {https://man7.org/linux/man-pages/man3/exec.3.html},
+  note = {Accessed on 13.10.2023}
+}
+
+@misc{stress06,
+  title = {{getpid(2) — Linux Manual Page}},
+  author = {{Linux Manual Page Contributors}},
+  year = {2023},
+  howpublished = {Man7.org},
+  url = {https://man7.org/linux/man-pages/man2/getpid.2.html},
+  note = {Accessed on 13.10.2023}
+}
+
+@misc{stress07,
+  title = {{getuid(2) — Linux Manual Page}},
+  author = {{Linux Manual Page Contributors}},
+  year = {2023},
+  howpublished = {Man7.org},
+  url = {https://man7.org/linux/man-pages/man2/getuid.2.html},
+  note = {Accessed on 13.10.2023}
+}
+
+@misc{stress08,
+  title = {{gettimeofday(2) — Linux Manual Page}},
+  author = {{Linux Manual Page Contributors}},
+  year = {2023},
+  howpublished = {Man7.org},
+  url = {https://man7.org/linux/man-pages/man2/gettimeofday.2.html},
+  note = {Accessed on 13.10.2023}
+}
+
+@misc{stress09,
+  title = {{Linux Out of Memory killer}},
+  author = {José Rocha},
+  year = {2023},
+  url = {https://neo4j.com/developer/kb/linux-out-of-memory-killer/},
+  note = {Accessed on 13.10.2023}
+}
+
+@misc{stress10,
+  title = {{IOSchedulers}},
+  author = {{Ubuntu Wiki}},
+  year = {2023},
+  url = {https://wiki.ubuntu.com/Kernel/Reference/IOSchedulers},
+  note = {Accessed on 14.10.2023}
+}
+
+@misc{stress11,
+  title = {{Control Group v2}},
+  author = {{Kernel Development Community}},
+  year = {2023},
+  url = {https://docs.kernel.org/admin-guide/cgroup-v2.html},
+  note = {Accessed on 14.10.2023}
+}
+
+
+
+
+
+
+@misc{stress14,
+  title={{Hardware interrupts - Red Hat Enterprise Linux for Real Time 8}},
+  url={https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux_for_real_time/8/html/reference_guide/chap-hardware_interrupts},
+  note={Accessed on 13.10.2023},
+  year={2023},
+  author={{Red Hat, Inc.}}
+}
+
+
+
+
+
+
+
+ 
+
+
+
+
 
  
