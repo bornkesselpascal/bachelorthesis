@@ -6,7 +6,7 @@
 \subsubsection{Computer Systems}
 The test setup consisted of five computer systems, which can be classified into three types.  Specifically, there were two 'High-Performance PCs' (HPC1 and HPC2), two 'Traffic PCs' (TPC1 and TPC2), and one system from the Concurrent iHawk platform. The hardware was intentionally chosen to represent different performance classes in order to identify possible limitations during the tests. 
 
-\paragraph{Hardware of the Computer System Types}
+\paragraph{Hardware of the Computer System Types} \label{chap:ComputerHardware}
 Table \ref{hwtable} provides an overview of the hardware of the computer system types used. The Hardeare was intentionally chosen to represent different performance classes.
 
 Table \ref{hw:hpc} shows that the High-Performance PCs use an Intel Core i9 13900 CPU with Intel Hybrid Technology, providing 8 Performance-Cores and 16 Efficient-Cores \cite{setup10}. However, due to incompatibility with the operating system, the efficient cores are disabled, resulting in the use of 8 physical cores or 16 logical cores for systems of this type.
@@ -236,7 +236,7 @@ In a star topology, each node connects to a central instance, typically a hub or
 
 Both topologies used are described in detail below. Any modifications made for specific test campaigns are indicated in the corresponding places in the thesis. This includes, for example, changes to the network interfaces used.
 
-\subsection{Star Topology with a Switch in the Center}
+\subsection{Star Topology with a Switch in the Center} \label{chap:TopoSwitch}
 
 \begin{figure}[h]
     \centering
@@ -634,7 +634,7 @@ One requirement for the tests is that they should be possible under different op
 
 The existing tools stress-ng and iPerf2 were used to generate the defined load scenarios.
 
-\subsection{stress-ng}
+\subsection{stress-ng} 
 Stress-ng is a  system stress testing tool designed to test various aspects of a computer system, such as CPU, memory and I/O, to their performance limits. It is used by system administrators, developers and testers to assess the stability and reliability of hardware and software under high load \cite{stress01}.
 
 Providing over 270 different stress options, called stressors, in areas such as CPU load, memory allocation and access, and disk I/O, which can be used individually or in combination to create a realistic load scenario for a system \cite{stress02}. In addition, stress-ng provides options to control the duration and intensity of the stressors \cite{stress03}.
@@ -643,7 +643,7 @@ Stress-ng is a command line program that can also be called from other programs,
 
 In order to generate the additional system load in the CPU, memory, I/O and timer areas during a test, stress-ng was used as it is a proven tool for generating stress with easy control. The stressors used are briefly introduced and described below. A more detailed description of all stressors and options of stress-ng can be found in its manual \cite{stress03}.
 
-\subsubsection{CPU Load}
+\subsubsection{CPU Load} \label{chap:stressngCPU}
 As per the requirements, the CPU load must be generated in both user space and kernel space for which different stressors have to be used. Additionally, section \ref{chap:loadgeneration} specifies the need to create a load through real-time processes.
 
 \paragraph{Generation of CPU Load in User Space} \label{chap:CPUStressor}
@@ -678,7 +678,7 @@ As can be derived from Figure \ref{fig:stressGET}, this stressor does not fully 
 
 stress-ng allows for the specification of a scheduling policy and priority as additional options. This allows each stressor to be executed as a real-time process. For generating load, the CPU stressor described in section \ref{chap:CPUStressor} was used with the \texttt{SCHED\_FIFO} scheduling policy described in section \ref{chap:RTProcess} and a scheduling priority of 50. The scheduling priority was intentionally set lower than that of the TestSuite because communication processes have a higher priority in the distributed test system.
 
-\subsubsection{Memory Load}
+\subsubsection{Memory Load} \label{chap:stressngMemeory}
 To generate memory load, the stress-ng 'bigheap' stressor is utilized. The stressor grows its heap by reallocating memory. If the Out Of Memory (OOM) killer on Linux, which is a process emplyed by the kernel when low memory is available on the system and kills one or more processes to resolve the situation \cite{stress09}, kills the process or the allocation fails then the stressor starts again.
 
 \begin{figure}[h!]
@@ -692,7 +692,7 @@ Figure \ref{fig:stressMEM} displays the memory utilization over time for a 'bigh
 
 The memory stressor, like any other process, also utilizes the system's CPU. Executing a memory stressor results in 100\% CPU utilization for one core.
 
-\subsubsection{I/O Load}
+\subsubsection{I/O Load} \label{chap:stressngIO}
 The 'hdd' stressor is used to generate I/O load. It performs continuous writes to the system's hard disk.
 
 \begin{figure}[h!]
@@ -708,7 +708,7 @@ Linux has I/O scheduling, which reorders and groups requests based on the logica
 
 stress-ng does not provide a default way to limit I/O stress by limiting the data rate. To achieve this limit, Control Groups (cgroup) were used. Control groups are a kernel function that can limit the resource utilization of processes. In some tests in this work, control groups were used to limit the maximum data rate of the HDD stressor. Further information on the used cgroup2 can be found in its documentation \cite{stress11}.
 
-\subsubsection{Interrupt Load}
+\subsubsection{Interrupt Load} \label{chap:stressngInterrupt}
 The 'timer' stressor was utilized to generate load in the domain of interrupts. This produces timer events at a rate of 1 MHz, resulting in timer clock interrupts. Each timer event is then intercepted by a signal handler. The purpose of this stressor is to test the system under high interrupt load \cite{stress02}. The execution of one timer stressor also fully utilizes a CPU core to 100\%. Additionally, the system is loaded by the processing of the signal handler. The entire system's utilization was examined using an HPC as an example, which amounts to approximately 6.3\%.
 
 It is important to note that the timer results generated in this manner differ from interrupts generated by external hardware. Although both events are asynchronous \cite{like02}, there is a significant difference between them. Timer events are generated periodically by the operating system, while hardware interrupts are triggered unpredictably by external devices such as network devices \cite{stress14}. Signal handlers execute timer events in the context of the respective process, while interrupt handlers process hardware interrupts directly in the kernel \cite{like02}.
