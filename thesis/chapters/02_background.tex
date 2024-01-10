@@ -529,19 +529,19 @@ The actual transmission of the packet over the network interface card is usually
 \subsection{Offloading}
 %TODO
 
-\subsection{Receive Side Scaling}
+\subsection{Receive Side Scaling} \label{chap:ReceiveSideScaling}
 Receive Side Scaling, or RSS for short, is a technology used to improve network performance. The procedure for receiving a packet is described in \ref{chap:recpath}. The interrupt and softirq described there, which carry out the processing of the received packet, are handled by a single CPU \cite{rss01}.
 
 The concept behind RSS is to distribute network data processing across multiple CPU cores instead of keeping it confined to a single core. Incoming network packets are distributed to different processor cores based on a hash function \cite{rss02}.
 
 For Intel network cards, the hash is calculated based on the packet type. The network interface parses all packet headers and uses specific fields as input values for the hash function. In the case of a non-fragmented UDP packet, the destination and source IP addresses, along with the destination and source port, are used to calculate a 32-bit hash value. This hash value determines the queue and CPU core for processing the packet. All packets with the same input parameters are considered a related communication flow and have the same hash value. As a result, they are processed by the same CPU \cite{rss03}.
 
-\subsection{Interrupt Moderation}
+\subsection{Interrupt Moderation} \label{chap:InterMod}
 As explained in \ref{chap:sedrecpath}, the system generates an interrupt for both incoming and outgoing packets, which can negatively impact performance, particularly at high transmission rates due to the high number of interrupts generated \cite{intermod01}. Interrupt moderation can be used to mitigate this issue by delaying the generation of interrupts until multiple packets have been sent or received, or a timeout has occurred, thereby reducing CPU utilization \cite{intermod02}.
 
 The Intel network interface drivers enable the configuration of a fixed timeout value for interrupt moderation or the complete deactivation of interrupt moderation. By default, adaptive interrupt moderation is active, which, according to Intel, provides a balanced approach between low CPU utilization and high performance \cite{intermod03}. The interrupt rate is dynamically set based on the number of packets, packet size, and number of connections. The associated patent \cite{intermod04} provides a detailed description of this process. The interrupt rate is typically set to achieve either low latency or high throughput, depending on the type of traffic. For small datagrams, a low interrupt moderation rate (i.e., a high number of interrupts/s) is selected, while for large datagrams, a high interrupt moderation rate (i.e., a lower number of interrupts/s) is selected.
 
-The interrupt moderation rate of Intel network interfaces can be configured using the 'ethtool' configuration tool within the range of 0 to 235\,$\mu s$. A value of 0 µs deactivates interrupt moderation.
+The interrupt moderation rate of Intel network interfaces can be configured using the 'ethtool' configuration tool within the range of 0 to 235 µs. A value of 0 µs deactivates interrupt moderation.
 
 
 

@@ -84,7 +84,7 @@ The SC5-FESTIVAL card manufactured by EKF Elektronik GmbH serves as the system m
 iHawk is a computer platform manufactured by Concurrent that is designed with a focus on time-critical simulation or data acquisition \cite{setup04}. The system used for the tests in this thesis, with the data described in Table \ref{hw:ihawk}, will also be used with the same configuration in a distributed test system. This ensures that the conditions of the tests carried out here are comparable to those of the distributed test system.
 
 
-\paragraph{Characteristics of the used iHawk System}
+\paragraph{Characteristics of the used iHawk System} \label{chap:iHawkChar}
 In the following, the special features of the iHawk system used, which were taken into account in the analyses carried out with special test scenarios, will be discussed.
 
 \begin{figure}[ht!]
@@ -103,7 +103,7 @@ To access the memory of the other NUMA node, an interconnect between the sockets
 \item Throughput bottleneck
 \end{itemize}
 
-The iHawk system utilizes two Intel Ultra Path Interconnect (UPI) links, as illustrated in Figure \ref{fig:BlockDiagrIHawk}.  Each link operates at a speed of 10.4 GT/s, providing a total full-duplex bandwidth of 41.6 GB/s \cite{setup08}. Accessing memory from the other NUMA node via the UPI increases latency by approximately 50\% \cite{setup06}, resulting in a memory latency of around 130 ns \cite{setup07} between the two sockets.
+The iHawk system utilizes two Intel Ultra Path Interconnect (UPI) links, as illustrated in Figure \ref{fig:BlockDiagrIHawk}. Each link operates at a speed of 10.4 GT/s, providing a total full-duplex bandwidth (two links in two directions) of 41.6 GB/s \cite{setup08}. Accessing memory from the other NUMA node via the UPI increases latency by approximately 50\% \cite{setup06}, resulting in a memory latency of around 130 ns \cite{setup07} between the two sockets.
 
 The block diagram shows that each PCI Express slot is connected to one CPU. Slots 0 to 3 are connected to CPU 0, while slots 4 to 6 are connected to CPU 1. It is important to note that the problems previously described for memory accesses also apply to accessing PCI Express devices on the other NUMA node, as they are also carried out via the UPI links.
 
@@ -124,7 +124,7 @@ The Ethernet switch used is a Cisco CBS350-8XT from the Cisco Business 350 serie
 
 The Cisco CBS350-8XT is a Layer 3 switch that can forward packets based on both MAC and IP addresses, similar to a router.  However, for the purposes of the tests conducted in this thesis, this functionality was not required, so the switch was configured as a Layer 2 switch.
 
-\paragraph{Network Interface Cards}
+\paragraph{Network Interface Cards} \label{chap:NicTypes}
 
 The tests only use PCIe Network Interface Cards (NIC) that are capable of 10 GbE. The main types of network interfaces used are Intel's X520-DA2, X540-T2, and X710-T2L. Network interfaces from Lenovo and Inspur are also considered. Table \ref{tab:NWHardware} provides a concise overview of the network interfaces used according to \cite{setupnw01, setupnw02, setupnw03, setupnw04}.
 
@@ -251,7 +251,7 @@ In this architecture, the Cisco CBS350-8XT switch, presented in \ref{chap:Ethern
 
 The HPC1 and HPC2 systems are both equipped with the Intel X710-T2L network card and are each connected to the switch with a bidirectional link using Cat7 copper cables. The TPC1 and TPC2 systems were equipped with the Intel X540-DA2 network card, which has SPF+ ports. They were connected to the switch via fiber optic cables using Intel SPF+ SR transceivers.
 
-\subsection{Star Topology with the iHawk in the Center}
+\subsection{Star Topology with the iHawk in the Center} \label{chap:TopoiHawk}
 
 \begin{figure}[h!]
     \centering

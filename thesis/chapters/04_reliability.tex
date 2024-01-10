@@ -8,7 +8,7 @@ Packet loss can occur at several points within the network. On the one hand, it 
 
 In the tests using the star topology with a switch in the centre (see \ref{chap:TopoSwitch}), packet loss may also occur due to this switch. Possible reasons for this are exceeding the maximum switch capacity, which is 160 GBit/s, or an egress buffer overflow. These buffers have a size of 6 MB, and are dynamically shared between all ports \cite{setup09}.
 
-\section{Reliability Analysis of the Star Topology with a Switch in the Centre}
+\section{Reliability Analysis of the Star Topology with a Switch in the Centre} \label{chap:switchtest}
 
 \subsection{System under Test}
 The test campaigns presented in this chapter utilize the star topology with a switch in the center (see \ref{chap:TopoSwitch}). All systems are connected to each other through the Cisco CBS350-8XT switch. The network interfaces mentioned in the architecture presentation are utilized in the computer systems.
@@ -63,11 +63,11 @@ In tests where the client was subjected to a generated load, no packet loss was 
 
 During the stress tests where the server was subjected to a generated load, packet losses occurred on both systems under test. Figure \ref{fig:resuc1a} displays the percentage of packet losses in different load scenarios for High-Performance PCs, while Figure \label{fig:resuc1b} shows the results for Traffic PCs. The diagrams demonstrate that packet losses occurred in both systems under test when subjected to the stress-ng 'bigheap' stressor which generates memory load and to network load on the server.
 
-Under stress from memory load, the server experiences packet losses across all three datagram sizes tested. Losses are less than one percent for 80 and 8900 bytes, which is why they are not visible on the diagram. However, they increase to 5.29\% and 7.81\% for 65000 bytes, which is due to fragmentation, since the entire datagram is lost when a fragment is lost. It is also observed that the losses are slightly lower with the High-Performance PC as the system under test compared to the Traffic PC as the system under test when under memory load.
+Under stress from memory load, the server experiences packet losses across all three datagram sizes tested. Losses are less than one percent for 80 bytes and 8900 bytes, which is why they are not visible on the diagram. However, they increase to 5.29\% and 7.81\% for 65000 bytes, which is due to fragmentation, since the entire datagram is lost when a fragment is lost. It is also observed that the losses are slightly lower with the High-Performance PC as the system under test compared to the Traffic PC as the system under test when under memory load.
 
 The losses occurred in the server, and the network card dropped the packets, as determined by the standard interface statistics of the network interface in the server. The drops occur due to memory load, as explained in \ref{chap:stressngMemeory}. This results in insufficient memory to process the arriving packets through the network stack. For instance, the network stack may not be able to allocate a socket buffer structure to process an incoming packet.
 
-Additionally, packet losses have been observed with network load for datagram sizes of 8900 and 65000 bytes. These are due to the maximum bandwidth being exceeded because both the client and another computer system are sending data to the server at up to 10 Gbit/s. As a result, the maximum bandwidth of 10 GBit/s, with which the server is connected to the switch, is exceeded, which is why packets get dropped by the switch.
+Additionally, packet losses have been observed with network load for datagram sizes of 8900 bytes and 65000 bytes. These are due to the maximum bandwidth being exceeded because both the client and another computer system are sending data to the server at up to 10 Gbit/s. As a result, the maximum bandwidth of 10 GBit/s, with which the server is connected to the switch, is exceeded, which is why packets get dropped by the switch.
 
 \begin{figure}[htbp]
   \centering
@@ -114,14 +114,14 @@ In the previous campaign (refer to \ref{chap:relcamp1}), individual operating st
 	Timer with a Frequency of 100 kHz & 1 & \\
 	\bottomrule
 \end{tabular}
-\caption{Components of the Realistic Load Scenario for a Computer System with A in a distributed Test Support System.}
+\caption{Components of the Realistic Load Scenario for a Computer System.}
 \label{tab:realpc}
 \end{table}
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.8\linewidth]{figures/reliability/star/rel_g_2.pdf}
-    \caption{Illustration of the used Systems under Test.}
+    \caption{Representation of the Network Load in the Realistic Load Scenario.}
     \label{fig:realNW}
 \end{figure}
 
@@ -144,7 +144,7 @@ The campaign was performed with both the High-Performance PCs and the Traffic PC
   \subcaptionbox{Datagram Size of 65000 Byte\label{fig:resuc3b}}{%
     \includegraphics[width=1\textwidth]{figures/reliability/star/rel_d_3b.pdf}
   }
-  \caption{Packet Loss Ratio by Cycle Time with High-Performance PCs as System under Test (Campaign „Tests with Realistic Load Scenario“).}
+  \caption{Packet Loss Ratio by Cycle Time with High-Performance PCs as System under Test (Campaign 'Tests with Realistic Load Scenario').}
   \label{fig:resuc3}
 \end{figure}
 
@@ -165,20 +165,18 @@ In order to better understand the packet losses, certain tests were repeated and
 \begin{figure}[h!]
     \centering
     \includegraphics[width=1\linewidth]{figures/reliability/star/rel_d_4.pdf}
-    \caption{Sent and Receive Packet Rate over Time for a Test with a Datagram Size of 65000 Byte and a Cycle Time of 120 µs (Campaign „Tests with Realistic Load Scenario“).}
+    \caption{Sent and Receive Packet Rate over Time for a Test with a Datagram Size of 65000 Byte and a Cycle Time of 120 µs (Campaign 'Tests with Realistic Load Scenario').}
     \label{fig:srpr4}
 \end{figure}
 
 Figure \ref{fig:srpr4} displays the send and receive packet rate over time for an example test with a datagram size of 65000 bytes and a cycle time of 120 µs. The average throughput was 4.3 Gbit/s, and there was a 61\% packet loss. The variation in packet losses between this implementation and the results presented in \ref{fig:resuc3} for a cycle time of 120 µs can be attributed to fluctuations.
 
-The diagram shows that the packet losses occur cyclically. It is illustrated that there are phases during which all packets are lost (shown in blue) and phases during which all packets are received (shown in orange). These phases of packet loss have a constant duration of 25 seconds, but the interval between these phases varies.
+The diagram shows that the packet losses occur cyclically. It is illustrated that there are phases during which all packets are lost (shown in gray) and phases during which nearly all packets are received (shown in green). These phases of packet loss have a constant duration of 25 seconds, but the interval between these phases varies.
 
-Based on recorded data, it can be concluded that the packet losses occurred due to an overload the switch. The recorded pattern with the constant loss intervals could indicate an kind of overload protection mechanism of the switch, which prevents the sending of packets. However, the Ethernet switch is a "Black Box", as Cisco does not publish detailed information about the implementation, so the exact cause of the losses cannot be analyzed further. During the tests, all protection mechanisms of this kind, which can be set in the switch interface, were deactivated.
+Based on recorded data, it can be concluded that the packet losses occurred due to an overload the switch. The recorded pattern with the constant loss intervals could indicate an kind of overload protection mechanism of the switch, which prevents the sending of packets. However, the Ethernet switch is a 'Black Box', as Cisco does not publish detailed information about the implementation, so the exact cause of the losses cannot be analyzed further. During the tests, all protection mechanisms of this kind, which can be set in the switch interface, were deactivated.
 
 \paragraph{Classification of Results}
 This campaign showed that packet losses can occur when the setup is loaded with the realistic scenario. Losses were also observed below the maximum bandwidth. The reason for this is most likely due to switch congestion, which occurs cyclically.
-
-The purpose of the 'Tests with Realistic Load Scenario and Quality of Service' campaign is to investigate the impact of Quality of Service on the results. Meanwhile, the 'Tests with Realistic Load Scenario and custom Network Load Generator' campaign aims to examine the influence of the network load generated by iPerf on the losses.
 
 \subsubsection{Tests with Realistic Load Scenario and Quality of Service}
 \paragraph{Motivation and Context}
@@ -221,8 +219,7 @@ The test procedure for this campaign was the same as for the 'Tests with Realist
 \begin{figure}[h!]
     \centering
     \includegraphics[width=1\linewidth]{figures/reliability/star/rel_d_5.pdf}
-    \caption{Packet Loss Ratio by Cycle Time for a Datagram Size of 65000 Byte with High-Performance PCs as System under Test (Campaign „Tests with Realistic Load Scenario and Custom Network Load Generator“).}
-    \label{fig:srpr5}
+    \caption{Packet Loss Ratio by Cycle Time for a Datagram Size of 65000 Byte with High-Performance PCs as System under Test (Campaign 'Tests with Realistic Load Scenario and Custom Network Load Generator').}    \label{fig:srpr5}
 \end{figure}
 
 During the campaign, only packet losses were observed when examining a datagram size of 65000 bytes. At a cycle time of 0 µs, packet losses of 99.9\% were recorded. while no packet losses occurred at a cycle time of 60 µs. These results are illustrated in Figure \ref{fig:srpr5}. It is worth noting that packet drops were again only reported by the switch.
@@ -247,11 +244,325 @@ Furthermore, in addition to the standard network interfaces in the topology, the
 \section{Reliability Analysis of the Star Topology with the iHawk in the Centre}
 
 \subsection{System under Test}
-The key takeaway from the previous reliability tests (see 3.2.3) is that the use of an Ethernet switch in the distributed AIDASS is unsuitable, as it leads to a significant number of lost packets. The behavior of the switch was also found to be unreliable and sometimes unpredictable.
+The key takeaway from the previous reliability tests (see \ref{chap:switchtest}) is that the use of an Ethernet switch in the distributed AIDASS is unsuitable, as it leads to a significant number of lost packets. Additionally, the behavior of the switch was found to be unreliable and unpredictable. As a result, an alternative topology was developed and investigated, which is described in \ref{chap:TopoiHawk}, and in which the iHawk is placed in the center of the star.
+
+In this configuration, all participants (hereafter referred to as Endpoints) are connected to a computer system in the center (hereafter referred to as the Center). In a practical implementation in the test system, the endpoints are the I/O PCs and the center is an iHawk. The endpoints are not connected to each other, as communication in the distributed Test Support System is mainly between the center and the endpoints, rather than between the endpoints themselves.
+
+For the test setup, the High-Performance PCs and Traffic PCs serve as endpoints, while an iHawk is located in the center. Unless otherwise specified, the network cards mentioned in the presenation of the topology (see \ref{chap:TopoiHawk}) will be used for the tests.
+
+The system under test for subsequent test campaigns is no longer a single communication that is examined. Instead, the TestSuite examines each bidirectional link in the topology. Since each of the four endpoints is connected to the center by two bidirectional links, there are 16 UDP communications generated and measured by the TestSuite.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\linewidth]{figures/reliability/ihawk/topo.pdf}
+    \caption{Structure and Nomenclature of Communication Channels of the Test Setup with the iHawk in the Center of the Star.}
+    \label{fig:topoihawknaming}
+\end{figure}
+
+To distinguish between communications more easily, the nomenclature scheme depicted in Figure \ref{fig:topoihawknaming} was designed. The two physical 10 GbE links that connect each endpoint to the centers are referred to as link \textbf{A} and \textbf{B}. A separate TestSuite process generates and measures UDP communication in both directions across each of these links simultaneously. These directions are referred to as \textbf{H} and \textbf{R}. Direction H refers to communication channels where the center is the sender and the endpoint is the receiver. Conversely, direction R refers to communication channels where the center is the receiver and the endpoint is the sender.
+
+Because 16 bidirectional communications lead to a high network load, especially in the center, the settings recommended by Intel for high reliability in the Linux Performance Tuning Guide for the Ethernet 700 Series \cite{intermod03} were used. These settings were chosen based on experiments conducted with the High-Performance PCs prior to this campaign. These settings include:
+\begin{itemize}
+  \item Disabling of Energy Efficient Ethernet
+  \item Enlargement of the RX\_Ring and TX\_Ring to 4096 slots
+  \item Deactivation of Interrupt Moderation (unless otherwise specified)
+  \item UDP Receive Buffer Size of 25 MB
+\end{itemize}
+
+\subsection{Test Campaigns}
+
+\subsubsection{Tests without additional Load} \label{chap:noaddloadTest}
+\paragraph{Motivation and Context}
+This test aims to assess the reliability of the setup when all 16 communication channels are operating at full capacity. The center, which has to handle a high communication load, is the main focus of the campaign.
+
+To analyze the reliability in a long-term test, a test duration of 2 hours is used. Datagram sizes of 80 bytes, 8900 bytes and 65000 bytes are tested and a cycle time of 0 µs is selected, which corresponds to an uninterrupted transmission process.
+
+\paragraph{Results}
+\subparagraph{System Utilization}
+Before presenting the results on reliability based on the number of packet losses, this section discusses the utilization of the systems, especially the utilization of the iHawk in the center.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1\linewidth]{figures/reliability/ihawk/diagr2.pdf}
+    \caption{CPU Utilization in the Center for the examined Datagram Sizes (Campaign 'Tests without additional Load').}
+    \label{fig:diagr2CPU}
+\end{figure}
+
+Figure \ref{fig:diagr2CPU} displays the average CPU utilization at the center for the examined datagram sizes. The overall utilization across all datagram sizes is about 55\% and varies slightly. As the datagram size increased, the utilization in the user space decreased while the utilization in the kernel space increased. Additionally, utilization was also observed in the software interrupt handling area.
+
+The increased user space utilization, especially for datagrams with a size of 80 bytes, is due to the higher number of packets generated or retrieved in the application (TestSuite). While about 100,000 packets per second are processed with an 80 byte datagram size, only about 19,000 packets per second are processed with a 65,000 byte datagram size.
+
+The utilization in the software interrupt handling area includes packet processing during reception and partially during transmission. The lowest utilization is measured with a datagram size of 8900 bytes, because fewer packets are processed (compared to 80 bytes) and no fragmentation or defragmentation is performed (compared to 65000 bytes).
+
+The CPU utilization was monitored throughout the testing period and no anomalies were detected. A fluctuation of ±3\% of the reported average utilizations can be observed. The CPU load does not indicate any overloading of the iHawk in the center during the test.
+
+CPU utilization at the endpoints was also considered. The High-Performance PCs showed an overall utilization of 14.8\%, while the Traffic PCs showed a higher utilization of 34.3\% due to their inferior hardware specifications. Again, there was little variation in the overall utilization between the datagram sizes tested. Based on the CPU utilization, no overload can be detected on the endpoints either.
+
+\subparagraph{Packet Loss}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1\linewidth]{figures/reliability/ihawk/diagr3.pdf}
+    \caption{Packet Loss Ratio by Datagram Size and Communication Direction (Campaign 'Tests without additional Load').}
+    \label{fig:diagr3Loss}
+\end{figure}
+
+Figure \ref{fig:diagr3Loss} shows the overall packet loss ratio for this test campaign, broken down by datagram size and communication direction. No packet losses were observed during the tests conducted with datagram sizes of 80 and 8900 bytes. However, packet losses were observed in both the 'H' and 'R' directions during testing with a datagram size of 65000 bytes when using fragmented packets. The packet losses in the 'H' and 'R' directions will be analyzed separately below.
+
+Packet losses of \num{7.56e-6} \% were observed when examining a datagram size of 65000 bytes in the direction from the endpoints to the center ('R'). Table \ref{tab:dirRLoss} provides a breakdown of these losses at a datagram size of 65000 bytes by channel, which shows that few losses occur in all communication channels in this direction and are almost evenly distributed among the individual channels.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lll}
+	\toprule
+	Channel & Lost Packets (Total) & Average Throughput (Net) \\
+	\midrule
+	1A-R & 7  & 8.25 GBit/s \\ 
+ 	1B-R & 11 & 8.75 GBit/s \\
+	2A-R & 8  & 8.23 GBit/s \\
+ 	2B-R & 8  & 8.13 GBit/s \\
+ 	3A-R & 7  & 8.12 GBit/s \\
+ 	3B-R & 16 & 8.09 GBit/s \\
+ 	4A-R & 9  & 8.20 GBit/s \\
+ 	4B-R & 9  & 8.40 GBit/s \\
+	\bottomrule
+\end{tabular}
+\caption{Packet Losses for a Datagram Size of 65000 Bytes in Direction 'R' (Campaign 'Tests without additional Load').}
+\label{tab:dirRLoss}
+\end{table}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1\linewidth]{figures/reliability/ihawk/diagr4.pdf}
+    \caption{Temporal Distribution of Packet Loss for Channel 1B-R (Campaign 'Tests without additional Load').}
+    \label{fig:diagr4Temp}
+\end{figure}
+
+Figure \ref{fig:diagr4Temp} displays the temporal distribution of packet losses using channel 1B-R as an example. It is evident that the packet losses do not occur in bursts, but instead are distributed independently across the entire test duration. This trend can observed for the other channels.
+
+Packet losses can occur at the sender (Endpoints in the 'R' direction), during cable transmission on the route, or at the receiver (Center in the 'R' direction). Further investigation is necessary to determine the precise location and reasons for packet losses, as the statistics of the network interfaces and the network stack on all computer systems for this direction do not indicate any drops.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1\linewidth]{figures/reliability/ihawk/diagr5.pdf}
+    \caption{Packet Loss Ratio by Number of Links with a Datagram Size of 65000 Byte in Direction 'R' (Campaign 'Tests without additional Load').}
+    \label{fig:diagr5Loss}
+\end{figure}
+
+To investigate the losses in the direction 'R' at 65,000 bytes, test sessions of 20 minutes were run, gradually reducing the number of bidirectional links used until no losses occurred. The results of this investigation are displayed in Figure \ref{fig:diagr5Loss}.
+
+The investigation shows that there are no losses in the direction 'R' when using 5 bidirectional links. The ratio of losses to the total number of packets decreases as the number of links decreases.
+
+In this test campaign, only the number of links decreased, but the configuration of the TestSuite remains unchanged. Therefore, the load on a single link remains the same, so the route cannot be considered the cause of the packet losses. In the test with five bidirectional links, endpoints 1 and 4 utilize both of their respective links, while endpoint 2 only utilizes link A. Endpoint 3 is not part of this test. Since the load on endpoints 1 and 4 is the same as in the original scenario with eight links, the senders, in this case the endpoints, are not considered to be responsible for the packet losses.
+
+Based on these findings, it can be concluded that the receiver, in direction 'R' the center, is where the packet losses occurred. Observing that losses occur only at a datagram size of 65000 bytes suggests a correlation with the defragmentation on the network stack. One possible scenario is an overflow of the buffer allocated for defragmentation, resulting in packet losses. \\
 
 
+As displayed in figure \ref{fig:diagr3Loss}, the direction 'H' from the center to endpoints experiences significantly higher packet loss at a rartio of \num{9.55e-4} \% for a datagram size of 65000 bytes compared to direction 'R'. Table \ref{tab:dirHLoss} includes a breakdown of the packet losses for a datagram size of 65000 bytes by channel. It is important to note that only packet losses were observed in communications with endpoint 3.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lll}
+	\toprule
+	Channel & Lost Packets (Total) & Average Throughput (Net) \\
+	\midrule
+ 	1A-H & 0    & 9.90 GBit/s \\ 
+ 	1B-H & 0    & 9.90 GBit/s \\
+ 	2A-H & 0    & 9.89 GBit/s \\
+ 	2B-H & 0    & 9.89 GBit/s \\
+ 	3A-H & 4313 & 9.89 GBit/s \\
+ 	3B-H & 4285 & 9.89 GBit/s \\
+ 	4A-H & 0    & 9.90 GBit/s \\
+ 	4B-H & 0    & 9.90 GBit/s \\
+	\bottomrule
+\end{tabular}
+\caption{Packet Losses for a Datagram Size of 65000 Bytes in Direction 'H' (Campaign 'Tests without additional Load').}
+\label{tab:dirHLoss}
+\end{table}
+
+The statistics (Standard Interface Statistic and Network Stack Statistic) recorded in the sender (Center) show no losses. In contrast, the statistics for the affected receiver (Endpoint 3) show packet losses in the \texttt{rx\_missed\_errors} counter of the Standard Interface Statistic (see Table \ref{tab:ep3InterfaceStat}).
+
+\begin{table}[h]
+\centering
+\begin{tabular}{llll}
+	\toprule
+	Interface & Channel & \texttt{rx\_dropped} & \texttt{rx\_missed\_errors} \\
+	\midrule
+ 	enp1s0f0 & 3A-(H/R) & 0 & 19507 \\ 
+ 	enp1s0f1 & 3B-(H/R) & 0 & 19414 \\
+	\bottomrule
+\end{tabular}
+\caption{Extract of the Standard Interface Statistic for Endpoint 3.}
+\label{tab:ep3InterfaceStat}
+\end{table}
+
+According to the Linux kernel documentation, \texttt{rx\_missed\_errors} indicates the number of packets that were dropped by the computer due to insufficient space in the buffer \cite{sock11}. This indicates that the computer may not be able to handle incoming packets at the rate at which they arrive at the network interface, resulting in network congestion at the endpoint 3. The ksoftriq threads, which handle the processing of incoming packets as described in \label{chap:recpath} were unable to process all the packets available in the network device's ring buffer before their CPU time expired.
+
+The recorded losses of the TestSuite are lower than the values for \texttt{rx\_missed\_error}. This is due to the fact that losses only occurred at 65000 bytes, where the UDP packets were fragmented into 8 IP packets due to the configured MTU of 9000 bytes. If a fragment is lost, the entire packet is discarded.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1\linewidth]{figures/reliability/ihawk/diagr6.pdf}
+    \caption{Temporal Distribution of Packet Loss for Channel 3A-H (Campaign 'Tests without additional Load').}
+    \label{fig:diagr6Temp}
+\end{figure}
+
+Figure 3 shows the temporal distribution of packet losses for communication 3A-H. The graph uses a resolution of 100,000 packets.  It is clear that packet losses occur uniformly over time rather than in bursts. Furthermore, it can be observed that losses are cyclic in nature. Upon examining the individual query requests, it is noticeable that there is a packet loss of approximately 30 to 40 packets every 900,000 packets (~65 seconds), but no packets are lost in the intervening period. The graph for 3B-H shows comparable results.
+
+These results confirm the hypothesis of network congestion on endpoint 3, which where already assumed in the presentation of the standard interface statistics (see Table \ref{tab:ep3InterfaceStat}). However, there is no indication of CPU overload, as the average CPU utilization on endpoint 3 during this test was 36.7\%. An additional investigation focusing on endpoint 3 revealed no packet loss when using only one bidirectional link with this endpoint.
+
+It is also important to note that packet losses are only observed on endpoint 3. Endpoint 2 and endpoint 3 belong to the Traffic PC system type (refer to \ref{chap:ComputerHardware}), meaning they utilize the same CPU and are equipped with the Intel X540-T2 network card. The recorded average CPU utilization of both computers during the test  was also almost identical.
+
+The primary distinction between the two Traffic PCs is the motherboard. TPC1 (Endpoint 2) uses a GA-Z77X-UD5H motherboard, while TPC2 (Endpoint 3) is equipped with a GA-Z77X-UD3H motherboard. Although both motherboards have the PCIe x16 slot, which is used for the network card, connected directly to the CPU and feature the same Intel X77 chipset, there are still differences in the components and their cooling, which is more advanced on the GA-Z77X-UD5H \cite{reli04, reli05}.
+
+Both computer systems are equipped with air cooling to provide heat dissipation to the CPU. However, TPC1 is equipped with a superior type of air cooling. As a result, the CPU of TPC2 may be subjected to higher temperatures compared to TPC1, which could lead to CPU throttling. This could be a possible explanation for the differences in packet loss observed between endpoints 2 and 3.
+
+Table \ref{tab:dirHLoss} shows that there were no losses observed in the 'H' direction with the High-Performance PCs.
+
+\paragraph{Classification of Results}
+
+The results indicate that packet losses occur in the test setup when using all bidirectional links, both in the center and in endpoint 3 due to congestion. However, it should be noted that these losses are relatively modest and occur only at maximum load and only in conjunction with a datagram size of 65000 bytes with fragmentation.
+
+\subsubsection{Tests with additional Load at the Center}
+
+\paragraph{Motivation and Context}
+The purpose of this test campaign is to analyze the reliability of the system under additional load at the center. The realistic scenario described in \ref{chap:campaignloadscen} was used as the additional system load. The number and intensity of stress-ng stressors on the computer system remain the same. However, no network stressors were used because the network load is entirely generated and measured by the TestSuite.
+
+A test duration of 10 minutes was chosen. To maintain consistency with the prior campaign, datagrams sizes of 80, 8900, and 65000 bytes were tested. Despite packet loss in the previous scenario, a cycle time of 0 µs was again selected to evaluate the system under a high network load. All 16 communication channels were utilized.
+
+\paragraph{Results}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\linewidth]{figures/reliability/ihawk/diagr7.pdf}
+    \caption{CPU Utilization in the Center for different Load Scenarios (Campaign 'Tests with additional Load at the Center').}
+    \label{fig:diagr7CPU}
+\end{figure}
+
+Figure \ref{fig:diagr7CPU} displays the average CPU utilization in the center during the execution of this test campaign and compares it with the execution of the realistic load scenario without running the tests with the TestSuite.
+
+The realistic scenario utilizes 18.6\% of the CPU. The majority of the CPU time is spent in the user space with 17.6\% and 1\% is spent in the kernel space. The average CPU utilization during the execution of the test campaign is between 72\% and 78\%. No overload situation due to the additional system load can be identified when examining CPU utilization. Additionally, the transmission data transfer rate is also not affected by the additional load.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\linewidth]{figures/reliability/ihawk/diagr8.pdf}
+    \caption{Packet Loss Ratio by Datagram Size and Communication Direction (Campaign 'Tests with additional Load at the Center').}
+    \label{fig:diagr8Loss}
+\end{figure}
+
+Figure \ref{fig:diagr8Loss} displays the results of the test campaign categorized by communication direction and datagram size. The results are consistent with those observed in the first test campaign (Figure \ref{fig:diagr3Loss}), as packet losses only occurred with a datagram size of 65000 bytes in both communication directions.
+
+Packet losses were observed in the direction 'H' (Center to Endpoints), which again only occurred during communication with endpoint 3. The reasons for those losses were already described in the previous section.
+
+In direction 'R' (Endpoints to Center), packet losses were also comparable to the results of the campaign without additional load. The loss ratio is with \num{1.75e-5} \% slightly higher than on the scenario without additional load (\num{7.56e-6} \%). A possible explanation for this might be a variation in the exact number of packet losses, as well as the shorter duration choosen for this campaign. The absolute number of these losses, however, is very low at 8 packets across all links in direction 'R'.
+
+\paragraph{Classification of Results}
+The results of this campaign showed that the additional load on the iHawk in the center of the star had no impact on reliability, as the number of packet losses was comparable to the campaign with no additional load.
 
 
+\subsubsection{Tests to Investigate the Influence of CPU Affinity}
+\paragraph{Motivation and Context}
+
+CPU affinity refers to the ability to bind processes to one or more specific CPU cores \cite{reli06}. The objective of this campaign is to examine the impact of various CPU affinity options applied to the center PC on the reliability.
+
+As mentioned in \ref{chap:iHawkChar}, the iHawk's PCIe slots are directly connected to one of the CPUs. CPU 0 is connected to slots 1 to 3, which contain network cards connected to endpoints 2 and 3. Similarly, CPU 1 is connected to slots 4 to 6, which contain network cards connected to endpoints 1 and 4. The CPUs are interconnected through two UPI links. The purpose of the test campaign is to investigate any possible limitations in this two-socket configuration. These limitations could be caused by bottlenecks in the memory connection of the network cards and the connection between the CPUs.
+
+If CPU affinity is not explicitly configured, the scheduler will assign arbitrary CPU cores to the corresponding TestSuite processes, as it has no information about which I/O devices are used by which process \cite{reli07}. In this test campaign, a scenario with 'enabled' CPU affinity was performed. This describes the situation when client and server processes of TestSuite were bound to the CPU cores on the local NUMA node. This refers to the CPU node to which the respective network card is connected. Additionally, a test was conducted using an 'inverse' CPU affinity, in which the processes of the TestSuite were configured to use CPU cores from the other socket. The Receive Side Scaling settings (see \ref{chap:ReceiveSideScaling}) of the network interface were not changed in all tests, as they are set by default to use only the cores on the local NUMA node.
+
+Tests were performed with a duration of 10 minutes, using the same datagram sizes and a cycle time of 0 µs as in the previous campaigns.
+
+\paragraph{Results}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\linewidth]{figures/reliability/ihawk/diagr9.pdf}
+    \caption{Packet Loss Ratio by Affinity Setting for a Datagram Size of 65000 Byte (Campaign 'Tests to Investigate the Influence of CPU Affinity').}
+    \label{fig:diagr9Loss}
+\end{figure}
+
+Figure \ref{fig:diagr9Loss} shows the packet losses using the two CPU affinity settings in the 'R' direction (Endpoints to Center) for a datagram size of 65000 byte and compares them to the results with no affinity setting from a previous campaign. For all tests performed, packet losses were only detected with a datagram size of 65000 byte. The packet losses in the direction 'H' (Center to Endpoints) will not be discussed in detail here, as no particular anomalies were observed compared to the other test campaigns. There were packet losses in the communication channels from the center to endpoint 3.
+
+Packet losses were observed with all three affinity settings in direction 'R' when the datagram size was 65000 bytes, which is in connection with fragmented packets. These losses were also observed in the previous test campaigns.  The packet loss ratio varies slightly depending on the affinity settings utilized, but remains within a comparable range, ranging from \num{7.6e-6} \%  to \num{5.4e-6} \%. These variations in individual tests result more from variations in the specific number of packet losses, combined with the relatively short duration of the tests, than from the different evaluated CPU affinity settings. The CPU utilization of the center is similar for all three CPU affinity choices being evaluated and have already been discussed in the 'Tests without additional Load' campaign (see \ref{chap:noaddloadTest}).
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/reliability/ihawk/diagr10a.pdf}
+        \caption{80 Byte}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/reliability/ihawk/diagr10b.pdf}
+        \caption{8900 Byte}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/reliability/ihawk/diagr10c.pdf}
+        \caption{65000 Byte}
+    \end{subfigure}
+    \caption{Average Throughput for different Affinity Settings (Campaign 'Tests to Investigate the Influence of CPU Affinity').}
+    \label{fig:diagr10Throuhput}
+\end{figure}
+
+One notable result of this test campaign is the difference in the average transmit throughput of the center. Figure \ref{fig:diagr10Throuhput} compares the transmit data rates between 'enabled' and 'inverted' CPU affinity. The results show that, for datagram sizes of 80 bytes and 8900 bytes, the send throughput is approximately 15\% higher for the 'enabled' CPU affinity scenario than for the 'inverted' CPU affinity test. For a datagram size of 6500 bytes, the send throughput is approximately 3\% higher. The higher throughput is due to the fact that the CPU can access its local resources much faster than the other CPU. The UPI Link, which connects the two CPU sockets, has a latency of about 130 ns \cite{setup07}.
+
+\paragraph{Classification of Results}
+The results of this test campaign indicate that CPU affinity does not affect system reliability. Furthermore, it is important to note that potential bottlenecks, such as memory connections of network cards and connections between CPUs in multi-socket systems, do not have an impact on the packet loss rate a UDP communication.
+
+
+\subsubsection{Tests to Investigate the Influence of Interrupt-Moderation}
+\paragraph{Motivation and Context}
+
+Interrupt moderation, described in \ref{chap:InterMod}, can reduce the number of interrupts generated by the network interface.
+
+This campaign investigates the influence of different settings for interrupt moderation on reliability. The reliability will be examined with deactivated interrupt moderation, as used in all previous campaigns. The recommended timeout values of 84 µs (equivaltent to \num{\sim{12000}} interrupts/s) and 62 µs (equivaltent to \num{\sim{16000}} interrupts/s) from the Intel Linux Performance Tuning Guide \cite{intermod03} were also tested. Additionally, adaptive interrupt moderation, which is active by default, was examined.  
+
+The test campaign included tests with three datagram sizes of 80, 8900, and 65000 bytes, each with a duration of 5 minutes.
+
+\paragraph{Results}
+No significant differences in reliability were found among the various rates of interrupt moderation and the scenario without such moderation. Similar to the test scenario with interrupt moderation disabled, low levels of packet loss in direction 'R' were detected in all three variants tested. Furthermore, packet losses were also detected at endpoint 3, as discussed in previous sections.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\linewidth]{figures/reliability/ihawk/diagr11.pdf}
+    \caption{CPU Utilization in the Center for different Interrupt Moderation Configurations (Campaign 'Tests to Investigate the Influence of Interrupt-Moderation').}
+    \label{fig:diagr11CPU}
+\end{figure}
+
+Figure \ref{fig:diagr11CPU} displays CPU usage in the center with various interrupt moderation settings. As expected, the CPU usage reaches its maximum at about 54\% when interrupt moderation is disabled. All three datagram sizes exhibit similar values in this case. The two interrupt moderation rates of 84 µs and 62 µs record equally high CPU utilization rates of around 33\%, with slightly higher values observed for 62 µs. However, these two test scenarios revealed significant differences in datagram sizes across the various areas. When dealing with small datagrams, especially those of 80 byte in the test, a lower CPU utilization can be experienced. This is because a higher number of UDP packets per second are sent or received (\num{\sim{99000}} pps) compared to the other two datagram sizes (\num{\sim{81000}} pps for 8900 bytes and \num{\sim{19000}} pps for 65000 bytes). The utilization of interrupt moderation leads to a decrease in the number of interruptions generated and a reduction in CPU load.
+
+Adaptive interrupt moderation demonstrated variations in CPU utilization between the examined datagram sizes when compared to a fixed moderation rate. In this case, the interrupt rate is adjusted to provide low latency or high throughput depending on the type of traffic. This process is explained in detail in the patent \cite{intermod04}. For small datagrams, a low interrupt moderation rate is selected, which is equivalent to a high number of interrupts per second. Conversely, for large datagrams, a high interrupt moderation rate is selected, which is equivalent to a lower number of interrupts per second. These results are consistent with the CPU usage, which is significantly higher for 80 bytes than for 8900 or 65000 bytes.
+
+\paragraph{Classification of Results}
+The campaign has shown that all examined interruption moderation rates exhibit comparable reliability. The differences in CPU utilization was also investigated.
+
+Although adaptive interrupt moderation was found to be as reliable as other settings, it should not be used in the distributed Test Support System at this time due to the uncontrollability of its implementation. While the function is described in \cite{intermod04}, the behavior of the implementation may be unpredictable if used without closer examination.
+
+However, the interrupt moderation in connection with the selected interrupt rate also has an influence on the latency, which is considered in section 5. %TODO - Change Reference
+
+\subsubsection{Tests with the Intel X540-T2 Network Interfaces in the Center}
+\paragraph{Motivation and Context}
+This campaign investigates the reliability of the Intel X540-T2 network interface in the iHawk in the center of the star and compares it to the Intel X710-T2L network interface examined so far. Both interfaces are presented in \ref{chap:NicTypes} and have two RJ45 ports and are both 10 GbE capable. The X540 chipset network cards were released in 2012, which means they are 7 years older than the X710 chipset network cards, which were released in 2019 \cite{setupnw02, setupnw03}. In addition, interfaces use different drivers (see Table \ref{tab:drivernic}). Both devices offer comparable offloading mechanisms.
+
+During testing, datagram sizes of 80 bytes, 8900 bytes, and 6500 bytes were considered with a cycle time of 0 µs and a test duration of 2 hours each.
+
+\paragraph{Results}
+The reliability results show no noticeable differences compared to the Intel X710-T2L network cards. In the 'R' direction, a minimal number of packet losses were observed that can be attributed to the center, as previously mentioned. However, no packet losses were recorded in the 'H' direction during the test.
+
+Moreover, there were no notable variations in the transmission data rates of the center achieved through the utilization of Intel X540-T2 network cards and those of Intel X710- T2L network cards. Both cards also show a similarly CPU utilization.
+
+\paragraph{Classification of Results}
+The results indicate that both network interfaces, the Intel X710-T2L and the Intel X540-T2, are suitable for use in the distributed test support system from a reliability standpoint. 
+
+\subsection{Insights}
+Overall, packet losses were detected during the tests, but only under maximum load and in relation to fragmented packets with a size of 65,000 bytes. Thus, from a reliability perspective, the examined star topology is still suitable for a distributed test system.
+
+Additionally, no impact was found with increased stress at the center, and the location of the CPU socket on which the send or receive process is executed. No differences in reliability were found among the different interrupt moderation rates tested, despite a noticeable difference in CPU utilization.
+
+Furthermore, the reliability of the Intel X540-T2 network card in the center was tested. No differences to the X710-T2L were found. Therefore, the Intel X540-T2 is also suitable for use in the center of a distributed test system.
 
 
 
