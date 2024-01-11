@@ -675,14 +675,16 @@ Latency, often referred to as delay, is the amount of time it takes to transmit 
 	\item \textbf{Processing Delay:} time required to process data at the sender or receiver, such as adding header information or checking for errors.
 \end{itemize}
 
-TestSuite considers the latency from sending a packet in the client application to receiving a packet in the server application. This can be calculated using the timestamps recorded by the client and server. Thus, the latency can be determined for each transmitted packet.
+TestSuite considers the latency from sending a packet in the client application to receiving a packet in the server application. This can be calculated using the timestamps recorded by the client and server. Thus, the latency can be determined for each transmitted packet as shown in equation \ref{eq:latency}.
 
 \begin{equation}
 Latency = Receive\ Time - Send\ Time
 \label{eq:latency}
 \end{equation}
 
-To determine the latency as shown in equation \ref{eq:latency}, synchronized clocks between transmitter and receiver are required. The accuracy of the measurement is largely determined by the quality of the clock synchronization.
+When analyzing latency during a test run, two main values can be determined. The first is the \textbf{Worst Case Latency}, which reflects the maximum of all latency values recorded during a test. Additionally, the \textbf{Mean Latency} can be considered, which represents the average value of the recorded latencies during a test.
+
+To determine the latency, synchronized clocks between transmitter and receiver are required. The accuracy of the measurement is largely determined by the quality of the clock synchronization.
 
 \section{Generation of additional System Load} \label{chap:loadgeneration}
 One requirement for the tests is that they should be possible under different operating conditions (see \label{chap:introduction:research_questions}). Based on this requirement, the following categories of load were defined, which should be able to be produced in the test setup, either in isolation or together:

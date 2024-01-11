@@ -2,7 +2,7 @@
 
 \section{Test Objectives}
 
-The test campaigns presented here aim to investigate the reliability of UDP communication in a local network under conditions similar to those in the distributed Test Support System. Reliability is measured by the number of lost packets. Both topologies presented in \ref{chap:Architectures} were considered.
+The test campaigns presented here aim to investigate the reliability of UDP communication using an UDP socket in a local network under conditions similar to those in the distributed Test Support System. Reliability is measured by the number of lost packets. Both topologies presented in \ref{chap:Architectures} were considered.
 
 Packet loss can occur at several points within the network. On the one hand, it can be caused by a participating computer system. Possible causes include an overflow of the socket receive buffer or the network interface buffer (RX\_Ring or TX\_Ring). The QDisc queue, which is used in the network stack to send packets, can also overflow. In addition, limited system resources, such as CPU and memory contention or high interrupt handling, can also lead to packet loss.
 
