@@ -1,16 +1,68 @@
 \chapter{Background}
-% TODO
 
+\section{Data Management Layer}
+A distributed Test Support System consists of multiple asynchronous computer systems, called nodes. A node may have hardware interfaces to communicate with different bus systems. Additionally, processes, called Processing Units are executed on a node to process data from the hardware interfaces or to generate data for transmission. The nodes collaborate in a common test environment, therefore it is necessary to exchange data between them. The exchange of data between hardware interfaces and Processing Units, including the exchange between different nodes, is facilitated by the Data Management Layer (DML).
 
-\section{Positioning in the distributed Test Support System}
-TODO – Beschreibung des Senden/Empfangen im verteilten TSS zur besseren Einordnung der Arbeit
+This chapter provides an overview of the DML and explains the process of sending and receiving data according to \cite{dml01}.
+
+\subsection{Fundamentals}
+DML uses a publish-subscribe model to exchange data with the Processing Units. This enables the Processing Units to receive only the required messages from the interfaces. This principle is implemented through the use of a 64-bit identifier called a DML ID. Each message has a unique DML ID.  The structure of the DML ID is shown in Figure \ref{fig:DmlId}.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\linewidth]{figures/dml/dml01.pdf}
+    \caption[Structure of the DML ID]{Structure of the DML ID. Adapted from: \cite{dml01}.}
+    \label{fig:DmlId}
+\end{figure}
+
+The DML ID consists a 12-bit \textit{Interface ID} assigned to each interface by the Test Support System. In addition, a 52-bit \textit{Message ID} is part of the DML ID. This contains fields for the unique identification of a message, depending on the bus system implemented at the respective hardware interface.
+
+The current implementation connects the involved asynchronous computer systems using a Dolphin Interconnect based on PCI Express. This connection is the focus of this thesis, since an Ethernet network based on UDP is to be investigated as a possible alternative.
+
+Direct Memory Access (DMA) is primarily used as a method of communication between all components involved. It is described in chapter \ref{chap:hwdependcode}.
+
+\subsection{Receive Path}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1\linewidth]{figures/dml/dml02.pdf}
+    \caption[DML Receive Path]{DML Receive Path. Adapted from: \cite{dml01}.}
+    \label{fig:DmlRec}
+\end{figure}
+
+When a message is received by a hardware interface (see Figure \ref{fig:DmlRec}, Arrow 1), the interface uses DMA to copy the data to a FIFO buffer (see Figure \ref{fig:DmlRec}, Arrow 2). A FIFO buffer is implemented as a ring buffer and is located in the main memory of the node. Each interface has a separate FIFO buffer, which allows for asynchronous access without mutual exclusion, as the FIFO buffer is only written to by the respective interface.
+
+The Data Manager, a process running on each node, polls all of the FIFO buffers of the node at a specified time interval. If a new message is found in a FIFO and there is a subscriber for that message, it is processed further.
+
+If a subscriber exists on the local node, the Data Manager copies the message to the monitor memory (see Figure \ref{fig:DmlRec}, Arrow 3). From there, it can be read by a Processing Unit.
+
+If a subscriber for a message exists on another node, the message must be forwarded. To achieve this, the nodes exchange subscriber lists. This forwarding process is illustrated in Figure \ref{fig:DmlRec}, Arrow 4. The Data Manager of the local node copies the message by DMA over the Dolphin Interconnect into a FIFO buffer of the remote node. Each node has, in addition to the FIFO buffers for each interface in the node, a FIFO buffer for each remote node in the distributed Test Support System.
+
+The Data Manager of the remote node then copies the message to the monitor memory (see Figure \ref{fig:DmlRec}, Arrow 5), similar to the local distribution.
+
+\subsection{Transmit Path}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1\linewidth]{figures/dml/dml03.pdf}
+    \caption[DML Transmit Path]{DML Transmit Path. Adapted from: \cite{dml01}.}
+    \label{fig:DmlTrans}
+\end{figure}
+
+Whenever a processing unit wants to send a message on a bus system using a hardware interface, it writes it into a FIFO buffer (see Figure \ref{fig:DmlTrans}, Arrow 1). These FIFO buffers are separate from the ones on the receiving side. Each node has a FIFO for every processing unit and for every other remote node in the distributed Test Support System.
+
+The Data Manager also polls these FIFO buffers. To forward a message, it is distinguished whether the interface is located on the same node or on a remote node.
+
+If the message is intended for an interface on the same node, the Data Manager copies it into the Transmit FIFO (Tx FIFO) of that interface (see Figure \ref{fig:DmlTrans}, Arrow 2). The interface then copies the message that will be sent out next on the bus system into the Tx buffer. A composer mechanism is used to reuse certain parts of a previous message, which allows a Processing Unit to send only the parts that have changed from the prior message. The composer then builds the complete message based on this information. It is then transmitted through the front end of interface in accordance with the timing of the corresponding bus system.
+
+If the message is intended for an interface of a remote node, the Data Manager of the local node copies it using DMA over the Dolphin Interconnect to its FIFO buffer on the remote node (see Figure \ref{fig:DmlTrans}, Arrow 3). The Data Manager of the remote node then places it in the Tx FIFO of the corresponding interface (see figure \ref{fig:DmlTrans}, Arrow 4), from where it is processed and finally sent as described above.
 
 
 \section{TCP/IP Reference Model} \label{chap:RefModel}
 
 Protocols are the basis for communication between instances in a network. They specify rules that must be followed by all communication partners \cite{Tanenbaum2010}. Reference models arrange protocols hierarchically in layers. Each layer solves a specific part of the communication task and uses the services of the layer below while providing certain services to the layer above \cite{Weigel2021}.
 
-\begin{figure}
+\begin{figure}[h]
     \centering
     \includegraphics[width=0.7\linewidth]{figures/tcpip_refmodel/image1.png}
     \caption[Relationship between service and protocol]{Relationship between service and protocol. Source: \cite{Tanenbaum2010}.}
@@ -23,7 +75,7 @@ A protocol is a set of rules that define the format of messages exchanged within
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=1\linewidth]{figures/tcpip_refmodel/image2.png}
+    \includegraphics[width=1\linewidth]{figures/tcpip_refmodel/image2.pdf}
     \caption[Encapsulation Principle]{Encapsulation Principle. Adapted from: \cite{Tanenbaum2010}.}
     \label{fig:EncapsulationPrinciple}
 \end{figure}
@@ -58,7 +110,7 @@ The following section presents a explanation of the TCP/IP reference model. Thro
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=1\linewidth]{figures/tcpip_refmodel/image4.png}
+    \includegraphics[width=1\linewidth]{figures/tcpip_refmodel/image4.pdf}
     \caption[Selection of important protocols of the hybrid TCP/IP Reference Model]{Selection of important protocols of the hybrid TCP/IP Reference Model. Adapted from: \cite{Weigel2021}.}
     \label{fig:RefModelProtos}
 \end{figure}
@@ -120,7 +172,7 @@ The Internet Protocol (IP) is a central protocol in the TCP/IP reference model. 
 
 There are two versions of the Internet Protocol: IPv4 and IPv6. As this work uses the IPv4 protocol, it is presented in more detail below.
 
-\paragraph{IP Header}
+\paragraph{IP Header} \label{chap:ipheader}
 
 The IPv4 datagram is divided into a header and a payload. The header typically spans 20 bytes, but may also include an optional variable-length section. The header is shown in Figure \ref{fig:IPHeader}.
 
@@ -239,7 +291,7 @@ An operating system kernel serves as the interface between the hardware and the 
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=1\linewidth]{figures/linux_kernel/image01.png}
+    \includegraphics[width=1\linewidth]{figures/linux_kernel/image01.pdf}
     \caption[Simplified representation of the Linux Kernel with selected Subsystems]{Simplified representation of the Linux Kernel with selected Subsystems.}
     \label{fig:LinuxKernel}
 \end{figure}
@@ -277,7 +329,7 @@ It should be noted here that system calls are not the only way to execute instru
 \end{itemize}
 
 
-\subsection{Hardware and Hardware Dependent Code}
+\subsection{Hardware and Hardware Dependent Code} \label{chap:hwdependcode}
 
 As already mentioned, the kernel is the interface between the hardware and the processes of a system. Many operations in the kernel are related to the access of physical hardware.
 
@@ -291,7 +343,7 @@ The Linux kernel distinguishes between three different types of hardware devices
 
 The abstraction layer between the physical hardware and the Linux kernel are device drivers. Their primary function is to initialize the device and register its capabilities with the kernel. Additionally, drivers enable the kernel to access, control, and communicate with the device. Each driver is specific to a device and implements certain predefined interface functions to the Linux kernel, depending on the type of the device. The device drivers are available as modules that can be loaded dynamically at runtime \cite{like09}.
 
-One way for the physical hardware to interact with the kernel via the device drivers is through interrupts, which is referred to as interrupt-driven I/O. The hardware uses \textit{interrupt requests} to inform about certain events, and the driver implements the associated \textit{interrupt handler} to process the request \cite{like09}.
+One way for the physical hardware to interact with the kernel via the device drivers is through interrupts, which is referred to as \textit{Interrupt-Driven I/O}. The hardware uses \textit{interrupt requests} to inform about certain events, and the driver implements the associated \textit{interrupt handler} to process the request \cite{like09}.
 
 \textit{Direct Memory Access} (DMA) is another way of interaction between the hardware and a system, which is mainly used by block devices or network devices [9]. DMA is a mechanism that allows hardware devices to transfer data directly to or from system memory, bypassing the CPU. This method enhances data throughput and system performance, as it reduces CPU overhead during high-volume data transfers \cite{like05}.
 
@@ -336,7 +388,7 @@ The purpose of this chapter is to explain UDP communication using a Linux operat
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=1\linewidth]{figures/linux_nwstack/image03.png}
+    \includegraphics[width=1\linewidth]{figures/linux_nwstack/image03.pdf}
     \caption[Simplified Representation of the Linux Network Stack with associated Layers of the hybrid TCP/IP Reference Model]{Simplified Representation of the Linux Network Stack with associated Layers of the hybrid TCP/IP Reference Model. Adapted from: \cite{lins06}.}
     \label{fig:NWStack}
 \end{figure}
@@ -408,8 +460,8 @@ Raw sockets and packet sockets are additional types of Internet sockets. These a
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.9\linewidth]{figures/linux_nwstack/image02.png}
-    \caption[OOverview of Network Layers and Access Possibilities with different Socket Types]{Overview of Network Layers and Access Possibilities with different Socket Types. Adapted from: \cite{sock07}.}
+    \includegraphics[width=0.9\linewidth]{figures/linux_nwstack/image02.pdf}
+    \caption[Overview of Network Layers and Access Possibilities with different Socket Types]{Overview of Network Layers and Access Possibilities with different Socket Types. Adapted from: \cite{sock07}.}
     \label{fig:SocketAccessPossib}
 \end{figure}
 
@@ -513,21 +565,15 @@ The actual transmission of the packet over the network interface card is usually
 
 
 
-\section{Tuning Options}
+\section{Advanced Networking Options}
 
-\subsection{Buffers in the Network Stack}
+\subsection{Hardware Offloading} \label{chap:HWOffload}
+Hardware offloading enables specialized hardware to perform compute-intensive tasks instead of the system's CPU, reducing its workload. The workload for the CPU is reduced by utilizing specialized In terms of networking, this specialized hardware is integrated into the network interface \cite{tuning01}. Linux distinguishes between two types of offload: Checksum Offload and Segmentation Offload \cite{tuning02, tuning03}.
 
-\subsubsection{Socket Receive Queue Memory}
-%TODO
+Checksum Offload refers to the ability to calculate various checksums of the protocols in the TCP/IP reference model, including the checksum in the Ethernet frame and the checksum in the IP or UDP header \cite{tuning02}.
 
-\subsubsection{RX\_Ring}
-%TODO
+Segmentation Offload can be used to fragment a UDP packet using the network interface. A similar technique also exists for TCP \cite{tuning03}.
 
-\subsection{Quality of Service} \label{background:tuning:qualityofservice}
-%TODO
-
-\subsection{Offloading}
-%TODO
 
 \subsection{Receive Side Scaling} \label{chap:ReceiveSideScaling}
 Receive Side Scaling, or RSS for short, is a technology used to improve network performance. The procedure for receiving a packet is described in \ref{chap:recpath}. The interrupt and softirq described there, which carry out the processing of the received packet, are handled by a single CPU \cite{rss01}.
@@ -543,19 +589,10 @@ The Intel network interface drivers enable the configuration of a fixed timeout 
 
 The interrupt moderation rate of Intel network interfaces can be configured using the 'ethtool' configuration tool within the range of 0 to 235 µs. A value of 0 µs deactivates interrupt moderation.
 
+\subsection{Quality of Service} \label{background:tuning:qualityofservice}
+Quality of Service (QoS) comprises different mechanisms to provide distinct service levels for various network traffic. A service level includes statements about bandwidth, jitter, or reliability \cite{qos01}. To achieve a service level, QoS consists of various components and measures, including packet marking methods, traffic shaping methods, and the implementation of various queues in network devices \cite{qos02}. Due to the broad scope of Quality of Service and its related technologies, this section only briefly introduces key technologies used.
 
+One way to classify traffic is by using the Differentiated Services field in the IP header (refer to \ref{chap:ipheader}). This field enables the specification of a Differentiated Services Field Codepoint, which can be interpreted as a priority. The values range from 0 to 63, with 63 being the highest priority \cite{qos02}.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+Differentiated Services Field Codepoints are solely used for packet classification. To achieve specific service levels in the network, it is necessary to configure the network hardware to ensure the desired traffic handling. This may involve prioritizing certain Differentiated Services Field Codepoint values over others \cite{qos02}.
 

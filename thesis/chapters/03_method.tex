@@ -126,14 +126,77 @@ The Cisco CBS350-8XT is a Layer 3 switch that can forward packets based on both 
 
 \paragraph{Network Interface Cards} \label{chap:NicTypes}
 
-The tests only use PCIe Network Interface Cards (NIC) that are capable of 10 GbE. The main types of network interfaces used are Intel's X520-DA2, X540-T2, and X710-T2L. Network interfaces from Lenovo and Inspur are also considered. Table \ref{tab:NWHardware} provides a concise overview of the network interfaces used according to \cite{setupnw01, setupnw02, setupnw03, setupnw04}.
+The tests only use PCIe Network Interface Cards (NIC) that are capable of 10 GbE. The main types of network interfaces used are Intel's X520-DA2, X540-T2, and X710-T2L. Network interfaces from Lenovo and Inspur are also considered. Table \ref{tab:NWHardware} provides a concise overview of the network interfaces used according to \cite{setupnw01, setupnw02, setupnw03, setupnw04}. All interface cards support the same offloading mechanisms regarding UDP (see \ref{chap:HWOffload}).
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=1\linewidth]{figures/method/temp1.png}
-    \caption{TODO - THIS SHOULD BE UPDATED TO A TABLE}
-    \label{tab:NWHardware}
-\end{figure}
+\begin{table}[h!]
+\centering
+\newcolumntype{C}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+\begin{subtable}{\linewidth}
+\centering
+\begin{tabular}{C{2.2cm} C{4cm} C{4cm} C{4cm}}
+	\toprule
+	\textbf{Interface} & \textbf{X520-DA2} & \textbf{X540-T2} & \textbf{X710-T2L}\\
+	\toprule
+	\textbf{Year} & 2009 & 2012 & 2019\\
+	\midrule
+	\textbf{Ports} & Dual (SPF+) & Dual (RJ45) & Dual (RJ45)\\
+	\midrule
+	\textbf{System Interface} & PCIe v2.0 (5 GT/s), x8 Lane & PCIe v2.0 (5 GT/s), x8 Lane & PCIe v3.0 (8 GT/s), x8 Lane\\
+	\midrule
+	\textbf{Controller} & Intel 82599 & Intel X540 & Intel X710-AT2\\
+	\midrule
+	\textbf{Data Rate} & max. 10 GbE & max. 10 GbE & max. 10 GbE \\
+	\bottomrule
+\end{tabular}
+\caption{Intel}
+\end{subtable}
+\vspace{6pt}
+
+\begin{subtable}{\linewidth}
+\centering
+\begin{tabular}{C{2.2cm} C{4cm}}
+	\toprule
+	\textbf{Interface} & \textbf{X540-T2}\\
+	\toprule
+	\textbf{Year} & -\\
+	\midrule
+	\textbf{Ports} & Dual (RJ45)\\
+	\midrule
+	\textbf{System Interface} & PCIe v2.0 (5 GT/s), x8 Lane\\
+	\midrule
+	\textbf{Controller} & Intel X540\\
+	\midrule
+	\textbf{Data Rate} & max. 10 GbE\\
+	\bottomrule
+\end{tabular}
+\caption{Inspur}
+\end{subtable}
+\vspace{6pt}
+
+\begin{subtable}{\linewidth}
+\centering
+\begin{tabular}{C{2.2cm} C{4cm}}
+	\toprule
+	\textbf{Interface} & \textbf{QL41134}\\
+	\toprule
+	\textbf{Year} & 2021\\
+	\midrule
+	\textbf{Ports} & 4 (RJ45)\\
+	\midrule
+	\textbf{System Interface} & PCIe 3.0 (8.0 GT/s), x8 Lane\\
+	\midrule
+	\textbf{Controller} & QLogic QL41134\\
+	\midrule
+	\textbf{Data Rate} & max. 10 GbE\\
+	\bottomrule
+\end{tabular}
+\caption{Lenovo}
+\end{subtable}
+
+\caption{Overview of the Specifications of the Network Interface Cards by Manufacturer}
+\label{tab:NWHardware}
+\end{table}
 
 The network interfaces were selected broadly to reduce dependence on specific interfaces or manufacturers. Additionally, network cards of varying ages and prices were considered to account for potential hardware limitations.
 
@@ -184,7 +247,7 @@ The drivers supplied with the kernel are used for the network cards. Table \ref{
 	\midrule
 	i40e & Intel X710-T2L\\
 	ixgbe & Intel X520-DA2, Intel X540-T2, Inspur X540-T2 \\
-	qede & Lenovo ThinkSystem Marvell QL41134\\
+	qede & Lenovo QL41134\\
 	\bottomrule
 \end{tabular}
 \caption{Overview of the Drivers of and the associated Network Interface Cards.}
@@ -240,7 +303,7 @@ Both topologies used are described in detail below. Any modifications made for s
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=1\linewidth]{figures/method/topo2.png}
+    \includegraphics[width=1\linewidth]{figures/method/topo2.pdf}
     \caption[Visualization of the Star Topology with a Switch in the Center]{Visualization of the Star Topology with a Switch in the Center.}
     \label{fig:startopoSwitch}
 \end{figure}
@@ -255,7 +318,7 @@ The HPC1 and HPC2 systems are both equipped with the Intel X710-T2L network card
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=1\linewidth]{figures/method/topo3.png}
+    \includegraphics[width=1\linewidth]{figures/method/topo3.pdf}
     \caption[Visualization of the Star Topology with the iHawk in the Center]{Visualization of the Star Topology with the iHawk in the Center.}
     \label{fig:startopoIHawk}
 \end{figure}
@@ -294,7 +357,7 @@ The TestSuite was developed using the C++ programming language in the C++20 vers
 
 \begin{figure}[h!]
     \centering
-    \includegraphics[width=1\linewidth]{figures/method/swdesign1.png}
+    \includegraphics[width=1\linewidth]{figures/method/swdesign1.pdf}
     \caption[Illustration of the TestSuite Concept]{Illustration of the TestSuite Concept.}
     \label{fig:tsconcept}
 \end{figure}
@@ -307,7 +370,7 @@ TestSuite is able to generate a UDP communication with a pre-defined payload and
 
 \begin{sidewaysfigure}
     \centering
-    \includegraphics[width=1\linewidth]{figures/method/swdesign2.png}
+    \includegraphics[width=1\linewidth]{figures/method/swdesign2.pdf}
     \caption[Architecture of the TestSuite with the relevant Classes, Data and Connections between the Systems]{Architecture of the TestSuite with the relevant Classes, Data and Connections between the Systems.}
     \label{fig:tsarch}
 \end{sidewaysfigure}

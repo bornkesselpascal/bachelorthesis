@@ -151,6 +151,33 @@
     %\input{preamble/titlepage}			% Titelseite
     %\input{preamble/abstract}			% Abstract
     
+    
+    \Huge
+    \textbf{Version 0.2}
+    \normalsize
+    vom 11.01.2023 \\
+   
+   	\begin{itemize}
+		\item Kapitel 2
+		\begin{itemize}
+  			\item \textit{neu:} Data Management Layer
+  			\item \textit{neu:} Advanced Networking Options
+		\end{itemize}
+
+		\item Kapitel 3
+		\begin{itemize}
+  			\item \textit{überarbeitet:} Tabellen im Hardware Setup
+  			\item \textit{neu:} Lastgenerierung mit stress-ng mit Vorstellung der Stressoren
+		\end{itemize}
+		
+		
+		\item Kapitel 4
+		\begin{itemize}
+  			\item \textit{neu:} Kapitel hinzugefügt
+		\end{itemize} 
+	\end{itemize}
+    
+    
     \tableofcontents					% Inhaltsverzeichnis
     
 
@@ -166,7 +193,7 @@
     \setlength{\parskip}{10pt}			% Abstand zwischen Paragraphen
     
     
-    \include{chapters/01_introduction}
+    %\include{chapters/01_introduction}
     \include{chapters/02_background}
     \include{chapters/03_method}
     \include{chapters/04_reliability}
@@ -174,10 +201,11 @@
 
 	NOCH NICHT IN DIESEM TEIL:
 	\begin{itemize}
+		\item Kapitel 1 – Einleitung
 		\item Kapitel 5 – Performancemessungen unter versch. Betriebszuständen
 		\item Kapitel 6 – Conclusion, Zusammenfassung der Konfigurationen / Punkte woduch UDP geeignet ist
 		\item Kapitel 7 – Ausblick: Fragmentierung und DPDK (User Space Driver)
-		\item Code im Anhang
+		\item Anhang (mit Code)
 	\end{itemize}
 	
 	
