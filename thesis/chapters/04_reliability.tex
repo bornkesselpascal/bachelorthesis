@@ -241,9 +241,9 @@ Furthermore, in addition to the standard network interfaces in the topology, the
 
 
 
-\section{Reliability Analysis of the Star Topology with the iHawk in the Centre}
+\section{Reliability Analysis of the Star Topology with the iHawk in the Centre} \label{chap:ReliabIhawk}
 
-\subsection{System under Test}
+\subsection{System under Test} \label{chap:ReliabIhawk:SuT}
 The key takeaway from the previous reliability tests (see \ref{chap:switchtest}) is that the use of an Ethernet switch in the distributed AIDASS is unsuitable, as it leads to a significant number of lost packets. Additionally, the behavior of the switch was found to be unreliable and unpredictable. As a result, an alternative topology was developed and investigated, which is described in \ref{chap:TopoiHawk}, and in which the iHawk is placed in the center of the star.
 
 In this configuration, all participants (hereafter referred to as Endpoints) are connected to a computer system in the center (hereafter referred to as the Center). In a practical implementation in the test system, the endpoints are the I/O PCs and the center is an iHawk. The endpoints are not connected to each other, as communication in the distributed Test Support System is mainly between the center and the endpoints, rather than between the endpoints themselves.
@@ -259,9 +259,9 @@ The system under test for subsequent test campaigns is no longer a single commun
     \label{fig:topoihawknaming}
 \end{figure}
 
-To distinguish between communications more easily, the nomenclature scheme depicted in Figure \ref{fig:topoihawknaming} was designed. The two physical 10 GbE links that connect each endpoint to the centers are referred to as link \textbf{A} and \textbf{B}. A separate TestSuite process generates and measures UDP communication in both directions across each of these links simultaneously. These directions are referred to as \textbf{H} and \textbf{R}. Direction H refers to communication channels where the center is the sender and the endpoint is the receiver. Conversely, direction R refers to communication channels where the center is the receiver and the endpoint is the sender.
+To distinguish between communications more easily, the nomenclature scheme depicted in Figure \ref{fig:topoihawknaming} was designed. The two physical 10 GbE links that connect each endpoint to the centers are referred to as link '\textbf{A}' and '\textbf{B}'. A separate TestSuite process generates and measures UDP communication in both directions across each of these links simultaneously. These directions are referred to as '\textbf{H}' and '\textbf{R}'. Direction 'H' refers to communication channels where the center is the sender and the endpoint is the receiver. Conversely, direction 'R' refers to communication channels where the center is the receiver and the endpoint is the sender.
 
-Because 16 bidirectional communications lead to a high network load, especially in the center, the settings recommended by Intel for high reliability in the Linux Performance Tuning Guide for the Ethernet 700 Series \cite{intermod03} were used. These settings were chosen based on experiments conducted with the High-Performance PCs prior to this campaign. These settings include:
+Because 16 bidirectional communications lead to a high network load, especially in the center, the settings recommended by Intel for high performance and reliability in the Linux Performance Tuning Guide for the Ethernet 700 Series \cite{intermod03} were used. These settings were chosen based on experiments conducted with the High-Performance PCs prior to this campaign. These settings include:
 \begin{itemize}
   \item Disabling of Energy Efficient Ethernet
   \item Enlargement of the RX\_Ring and TX\_Ring to 4096 slots
@@ -521,7 +521,7 @@ Packet losses were observed with all three affinity settings in direction 'R' wh
 One notable result of this test campaign is the difference in the average transmit throughput of the center. Figure \ref{fig:diagr10Throuhput} compares the transmit data rates between 'enabled' and 'inverted' CPU affinity. The results show that, for datagram sizes of 80 bytes and 8900 bytes, the send throughput is approximately 15\% higher for the 'enabled' CPU affinity scenario than for the 'inverted' CPU affinity test. For a datagram size of 6500 bytes, the send throughput is approximately 3\% higher. The higher throughput is due to the fact that the CPU can access its local resources much faster than the other CPU. The UPI Link, which connects the two CPU sockets, has a latency of about 130 ns \cite{setup07}.
 
 \paragraph{Classification of Results}
-The results of this test campaign indicate that CPU affinity does not affect system reliability. Furthermore, it is important to note that potential bottlenecks, such as memory connections of network cards and connections between CPUs in multi-socket systems, do not have an impact on the packet loss rate a UDP communication.
+The results of this test campaign indicate that CPU affinity does not affect system reliability. Furthermore, it is important to note that potential bottlenecks in multi-socket systems, do not have an impact on the packet loss rate of a UDP communication.
 
 
 \subsubsection{Tests to Investigate the Influence of Interrupt-Moderation}
