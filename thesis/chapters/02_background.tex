@@ -421,7 +421,7 @@ There are different types of sockets that vary in their properties. The two most
 \item \textbf{Datagram sockets} enable the exchange of individual messages. The sockets operate without a connection. The User Datagram Protocol (UDP) is utilized as the transport layer protocol, resulting in the provision of unreliable transmission.
 \end{itemize}
 
-Other socket types, such as raw sockets or packet sockets, also exist.
+Other socket types, such as Raw sockets or Packet sockets, also exist.
 
 
 \subparagraph{Socket Address}
@@ -456,7 +456,7 @@ Figure \ref{fig:SocketOperations} displays the system calls commonly used with a
 
 \paragraph{Raw Sockets and Packet Sockets}
 
-Raw sockets and packet sockets are additional types of Internet sockets. These are an addition to the stream and datagram sockets already mentioned and allow access to lower layers of the network stack instead of hiding them from the user \cite{sock07}.
+Raw sockets and Packet sockets are additional types of Internet sockets. These are an addition to the stream and datagram sockets already mentioned and allow access to lower layers of the network stack instead of hiding them from the user \cite{sock07}.
 
 \begin{figure}[h]
     \centering
@@ -467,13 +467,13 @@ Raw sockets and packet sockets are additional types of Internet sockets. These a
 
 Figure \ref{fig:SocketAccessPossib} displays the access possibilities with different socket types. Raw sockets provide access to the transport layer (4) and network layer (3) of the network stack \cite{sock08}, including TCP or UDP as well as IP in the case of the TCP/IP reference model. Packet sockets can also be utilized to access the link layer (2), enabling access to almost the entire Ethernet frame, except for the preamble and trailer \cite{sock09}.
 
-The concept underlying raw and packet sockets involves the implementation of separate protocol layers in the application. Depending on the chosen socket type, the application can implement layers 2 to 4 \cite{sock08}. Furthermore, packet sockets can also be used to capture the entire communication of a system, as used by Wireshark, for example.
+The concept underlying Raw and Packet sockets involves the implementation of separate protocol layers in the application. Depending on the chosen socket type, the application can implement layers 2 to 4 \cite{sock08}. Furthermore, Packet sockets can also be used to capture the entire communication of a system, as used by Wireshark, for example.
 
-Raw or packet sockets eliminate the overhead of the respective protocol layer in the Linux kernel, which can potentially accelerate processing. They also increase flexibility, as certain fields in the header can be easily modified.
+Raw or Packet sockets eliminate the overhead of the respective protocol layer in the Linux kernel, which can potentially accelerate processing. They also increase flexibility, as certain fields in the header can be easily modified.
 
-A disadvantage, however, is that in order to maintain compatibility with other TCP/IP implementations, the corresponding protocols must be fully and correctly implemented in the application. Additionally, using raw or packet sockets requires that the application be executed with root privileges.
+A disadvantage, however, is that in order to maintain compatibility with other TCP/IP implementations, the corresponding protocols must be fully and correctly implemented in the application. Additionally, using Raw or Packet sockets requires that the application be executed with root privileges.
 
-The technical report 'Introduction to RAW sockets' \cite{sock07} provides a comprehensive overview of raw and packet sockets and their application. This report was also used for programming in this thesis.
+The technical report 'Introduction to RAW sockets' \cite{sock07} provides a comprehensive overview of Raw and Packet sockets and their application. This report was also used for programming in this thesis.
 
 
 
