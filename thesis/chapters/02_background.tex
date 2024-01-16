@@ -256,7 +256,7 @@ Routing, which is another important task of the network layer, is based on IP ad
 The Address Resolution Protocol, abbreviated to ARP, is an auxiliary protocol of the network layer. Its task is to map the IP addresses to a MAC address and vice versa, as the sending and receiving of data in the underlying link layer is based on these MAC addresses \cite{Weigel2021}.
 
 
-\paragraph{Fragmentation and Defragmentation}
+\paragraph{Fragmentation and Defragmentation} \label{chap:frag}
 
 As explained in \ref{chap:EthLinkLayer}, the link layer defines a maximum data size known as MTU. Since IPv4 datagrams have a maximum size of 65535 bytes, they must be divided into smaller packets, or fragments, each with its own IP header.
 
