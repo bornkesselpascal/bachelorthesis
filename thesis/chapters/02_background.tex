@@ -1,7 +1,9 @@
+% !TeX spellcheck = en_US 
+
 \chapter{Background}
 
 \section{Data Management Layer}
-A distributed Test Support System consists of multiple independent computer systems, called nodes. A node may have hardware interfaces to communicate with different bus systems. Additionally, processes, called Processing Units are executed on a node to process data from the hardware interfaces or to generate data for transmission. The nodes collaborate in a common test environment, therefore it is necessary to exchange data between them. The exchange of data between hardware interfaces and Processing Units, including the exchange between different nodes, is facilitated by the Data Management Layer (DML).
+A distributed Test Support System consists of multiple independent computer systems called nodes. A node may have hardware interfaces to communicate with different bus systems. Additionally, processes, called Processing Units (PU) are executed on a node to process data from the hardware interfaces or to generate data for transmission. The nodes collaborate in a common test environment, therefore it is necessary to exchange data between them. The exchange of data between hardware interfaces and Processing Units, including the exchange between different nodes, called Multi Node Mode, is facilitated by the Data Management Layer (DML).
 
 This chapter provides an overview of the DML and explains the process of sending and receiving data according to \cite{dml01}.
 
@@ -23,39 +25,59 @@ Direct Memory Access (DMA) is primarily used as a method of communication betwee
 
 \subsection{Receive Path}
 
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=1\linewidth]{figures/dml/dml02.pdf}
-    \caption[DML Receive Path]{DML Receive Path. Adapted from: \cite{dml01}.}
-    \label{fig:DmlRec}
-\end{figure}
-
-When a message is received by a hardware interface (see Figure \ref{fig:DmlRec}, Arrow 1), the interface uses DMA to copy the data to a FIFO buffer (see Figure \ref{fig:DmlRec}, Arrow 2). A FIFO buffer is implemented as a ring buffer and is located in the main memory of the node. Each interface has a separate FIFO buffer, which allows for asynchronous access without mutual exclusion, as the FIFO buffer is only written to by the respective interface.
+When a message is received by a hardware interface (see Figure \ref{fig:DmlRecSingleNode} and Figure \ref{fig:DmlRecMultiNode}, Arrow 1), the interface uses DMA to copy the data to a FIFO buffer (see Figure \ref{fig:DmlRecSingleNode} and Figure \ref{fig:DmlRecMultiNode}, Arrow 2). A FIFO buffer is implemented as a ring buffer and is located in the main memory of the node. Each interface has a separate FIFO buffer, which allows for asynchronous access without mutual exclusion, as the FIFO buffer is only written to by the respective interface.
 
 The Data Manager, a process running on each node, polls all of the FIFO buffers of the node at a specified time interval. If a new message is found in a FIFO and there is a subscriber for that message, it is processed further.
 
-If a subscriber exists on the local node, the Data Manager copies the message to the monitor memory (see Figure \ref{fig:DmlRec}, Arrow 3). From there, it can be read by a Processing Unit.
+If a subscriber exists on the local node, referred to as Single Node Mode, the Data Manager copies the message to the monitor memory (see Figure \ref{fig:DmlRecSingleNode}, Arrow 3). From there, it can be read by a Processing Unit.
 
-If a subscriber for a message exists on another node, the message must be forwarded. To achieve this, the nodes exchange subscriber lists. This forwarding process is illustrated in Figure \ref{fig:DmlRec}, Arrow 4. The Data Manager of the local node copies the message by DMA over the Dolphin Interconnect into a FIFO buffer of the remote node. Each node has, in addition to the FIFO buffers for each interface in the node, a FIFO buffer for each remote node in the distributed Test Support System.
+If a subscriber for a message exists on another node, referred to as Multi Node Mode, the message must be forwarded. To achieve this, the nodes exchange subscriber lists. This forwarding process is illustrated in Figure \label{fig:DmlRecMultiNode}, Arrow 3. The Data Manager of the local node copies the message by DMA over the Dolphin Interconnect into a FIFO buffer of the remote node. Each node has, in addition to the FIFO buffers for each interface in the node, a FIFO buffer for each remote node in the distributed Test Support System.
 
-The Data Manager of the remote node then copies the message to the monitor memory (see Figure \ref{fig:DmlRec}, Arrow 5), similar to the local distribution.
+The Data Manager of the remote node then copies the message to the monitor memory (see Figure \label{fig:DmlRecMultiNode}, Arrow 4), similar to the local distribution.
 
 \subsection{Transmit Path}
 
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=1\linewidth]{figures/dml/dml03.pdf}
-    \caption[DML Transmit Path]{DML Transmit Path. Adapted from: \cite{dml01}.}
-    \label{fig:DmlTrans}
-\end{figure}
-
-Whenever a processing unit wants to send a message on a bus system using a hardware interface, it writes it into a FIFO buffer (see Figure \ref{fig:DmlTrans}, Arrow 1). These FIFO buffers are separate from the ones on the receiving side. Each node has a FIFO for every processing unit and for every other remote node in the distributed Test Support System.
+Whenever a processing unit wants to send a message on a bus system using a hardware interface, it writes it into a FIFO buffer (see Figure \ref{fig:DmlTransSingleNode} and Figure \ref{fig:DmlTransMultiNode}, Arrow 1). These FIFO buffers are separate from the ones on the receiving side. Each node has a FIFO for every processing unit and for every other remote node in the distributed Test Support System.
 
 The Data Manager also polls these FIFO buffers. To forward a message, it is distinguished whether the interface is located on the same node or on a remote node.
 
-If the message is intended for an interface on the same node, the Data Manager copies it into the Transmit FIFO (Tx FIFO) of that interface (see Figure \ref{fig:DmlTrans}, Arrow 2). The interface then copies the message that will be sent out next on the bus system into the Tx buffer. A composer mechanism is used to reuse certain parts of a previous message, which allows a Processing Unit to send only the parts that have changed from the prior message. The composer then builds the complete message based on this information. It is then transmitted through the front end of interface in accordance with the timing of the corresponding bus system.
+If the message is intended for an interface on the same node, referred to as Single Node Mode, the Data Manager copies it into the Transmit FIFO (Tx FIFO) of that interface (see Figure \label{fig:DmlTransSingleNode}, Arrow 2). The interface then copies the message that will be sent out next on the bus system into the Tx buffer. A composer mechanism is used to reuse certain parts of a previous message, which allows a Processing Unit to send only the parts that have changed from the prior message. The composer then builds the complete message based on this information. It is then transmitted through the front end of interface in accordance with the timing of the corresponding bus system.
 
-If the message is intended for an interface of a remote node, the Data Manager of the local node copies it using DMA over the Dolphin Interconnect to its FIFO buffer on the remote node (see Figure \ref{fig:DmlTrans}, Arrow 3). The Data Manager of the remote node then places it in the Tx FIFO of the corresponding interface (see figure \ref{fig:DmlTrans}, Arrow 4), from where it is processed and finally sent as described above.
+If the message is intended for an interface of a remote node, the Data Manager of the local node copies it using DMA over the Dolphin Interconnect to its FIFO buffer on the remote node (see Figure \label{fig:DmlTransMultiNode}, Arrow 2). The Data Manager of the remote node then places it in the Tx FIFO of the corresponding interface (see Figure \label{fig:DmlTransMultiNode}, Arrow 3), from where it is processed and finally sent as described above.
+
+\clearpage
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.65\linewidth]{figures/dml/dml02a.pdf}
+    \caption[DML Receive Path in Single Node Mode]{DML Receive Path in Single Node Mode. Adapted from: \cite{dml01}.}
+    \label{fig:DmlRecSingleNode}
+\end{figure}
+
+\vspace{20pt}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=0.65\linewidth]{figures/dml/dml03a.pdf}
+    \caption[DML Transmit Path in Single Node Mode]{DML Transmit Path in Single Node Mode. Adapted from: \cite{dml01}.}
+    \label{fig:DmlTransSingleNode}
+\end{figure}
+
+\begin{sidewaysfigure}[h!]
+    \centering
+    \includegraphics[width=1\linewidth]{figures/dml/dml02b.pdf}
+    \caption[DML Receive Path in Multi Node Mode]{DML Receive Path in Multi Node Mode. Adapted from: \cite{dml01}.}
+    \label{fig:DmlRecMultiNode}
+\end{sidewaysfigure}
+
+\begin{sidewaysfigure}[h!]
+    \centering
+    \includegraphics[width=1\linewidth]{figures/dml/dml03b.pdf}
+    \caption[DML Transmit Path in Multi Node Mode]{DML Tranismit Path in Multi Node Mode. Adapted from: \cite{dml01}.}
+    \label{fig:DmlTransMultiNode}
+\end{sidewaysfigure}
+
+\clearpage
 
 
 \section{TCP/IP Reference Model} \label{chap:RefModel}
