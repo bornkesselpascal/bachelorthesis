@@ -44,6 +44,9 @@
 \usepackage[german, algochapter, linesnumbered]{algorithm2e}
 % package to create diagrams
 \usepackage{tikz}
+\usepackage{geometry}						% Für newgeometry in Titelseite
+\geometry{a4paper,left=30mm,right=20mm}
+
 \usetikzlibrary{positioning}
 \usetikzlibrary{shapes.geometric, arrows}
 \tikzset{font={\fontsize{10pt}{12}\selectfont}}
@@ -89,6 +92,7 @@
 
 % include acronyms
 \input{preamble/acronyms}
+\usepackage[numbers]{natbib}
 
 % avoid bold caption for algorithms to be consistent with other captions
 \SetAlCapSty{}
@@ -148,38 +152,9 @@
 
     \pagenumbering{Roman}				% römische Seitenzahlen
     
-    %\input{preamble/titlepage}			% Titelseite
-    %\input{preamble/abstract}			% Abstract
-    
-    
-    \Huge
-    \textbf{Version 0.3}
-    \normalsize
-    vom 16.01.2023 \\
-   
-   	\begin{itemize}
-		\item Kapitel 2
-		\begin{itemize}
-  			\item \textit{überarbeitet:} Grafiken zum Data Management Layer
-		\end{itemize}
-
-		\item Kapitel 3
-		\begin{itemize}
-  			\item \textit{überarbeitet:} Einordnung der Überschift 'Latency' in korrekter Hierarchieebene (3.3.3.4 statt 3.3.4)
-		\end{itemize}
-		
-		
-		\item Kapitel 4
-		\begin{itemize}
-  			\item \textit{überarbeitet:} Änderung der Diagrammart für Grafik \ref{fig:srpr4} um Aussage besser darzustellen
-		\end{itemize}
-		
-		\item Kapitel 5
-		\begin{itemize}
-  			\item \textit{neu:} Kapitel hinzugefügt
-		\end{itemize} 
-	\end{itemize}
-    
+    \input{preamble/titlepage}			% Titelseite
+    \input{preamble/declaration}			% Erklärung
+    \input{preamble/abstract}			% Abstract
     
     \tableofcontents					% Inhaltsverzeichnis
     
@@ -211,10 +186,8 @@
 		\item Anhang (mit Code)
 	\end{itemize}
 	
-	
+	\bibliographystyle{apalike2}
 	\bibliography{bibliography/references.bib}
-	\bibliographystyle{plainurl}
-    
     
     \begin{appendix}
     	\input{appendices/example_appendix}
