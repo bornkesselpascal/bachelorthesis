@@ -253,7 +253,7 @@ Listing \ref{lst:rtprocess} contains the command used to modify the real-time at
 \item Change of the \textbf{scheduling priority} to 99. \texttt{SCHED\_FIFO} uses a fixed priority with values ranging from 1 to 99, with 99 as the highest priority \cite{swsetup06}.
 \end{itemize}
 
-
+\clearpage
 
 \section{Network Topologies} \label{chap:Architectures}
 For the tests with the described setup, two different topologies were utilized for the local Ethernet network and the arrangement of the computer systems. Both topologies are star-shaped, consisting of bidirectional point-to-point links that connect two systems. Each link can be used independently in both directions \cite{Tanenbaum2010}.
@@ -298,7 +298,7 @@ As the first topology presented proved to be unsuitable in the course of the tes
 
 This new topology features an iHawk computer system at the center of the star, equipped with four Intel X710-T2L network interfaces. The HPC computer systems in this topology also have Intel X710-T2L network interfaces, while the TPC systems use Intel X520-T2 network interfaces. Each node is connected to the iHawk in the center via two bidirectional 10 GbE links.
 
-
+\clearpage
 \section{Introduction of the Test Program} \label{chap:TestSuite}
 A dedicated test program, called TestSuite, was created to carry out the tests with the setup described above. The decision to create an own test program was based on the following considerations, which were not fully covered by existing network performance test programs such as iPerf \cite{testsuite01}:
 
@@ -353,13 +353,13 @@ The input and output data is also shown. The diagram also shows the five central
 \paragraph{Communication Channels}
 Communication between the client PC and the server PC takes place via three separate communication channels, all using the UDP protocol.
 
-The 'Service Connection' is used to send configuration data to the server. This includes the description of the tests to be performed and the starting and stopping of a test execution. Furthermore, the configurations of the other communication channels, the 'Test Connection' and the 'Feedback Connection', are sent to the server.
+The `Service Connection' is used to send configuration data to the server. This includes the description of the tests to be performed and the starting and stopping of a test execution. Furthermore, the configurations of the other communication channels, the `Test Connection' and the `Feedback Connection', are sent to the server.
 
-The UDP protocol is used for the 'Service Connection'. This is due to the fact that TestSuite focuses on tests between two participants in a local network. However, UDP does not guarantee that the packets sent will reach their destination. Therefore, if TestSuite is to be used for tests over external networks in the future, a protocol should be used that guarantees the reliability of its transmission.
+The UDP protocol is used for the `Service Connection'. This is due to the fact that TestSuite focuses on tests between two participants in a local network. However, UDP does not guarantee that the packets sent will reach their destination. Therefore, if TestSuite is to be used for tests over external networks in the future, a protocol should be used that guarantees the reliability of its transmission for this communication.
 
-The 'Test Connection' is the communication channel to be tested. A UDP communication is generated and measured according to certain parameters. This channel exists from the client to the server.
+The `Test Connection' is the communication channel to be tested. A UDP communication is generated and measured according to certain parameters. This channel exists from the client to the server.
 
-The 'Feedback Connection' allows the server to send messages to the client during the current test run. This is also a UDP connection. The server sends the requested data only when requested by the client.
+The `Feedback Connection' allows the server to send messages to the client during the current test run. This is also a UDP connection. The server sends the requested data only when requested by the client.
 
 \paragraph{Input and Output Data}
 All data required or created by TestSuite is written in Extensible Markup Language (XML). XML is a markup language for storing structured data in text form \cite{tsd01}. Because XML allows hierarchical storage of data and is human readable, it was used in TestSuite.
@@ -420,14 +420,14 @@ The output data also includes logs from the nmon tool. This is described in more
 TestSuite has 5 central classes, the functionality of which is briefly explained below.
 
 \subparagraph{Test Control}
-The 'Test Control' class is responsible for controlling and automating the execution of the test campaign. For this purpose, the class processes the input data of the TestSuite, the 'Client Description' or the 'Server Description'.
+The `Test Control' class is responsible for controlling and automating the execution of the test campaign. For this purpose, the class processes the input data of the TestSuite, the `Client Description' or the `Server Description'.
 
 An important task is to control the execution of the tests. This is done by the 'Test Control' on the client PC. The tests contained in the Client Description are executed sequentially by creating an instance of the Test Scenario class for each test.
 
-In addition, 'Test Control' in the client sends commands to start and stop a test and the 'Test Description' of the current test to the server via the 'Service Connection'. The server is then able to execute the test accordingly.
+In addition, `Test Control' in the client sends commands to start and stop a test and the 'Test Description' of the current test to the server via the `Service Connection'. The server is then able to execute the test accordingly.
 
 \subparagraph{Test Scenario}
-The 'Test Scenario' class handles the overall management of a single test. To create an instance of the class, the 'Test Description' of that test is required as a parameter.
+The `Test Scenario' class handles the overall management of a single test. To create an instance of the class, the `Test Description' of that test is required as a parameter.
 
 The class will then create instances of the necessary components for that test according to the specifications in the 'Test Description'. This includes:
 \begin{itemize}
@@ -437,14 +437,14 @@ The class will then create instances of the necessary components for that test a
 \end{itemize}
 
 \subparagraph{Custom Tester} \label{chap:customtester}
-The "Custom Tester" class is responsible for generating and measuring the UDP communication and processing the test results. The generation and measurement of target communication as well as the associated configuration parameters and technical details are described in \ref{chap:targetcom}.
+The `Custom Tester' class is responsible for generating and measuring the UDP communication and processing the test results. The generation and measurement of target communication as well as the associated configuration parameters and technical details are described in \ref{chap:targetcom}.
 
-The data measured during a test is then processed and saved as an XML file. "Custom Tester" saves the "Test Results" section of the "Results Data" output data structure.
+The data measured during a test is then processed and saved as an XML file. `Custom Tester' saves the "Test Results" section of the "Results Data" output data structure.
 
 \subparagraph{Stress}
-The 'Stress' class is responsible for controlling the generation of additional system load during testing. This includes areas such as CPU load, I/O load, or network load.
+The `Stress' class is responsible for controlling the generation of additional system load during testing. This includes areas such as CPU load, I/O load, or network load.
 
-The two programs 'stress-ng' and 'iPerf2' are used to generate these loads. These are described in more detail in Section \ref{chap:loadgeneration}. The 'Stress' class of TestSuite controls these external programs, including starting, stopping, and configuring them.
+The two programs `stress-ng' and `iPerf2' are used to generate these loads. These are described in more detail in Section \ref{chap:loadgeneration}. The `Stress' class of TestSuite controls these external programs, including starting, stopping, and configuring them.
 
 The additional system load can be executed during a test on the client PC or the server PC, or on both systems simultaneously.
 
@@ -453,14 +453,14 @@ All configuration data for the additional system load is contained in the Test D
 \subparagraph{Metrics}
 The 'Metrics' class is responsible for collecting system metrics before, during, and after a test.
 
-On the one hand, 'Metrics' is responsible for recording the statistics of the network interface or the network stack in the systems before and after a test. The statistics are collected using the command line utilities 'ip' from 'iproute2' and 'netstat'. The output of these utilities is then processed using regular expressions, among other things, and important parameters are stored in the 'Statistics' section of the output data.
+On the one hand, `Metrics' is responsible for recording the statistics of the network interface or the network stack in the systems before and after a test. The statistics are collected using the command line utilities 'ip' from 'iproute2' and 'netstat'. The output of these utilities is then processed using regular expressions, among other things, and important parameters are stored in the 'Statistics' section of the output data.
 
-Another task of the 'Metrics' class is to control the 'nmon' program. 'nmon' is a system monitoring tool for Linux operating systems. It monitors various system parameters such as CPU usage, memory usage, network traffic, disk activity, and other important system metrics \cite{tsd04}. Furthermore, nmon offers the possibility to record and store the system parameters cyclically.
+Another task of the `Metrics' class is to control the `nmon' program. `nmon' is a system monitoring tool for Linux operating systems. It monitors various system parameters such as CPU usage, memory usage, network traffic, disk activity, and other important system metrics \cite{tsd04}. Furthermore, nmon offers the possibility to record and store the system parameters cyclically.
 
 The TestSuite creates an nmon recording for each test at runtime, in which the system parameters are recorded every 60 seconds. This recording is part of the 'Result Data'.
 
 \subsection{Generation and Measurement of Target Communication} \label{chap:targetcom}
-As explained in the description of the software design in \ref{chap:customtester}, the 'Custom Tester' class is used to generate and measure the UDP communication.  In the following, this class will be introduced and the send and receive routines will be described in more detail.
+As explained in the description of the software design in \ref{chap:customtester}, the `Custom Tester' class is used to generate and measure the UDP communication.  In the following, this class will be introduced and the send and receive routines will be described in more detail.
 
 \subsubsection{Parameters and Configuration Options}
 A UDP communication is generated in the client part of the class and received by the server. Only a one-way communication is considered, i.e. the server does not send any messages other than those required to manage the test run. The generated UDP communication is characterized by the following parameters:
@@ -476,12 +476,19 @@ TestSuite has a query function that can be used to determine the current number 
 
 The client sends a query to the server, which returns the number of packets received so far. The query is synchronized with the test, i.e. no more packets are sent until the response is received from the server. The query request is made after a pre-defined number of packets have been sent. In the tests performed, a request is sent every 100,000 packets.
 
-The result of the queries, that is the total number of lost packets, is stored in a data structure. This is written to XML data after the test. This makes it possible to view the distribution of packet losses over the duration of the test. The query requests can also be used to abort the test prematurely. If a pre-defined threshold of lost packets, called 'LOSS\_THRESHOLD", is exceeded, the test is also terminated before the specified test duration has elapsed.
+The result of the queries, that is the total number of lost packets, is stored in a data structure. This is written to XML data after the test. This makes it possible to view the distribution of packet losses over the duration of the test. The query requests can also be used to abort the test prematurely. If a pre-defined threshold of lost packets, called `LOSS\_THRESHOLD', is exceeded, the test is also terminated before the specified test duration has elapsed.
 
 \paragraph{Timestamps}
-The 'Custom Tester' class also supports the recording of timestamps. The client records the time the packet was sent to the application. The server records the time the packet was received in the application. The timestamps are stored on both systems in a data structure that is written to an XML file when the tests are complete.
+The `Custom Tester' class also supports the recording of timestamps. The client records the time the packet was sent in the application, while the server records the time the packet was received in the application. Figure \ref{fig:TimestampLocation} displays the locations where the timestamps are recorded in relation to the perspective of the Linux network stack presented in \ref{chap:LinuxUDPNWStack}.
 
-By calculating the difference between the time stamps, the latency between sending and receiving in the application can be determined. This requires synchronized clocks between client and server.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1\linewidth]{figures/method/timestamps.pdf}
+    \caption{Location of the Timestamp Recording in Relation to the Linux Network Stack.}
+    \label{fig:TimestampLocation}
+\end{figure}
+
+The timestamps are stored on both systems in a data structure that is written to an XML file when the tests are complete. By calculating the difference between the time stamps, the latency between sending and receiving in the application can be determined. This requires synchronized clocks between client and server.
 
 \subsubsection{Implementation}
 Selected features of the TestSuite implementation are described here. This includes the socket abstraction layer as well as the send and receive routine.
@@ -607,7 +614,7 @@ At the end of the test, if enabled, the recorded timestamps are written to XML d
 The presentation of TestSuite has already dealt with the data provided by the program in several places. The following chapter will show how the relevant test results are determined from this data.
 The most important data provided by the TestSuite are the counters for the number of packets sent and received, a measurement of the exact test duration and the time stamp for each packet. From these, the relevant metrics for reliability and performance testing can be determined.
 
-To calculate the metrics presented below, a Phyton script called "eParser" has been created. This script reads the output data from the TestSuite and calculates the presented metrics and creates diagrams based on them. The script is included in the appendix.
+To calculate the metrics presented below, a Phyton script called `eParser' has been created. This script reads the output data from the TestSuite and calculates the presented metrics and creates diagrams based on them. The script is included in the appendix.
 
 \subsubsection{Packet Loss}
 The counters for the sent and received packets can be used to determine the number of packet losses, as shown in equation \ref{eq:packetloss}. This calculation is already performed by the TestSuite.
@@ -620,7 +627,7 @@ Packet\ Loss = Sent\ Packets - Received\ Packets
 
 \subsubsection{Throughput}
 
-Throughput is the amount of data transferred per unit of time and can be measured in bits per second. To define throughput, let's consider the example of Host A attempting to send a file to Host B. During the data transfer, two types of throughput can be measured: instantaneous throughput and average throughput. Instantaneous throughput is the rate (in Bits per second) at which Host B receives the file at a given time. Average throughput is defined as the number of bits transmitted divided by the number of seconds it took to complete the transmission \cite{datacalc01}. In the context of this thesis, the average throughput as calculated in \ref{eq:throughput} is always referred to.
+Throughput is the amount of data transferred per unit of time and can be measured in bits per second. To define throughput, let's consider the example of Host A attempting to send a file to Host B. During the data transfer, two types of throughput can be measured: instantaneous throughput and average throughput. Instantaneous throughput is the rate (in Bits per second) at which Host B receives the file at a given time. Average throughput is defined as the number of bits transmitted divided by the number of seconds it took to complete the transmission \cite{datacalc01}. In the context of this thesis, the average throughput as calculated in equation \ref{eq:throughput} is always referred to.
 
 \begin{equation}
 Throughput = (Sent\ Packets \cdot Datagram\ Size) / Duration
@@ -628,7 +635,7 @@ Throughput = (Sent\ Packets \cdot Datagram\ Size) / Duration
 \end{equation}
 
 \subsubsection{Packet Rate}
-The packet rate (see \ref{eq:packetrate}) represents the number of packets that are transmitted per unit of time. In contrast to throughput, the packet rate is not specified in bits per second but in packets per second. The average packet rate is considered in this paper.
+The packet rate (see equation \ref{eq:packetrate}) represents the number of packets that are transmitted per unit of time. In contrast to throughput, the packet rate is not specified in bits per second but in packets per second. The average packet rate is considered in this paper.
 
 
 \begin{equation}
@@ -643,13 +650,13 @@ Latency, often referred to as delay, is the amount of time it takes to transmit 
 	\item \textbf{Propagation Time:} time required for a signal to travel from the source to the receiver via the transmission path
 	\item \textbf{Transmission Time:} time required to transmit all the data bits of a signal from the transmitter source to the receiver
 	\item \textbf{Queuing Time:} time that data packets spend in a queue before they are sent
-	\item \textbf{Processing Delay:} time required to process data at the sender or receiver, such as adding header information or checking for errors.
+	\item \textbf{Processing Delay:} time required to process data at the sender or receiver
 \end{itemize}
 
 TestSuite considers the latency from sending a packet in the client application to receiving a packet in the server application. This can be calculated using the timestamps recorded by the client and server. Thus, the latency can be determined for each transmitted packet as shown in equation \ref{eq:latency}.
 
 \begin{equation}
-Latency = Receive\ Time - Send\ Time
+Latency = Receive\ Timestamp - Send\ Timestamp
 \label{eq:latency}
 \end{equation}
 
@@ -657,6 +664,7 @@ When analyzing latency during a test run, two main values can be determined. The
 
 To determine the latency, synchronized clocks between transmitter and receiver are required. The accuracy of the measurement is largely determined by the quality of the clock synchronization.
 
+\clearpage
 \section{Generation of additional System Load} \label{chap:loadgeneration}
 One requirement for the tests is that they should be possible under different operating conditions (see \label{chap:introduction:research_questions}). Based on this requirement, the following categories of load were defined, which should be able to be produced in the test setup, either in isolation or together:
 \begin{itemize}
@@ -731,14 +739,14 @@ The memory stressor, like any other process, also utilizes the system's CPU. Exe
 \subsubsection{I/O Load} \label{chap:stressngIO}
 The `hdd' stressor is used to generate I/O load. It performs continuous writes to the system's hard disk.
 
+Figure \ref{fig:stressIO} shows the hard disk load for a 1-minute execution of an `hdd' stressor. It can be seen that this performs write operations at an average data rate of around 3.2 GBit/s. Furthermore, the data rate can fluctuate between 3 GBit/s and 3.8 GBit/s. The reasons for this is that the stressor works internally with different methods and iterates through them. The methods differ, for example, in the size of the files that are written to the hard disk. The execution of an hdd stressor leads to 100\% CPU utilization of a CPU core.
+
 \begin{figure}[h!]
     \centering
     \includegraphics[width=1\linewidth]{figures/method/stress4.pdf}
     \caption{Disk Utilization during Execution of one stress-ng `hdd' stressors on HPC1.}
     \label{fig:stressIO}
 \end{figure}
-
-Figure \ref{fig:stressIO} shows the hard disk load for a 1-minute execution of an `hdd' stressor. It can be seen that this performs write operations at an average data rate of around 3.2 GBit/s. Furthermore, the data rate can fluctuate between 3 GBit/s and 3.8 GBit/s. The reasons for this is that the stressor works internally with different methods and iterates through them. The methods differ, for example, in the size of the files that are written to the hard disk. The execution of an hdd stressor leads to 100\% CPU utilization of a CPU core.
 
 Linux has I/O scheduling, which reorders and groups requests based on the logical address of the data, with the goal of improving I/O throughput \cite{stress10}. To maximize I/O device stress, I/O scheduling was disabled by selecting the "none" scheduling policy.
 

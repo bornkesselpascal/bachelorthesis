@@ -9,6 +9,7 @@ There are several factors that can contribute to the latency of a network. Howev
 
 The worst-case latency (see \ref{chap:LatencyExplanation}) is the most important indicator for these investigations. However, the mean latency should be also considered. Additionally, secondary data, such as packet losses and datagram sequence, are taken into consideration.
 
+\clearpage
 \section{System under Test}
 Although the topology with the iHawk in the center is used, in contrast to the reliability tests with this topology (see \ref{chap:ReliabIhawk}), not all bi-directional links between the iHawk in the center and the High-Performance or Traffic PCs are to be examined simultaneously. Instead, a single isolated communication is considered.
 
@@ -37,6 +38,7 @@ Similarly, a UDP communication between the iHawk and TPC1 was also considered a 
 
 The network interfaces mentioned in the topology description are used unless otherwise stated in the test campaign description. Furthermore, as with the reliability tests with the iHawk in the center, several settings recommended in the Intel Linux Performance Tuning Guide for the Ethernet 700 series were used. A list of these settings can be found in chapter \ref{chap:ReliabIhawk:SuT}.
 
+\clearpage
 \section{Accuracy of Measurements}
 As demonstrated in \ref{chap:LatencyExplanation}, latency calculation is based on the difference between two time stamps. One of them is recorded at the sender and the other at the receiver. In order to calculate a valid latency value, clock synchronization between the systems is required. The accuracy and reliability of the measurements depend on the accuracy of this clock synchronization.
 
@@ -61,6 +63,7 @@ The programs ptp4l and phc2sys implement the PTP standard for Linux. They provid
 
 The data indicates that the clocks of the two slaves synchronize with the master with an accuracy of 80 to 85 ns. Since the measured latencies in the test are expected to be at least in the two- to three-digit microsecond range, the accuracy of the clock synchronization is sufficient to provide reliable latency results.
 
+\clearpage
 \section{Test Campaigns}
 
 \subsection{Tests with UDP, Raw and Packet Sockets} \label{chap:PerfSockType}
@@ -392,9 +395,6 @@ Figure \ref{fig:540Mean} displays a comparison of the mean latency of the Intel 
 
 It is noticeable that with a datagram size of 80 bytes, the average latency in both directions has a value of about 42 µs and increases significantly with a datagram size of 1080 bytes. These differences are not observable when using the Intel X710-T2L network interfaces with small datagrams.
 
-\subsubsection{Classification of Results}
-The campaign has demonstrated that the Intel X540-T2 network interfaces exhibit significantly higher latencies than the Intel X710-T2L network interfaces with the same configuration. This applies to both worst-case and mean latencies. Therefore, when using these network interfaces in the Distributed Test Support System, a higher latency should be expected. \\
-
 \begin{figure}[h!]
   \centering
   \subcaptionbox{Direction `H'\label{fig:540Mean:a}}{%
@@ -406,6 +406,9 @@ The campaign has demonstrated that the Intel X540-T2 network interfaces exhibit 
   \caption{Mean Latency by Datagram Size of the Intel X540-T2 Network Interface compared with the Intel X710-T2L Network interface (Campaign `Tests with the Intel X540-T2 Network Interface').}
   \label{fig:540Mean}
 \end{figure}
+
+\subsubsection{Classification of Results}
+The campaign has demonstrated that the Intel X540-T2 network interfaces exhibit significantly higher worst-case and mean latencies than the Intel X710-T2L network interfaces with the same configuration. Therefore, when using these network interfaces in the Distributed Test Support System, a higher latency should be expected. \\
 
 \section{Insights}
 The analysis of performance has revealed the anticipated latencies of a UDP communication on the application level. The lowest latencies are to be expected when communication is between the iHawk and a High-Performance PC. However, when communicating systems similar to Traffic PCs, higher latencies should be expected in some cases.

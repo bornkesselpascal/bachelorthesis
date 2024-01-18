@@ -10,7 +10,8 @@ Packet loss can occur at several points within the network. On the one hand, it 
 
 In the tests using the star topology with a switch in the centre (see \ref{chap:TopoSwitch}), packet loss may also occur due to this switch. Possible reasons for this are exceeding the maximum switch capacity, which is 160 GBit/s, or an egress buffer overflow. These buffers have a size of 6 MB, and are dynamically shared between all ports \cite{setup09}.
 
-\section{Reliability Analysis of the Star Topology with a Switch in the Centre} \label{chap:switchtest}
+\clearpage
+\section{Reliability Analysis of the Star Topology with a Switch in the Center} \label{chap:switchtest}
 
 \subsection{System under Test}
 The test campaigns presented in this chapter utilize the star topology with a switch in the center (see \ref{chap:TopoSwitch}). All systems are connected to each other through the Cisco CBS350-8XT switch. The network interfaces mentioned in the architecture presentation are utilized in the computer systems.
@@ -250,8 +251,8 @@ Furthermore, in addition to the standard network interfaces in the topology, the
 
 
 
-
-\section{Reliability Analysis of the Star Topology with the iHawk in the Centre} \label{chap:ReliabIhawk}
+\clearpage
+\section{Reliability Analysis of the Star Topology with the iHawk in the Center} \label{chap:ReliabIhawk}
 
 \subsection{System under Test} \label{chap:ReliabIhawk:SuT}
 The key takeaway from the previous reliability tests (see \ref{chap:switchtest}) is that the use of an Ethernet switch in the Distributed Test Support System is unsuitable, as it leads to a significant number of lost packets. Additionally, the behavior of the switch was found to be unreliable and unpredictable. As a result, an alternative topology was developed and investigated, which is described in \ref{chap:TopoiHawk}, and in which the iHawk is placed in the center of the star.
