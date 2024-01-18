@@ -3,7 +3,7 @@
 \chapter{Background}
 
 \section{Data Management Layer}
-A distributed Test Support System consists of multiple independent computer systems called nodes. A node may have hardware interfaces to communicate with different bus systems. Additionally, processes, called Processing Units (PU) are executed on a node to process data from the hardware interfaces or to generate data for transmission. The nodes collaborate in a common test environment, therefore it is necessary to exchange data between them. The exchange of data between hardware interfaces and Processing Units, including the exchange between different nodes, called Multi Node Mode, is facilitated by the Data Management Layer (DML).
+A Distributed Test Support System consists of multiple independent computer systems called nodes. A node may have hardware interfaces to communicate with different bus systems. Additionally, processes, called Processing Units (PU) are executed on a node to process data from the hardware interfaces or to generate data for transmission. The nodes collaborate in a common test environment, therefore it is necessary to exchange data between them. The exchange of data between hardware interfaces and Processing Units, including the exchange between different nodes, called Multi Node Mode, is facilitated by the Data Management Layer (DML).
 
 This chapter provides an overview of the DML and explains the process of sending and receiving data according to \cite{dml01}.
 
@@ -31,13 +31,13 @@ The Data Manager, a process running on each node, polls all of the FIFO buffers 
 
 If a subscriber exists on the local node, referred to as Single Node Mode, the Data Manager copies the message to the monitor memory (see Figure \ref{fig:DmlRecSingleNode}, Arrow 3). From there, it can be read by a Processing Unit.
 
-If a subscriber for a message exists on another node, referred to as Multi Node Mode, the message must be forwarded. To achieve this, the nodes exchange subscriber lists. This forwarding process is illustrated in Figure \label{fig:DmlRecMultiNode}, Arrow 3. The Data Manager of the local node copies the message by DMA over the Dolphin Interconnect into a FIFO buffer of the remote node. Each node has, in addition to the FIFO buffers for each interface in the node, a FIFO buffer for each remote node in the distributed Test Support System.
+If a subscriber for a message exists on another node, referred to as Multi Node Mode, the message must be forwarded. To achieve this, the nodes exchange subscriber lists. This forwarding process is illustrated in Figure \label{fig:DmlRecMultiNode}, Arrow 3. The Data Manager of the local node copies the message by DMA over the Dolphin Interconnect into a FIFO buffer of the remote node. Each node has, in addition to the FIFO buffers for each interface in the node, a FIFO buffer for each remote node in the Distributed Test Support System.
 
 The Data Manager of the remote node then copies the message to the monitor memory (see Figure \label{fig:DmlRecMultiNode}, Arrow 4), similar to the local distribution.
 
 \subsection{Transmit Path}
 
-Whenever a processing unit wants to send a message on a bus system using a hardware interface, it writes it into a FIFO buffer (see Figure \ref{fig:DmlTransSingleNode} and Figure \ref{fig:DmlTransMultiNode}, Arrow 1). These FIFO buffers are separate from the ones on the receiving side. Each node has a FIFO for every processing unit and for every other remote node in the distributed Test Support System.
+Whenever a processing unit wants to send a message on a bus system using a hardware interface, it writes it into a FIFO buffer (see Figure \ref{fig:DmlTransSingleNode} and Figure \ref{fig:DmlTransMultiNode}, Arrow 1). These FIFO buffers are separate from the ones on the receiving side. Each node has a FIFO for every processing unit and for every other remote node in the Distributed Test Support System.
 
 The Data Manager also polls these FIFO buffers. To forward a message, it is distinguished whether the interface is located on the same node or on a remote node.
 

@@ -1,7 +1,9 @@
 \chapter{Analysis of Performance}
 
 \section{Test Objectives}
-The test campaigns presented here aim to investigate the performance of UDP communication in a local network under conditions similar to those in a distributed test support system. The considered performance indicators are latency and jitter. The investigations are performed using the star topology with the iHawk in the center, presented in \ref{chap:TopoiHawk}.
+The test campaigns presented here aim to investigate the performance of UDP communication in a local network under conditions similar to those in a Distributed Test Support System. The considered performance indicators are latency and jitter. The investigations are performed using the star topology with the iHawk in the center, presented in \ref{chap:TopoiHawk}.
+
+Contrary to the investigation of reliability, no direct requirement can be defined here under which this test can be considered a success. The aim of the investigation is rather to determine the expected latencies, which may lead to certain restrictions concerning the use of a UDP communication within a Distributed Test Support System.
 
 There are several factors that can contribute to the latency of a network. However, since there are no intermediate stations between the computer systems in the network topology, the focus will be on these computer systems and their operating states. In a computer system, latency is influenced by the network interface and driver, processing in the network stack, and the application.
 
@@ -72,7 +74,7 @@ All tests were conducted using the iHawk and HPC1 systems under test, with a cyc
 \subsubsection{Results}
 \paragraph{Worst-Case Latency}
 
-\begin{figure}[h]
+\begin{figure}[h!]
   \centering
   \subcaptionbox{Direction 'H'\label{fig:SockTypeWc:a}}{%
     \includegraphics[width=1\textwidth]{figures/performance/d_2a.pdf}
@@ -351,25 +353,28 @@ The mean latency for adaptive interrupt moderation is 103 µs in both directions
 \subsubsection{Classification of Results}
 The results indicate that latency is at its lowest when interrupt moderation is deactivated. Additionally, the campaign presents the expected worst-case and mean latencies for interrupt moderation configurations with timeout values of 62 µs and 84 µs.
 
-The highest latencies were measured with an adaptive interrupt configuration. However, the configuration changes due to factors such as the number of packets, packet size, or number of connections. As a result, the measured latency may fluctuate, making this option unsuitable for use in a distributed Test Support System.
+The highest latencies were measured with an adaptive interrupt configuration. However, the configuration changes due to factors such as the number of packets, packet size, or number of connections. As a result, the measured latency may fluctuate, making this option unsuitable for use in a Distributed Test Support System.
 
 \subsection{Tests with the Intel X540-T2 Network Interface}
 \subsubsection{Motivation and Context}
 
 This campaign aims to investigate the latency of the Intel X540-T2 network interfaces in both iHawk and HPC1. The reliability of these interfaces has already been examined in \ref{chap:IntelRel540}, where no difference was found compared to the currently used Intel X710-T2L.
 
-The test also employed the settings from the Intel Linux Performance Tuning Guide (see \cite[intermod03]) for the Intel X540-T2 network interfaces. This means for example that interrupt moderation is disabled.
+The test also employed the settings from the Intel Linux Performance Tuning Guide (see \cite{intermod03}) for the Intel X540-T2 network interfaces. This means for example that interrupt moderation is disabled.
 
 The test mode used for this campaign was the same as in the previous campaigns. This involved the use of UDP sockets and datagram sizes ranging from 80 to 8080 bytes, with a cycle time of 0 µs and a test duration of 60 seconds. Only the system under test with the High-Performance PC was utilized.
 
 \subsubsection{Results}
 \paragraph{Worst-Case Latency}
 
+Figure \ref{fig:540Wc} shows the worst-case latency when using the Intel X540-T2 network interfaces compared to the Intel X710-T2L network interfaces in both directions.
+
 \begin{figure}[h!]
   \centering
   \subcaptionbox{Direction 'H'\label{fig:540Wc:a}}{%
     \includegraphics[width=1\textwidth]{figures/performance/d_11a.pdf}
   }
+  \vspace{10pt}
   \subcaptionbox{Direction 'R'\label{fig:540Wc:b}}{%
     \includegraphics[width=1\textwidth]{figures/performance/d_11b.pdf}
   }
@@ -377,13 +382,18 @@ The test mode used for this campaign was the same as in the previous campaigns. 
   \label{fig:540Wc}
 \end{figure}
 
-Figure \ref{fig:540Wc} shows the worst-case latency when using the Intel X540-T2 network interfaces compared to the Intel X710-T2L network interfaces in both directions.
-
 The results show that the worst-case latency is greater when using the Intel X540-T2 in both directions compared to the Intel X710-T2L. Across all datagram sizes, the worst-case latency is 257.79 µs in direction 'H' and 229.56 µs in direction 'R'.
 
 The higher worst-case latencies with the same configuration with the Intel X540-T2 can be attributed to the fact that the network interface itself is older compared to the Intel X710-T2L. Additionally, the network interfaces use different drivers (see Table \ref{tab:drivernic}), which also affects the latency.
 
 \paragraph{Mean Latency}
+
+Figure \ref{fig:540Mean} displays a comparison of the mean latency of the Intel X540-T2 and Intel X710-T2L network interfaces. The mean latency in both directions, 'H' and 'R', increases with larger datagram sizes and is on average about 90.30 µs in direction 'H' and 98.34 µs in direction 'R'.
+
+It is noticeable that with a datagram size of 80 bytes, the average latency in both directions has a value of about 42 µs and increases significantly with a datagram size of 1080 bytes. These differences are not observable when using the Intel X710-T2L network interfaces with small datagrams.
+
+\subsubsection{Classification of Results}
+The campaign has demonstrated that the Intel X540-T2 network interfaces exhibit significantly higher latencies than the Intel X710-T2L network interfaces with the same configuration. This applies to both worst-case and mean latencies. Therefore, when using these network interfaces in the Distributed Test Support System, a higher latency should be expected. \\
 
 \begin{figure}[h!]
   \centering
@@ -397,13 +407,6 @@ The higher worst-case latencies with the same configuration with the Intel X540-
   \label{fig:540Mean}
 \end{figure}
 
-Figure \ref{fig:540Mean} displays a comparison of the mean latency of the Intel X540-T2 and Intel X710-T2L network interfaces. The mean latency in both directions, 'H' and 'R', increases with larger datagram sizes and is on average about 90.30 µs in the 'H' direction and 98.34 µs in the 'R' direction.
-
-It is noticeable that with a datagram size of 80 bytes, the average latency in both directions has a value of about 42 µs and increases significantly with a datagram size of 1080 bytes. These differences are not observable when using the Intel X710-T2L network interfaces with small datagrams.
-
-\subsubsection{Classification of Results}
-The campaign has demonstrated that the Intel X540-T2 network interfaces exhibit significantly higher latencies than the Intel X710-T2L network interfaces with the same configuration. This applies to both worst-case and mean latencies. Therefore, when using these network interfaces in the distributed Test Support System, a higher latency should be expected.
-
 \section{Insights}
 The analysis of performance has revealed the anticipated latencies of a UDP communication on the application level. The lowest latencies are to be expected when communication is between the iHawk and a High-Performance PC. However, when communicating systems similar to Traffic PCs, higher latencies should be expected in some cases.
 
@@ -413,5 +416,6 @@ Further the investigation analyzed the impact of different load scenarios on the
 
 The study investigated the impact of CPU affinity on multi-socket systems and found that it has a minor effect on latency. Also the latencies can be expected with different interrupt moderation options are presented. As expected, the lowest latency was observed when interrupt moderation was disabled. 
 
-Additionally, the study examined the latency of the Intel X540-T2 network interface and found it to be higher than that of the newer Intel X710-T2L network interface.
+Additionally, the investigation examined the latency of the Intel X540-T2 network interface and found it to be higher than that of the newer Intel X710-T2L network interface.
 
+These observed latencies and their variation with respect to the computer system, network hardware, and system load must be taken into account when using a UDP-based implementation in a Distributed Test Support System.

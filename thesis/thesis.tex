@@ -45,7 +45,6 @@
 % package to create diagrams
 \usepackage{tikz}
 \usepackage{geometry}						% Für newgeometry in Titelseite
-\geometry{a4paper,left=30mm,right=20mm}
 
 \usetikzlibrary{positioning}
 \usetikzlibrary{shapes.geometric, arrows}
@@ -176,21 +175,15 @@
     \include{chapters/03_method}
     \include{chapters/04_reliability}
 	\include{chapters/05_performance}
+	\include{chapters/06_conclusion}
+	\include{chapters/07_outlook}
 
-
-	\textbf{NOCH NICHT IN DIESER VERSION:}
-	\begin{itemize}
-		\item Kapitel 1 – Einleitung
-		\item Kapitel 6 – Conclusion, Zusammenfassung der Konfigurationen / Punkte woduch UDP geeignet ist
-		\item Kapitel 7 – Ausblick: Fragmentierung und DPDK (User Space Driver)
-		\item Anhang (mit Code)
-	\end{itemize}
 	
 	\bibliographystyle{apalike2}
 	\bibliography{bibliography/references.bib}
     
     \begin{appendix}
-    	\input{appendices/example_appendix}
+    	%\input{appendices/example_appendix}
 
 		\listoffigures
 		\listoftables

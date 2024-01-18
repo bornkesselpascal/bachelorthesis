@@ -73,15 +73,15 @@ Table \ref{hw:hpc} shows that the High-Performance PCs use an Intel Core i9 1390
 
 
 \paragraph{Comparison with Computer Systems in the Test Support System}
-When selecting the hardware, care was taken to ensure that it was similar or identical to the hardware used in a distributed Test Support System.
+When selecting the hardware, care was taken to ensure that it was similar or identical to the hardware used in a Distributed Test Support System.
 
 \subparagraph{Systems of the Type 'Traffic PC'}
-The 'Traffic PC' systems used in this context are similar to the I/O PCs used in the distributed test system. Both systems use the CompactPCI Serial architecture, which allows for modular systems consisting of a system module with the CPU and up to eight peripheral modules. These modules are connected to the system module through serial point-to-point connections \cite{setup01}.
+The 'Traffic PC' systems used in this context are similar to the I/O PCs used in the Distributed Test Support System. Both systems use the CompactPCI Serial architecture, which allows for modular systems consisting of a system module with the CPU and up to eight peripheral modules. These modules are connected to the system module through serial point-to-point connections \cite{setup01}.
 
-The SC5-FESTIVAL card manufactured by EKF Elektronik GmbH serves as the system module in the distributed test system. It is equipped with an Intel Core i3 7100E processor \cite{setup02}, which provides comparable performance to the Intel Core i7-3770S used in the Traffic PCs \cite{setup03}.
+The SC5-FESTIVAL card manufactured by EKF Elektronik GmbH serves as the system module in the Distributed Test Support System. It is equipped with an Intel Core i3 7100E processor \cite{setup02}, which provides comparable performance to the Intel Core i7-3770S used in the Traffic PCs \cite{setup03}.
 
 \subparagraph{iHawk Platform}
-iHawk is a computer platform manufactured by Concurrent that is designed with a focus on time-critical simulation or data acquisition \cite{setup04}. The system used for the tests in this thesis, with the data described in Table \ref{hw:ihawk}, will also be used with the same configuration in a distributed test system. This ensures that the conditions of the tests carried out here are comparable to those of the distributed test system.
+iHawk is a computer platform manufactured by Concurrent that is designed with a focus on time-critical simulation or data acquisition \cite{setup04}. The system used for the tests in this thesis, with the data described in Table \ref{hw:ihawk}, will also be used with the same configuration in a Distributed Test Support System. This ensures that the conditions of the tests carried out here are comparable to those of the Distributed Test Support System.
 
 
 \paragraph{Characteristics of the used iHawk System} \label{chap:iHawkChar}
@@ -205,23 +205,23 @@ Chapter \ref{chap:Architectures} explains for each topology which network interf
 
 \subparagraph{Comparison with Network Interfaces in the Test Support System}
 
-In the distributed test system, for systems similar to the 'High Performance PCs' and the iHawk, a wide range of PCIe 10GbE network interfaces can be used. However, the CompactPCI Serial systems can only use network interfaces for which a corresponding peripheral module is available.
+In the Distributed Test Support System, for systems similar to the 'High Performance PCs' and the iHawk, a wide range of PCIe 10GbE network interfaces can be used. However, the CompactPCI Serial systems can only use network interfaces for which a corresponding peripheral module is available.
 
-The Distributed Test System utilizes the SN5-TOMBACK peripheral module from EKF \cite{setupnw05}. This module uses the Intel 82599 controller, has two SPF+ ports and supports 10 GbE. It is therefore comparable to the Intel X520-DA2 network card in the test setup, which uses the same controller.
+The Distributed Test Support System utilizes the SN5-TOMBACK peripheral module from EKF \cite{setupnw05}. This module uses the Intel 82599 controller, has two SPF+ ports and supports 10 GbE. It is therefore comparable to the Intel X520-DA2 network card in the test setup, which uses the same controller.
 
 \paragraph{Cabling}
 The cabling of the hardware used was carried out using Cat7 Ethernet patch cables with RJ45 plugs or with fiber optic cables and Intel SPF+ SR modules. Both cabling systems used are suitable for 10 GbE.
 
 \subsection{Software Setup}
-This chapter describes the software versions used and important configurations.
+This chapter describes the software versions and important configurations used in the test setup.
 
 \subsubsection{Versions}
 \paragraph{Operating System}
 The operating system used on all computer systems is the real-time operating system RedHawk Linux 9.2 based on Ubuntu 22.04.3 LTS.
 
 \begin{itemize}
-\item \textbf{Operating system:} RedHawk 9.2 with Ubuntu 22.04.3 LTS user environment
-\item \textbf{Linux kernel:} 6.1.19-rt8-RedHawk-9.2-trace
+\item \textbf{Operating System:} RedHawk 9.2 with Ubuntu 22.04.3 LTS user environment
+\item \textbf{Linux Kernel:} 6.1.19-rt8-RedHawk-9.2-trace
 \end{itemize}
 
 RedHawk Linux 9.2 is a real-time operating system developed by Concurrent, optimized for real-time determinism with precise and consistent response times and low latency \cite{swsetup01}. The manufacturer integrates open source patches and proprietary enhancements into the Linux kernel. The following list briefly describes some important features of the real-time optimized Linux kernel from the product brochure \cite{swsetup02}:
@@ -233,7 +233,7 @@ RedHawk Linux 9.2 is a real-time operating system developed by Concurrent, optim
 \item \textbf{Multithreading and Preemption}: RedHawk allows multiple processes to execute simultaneously in the kernel while protecting critical data or code sections with semaphores or spinlocks. In the RedHawk kernel, processes can be preemptively interrupted to reallocate CPU control from a lower-priority to a higher-priority process, except during execution in critical kernel sections. To ensure deterministic responses, critical sections of the kernel have been optimized to reduce non-preemptable conditions and enabling high-priority processes to immediately respond to external events, even when the CPU is actively engaged.
 \end{itemize}
 
-RedHawk Linux was chosen for the test setup as it is also used in the Distributed Test System. It also offers low latency, which should have a positive impact on the performance characteristics.
+RedHawk Linux was chosen for the test setup as it is also used in the Distributed Test Support System. It also offers low latency, which should have a positive impact on the performance characteristics.
 
 \paragraph{Drivers of the Network Interface Cards}
 
@@ -255,11 +255,10 @@ The drivers supplied with the kernel are used for the network cards. Table \ref{
 \end{table}
 
 \subsubsection{Configurations}
-This chapter describes the general configurations that were used for all tests.
 
 \paragraph{Activation of Jumbo Frames}
 
-The tests used jumbo frames with a maximum size of 9000 bytes. Jumbo frames must be supported by all network nodes to avoid packet loss \cite{swsetup04}. Since the network in the test setup and in the distributed test system is completely under user control, no problems are expected in this regard. \\
+The tests used jumbo frames with a maximum size of 9000 bytes. Jumbo frames must be supported by all network nodes to avoid packet loss \cite{swsetup04}. Since the network in the test setup and also in the Distributed Test Support System is completely under user control, no problems are expected in this regard. \\
 
 \begin{lstlisting}[language=Bash, caption=Configuration of Jumbo Frames for the ethX Interface., label=lst:jumbocongif]
 ifconfig ethX mtu 9000
@@ -269,7 +268,7 @@ Listing \ref{lst:jumbocongif} shows the configuration of jumbo frames with a max
 
 
 \paragraph{Real-time Process} \label{chap:RTProcess}
-The tests, specifically the test program described in the following section \ref{chap:TestSuite}, were executed as a real-time process with the highest priority. This was done in order to obtain realistic test conditions, as the communication layer is also executed as a real-time process in the distributed Test System. \\
+The tests, specifically the test program described in the following section \ref{chap:TestSuite}, were executed as a real-time process with the highest priority. This was done in order to obtain realistic test conditions, as the communication layer is also executed as a real-time process in the Distributed Test Support System. \\
 
 \begin{lstlisting}[language=Bash, caption=Modification of the real-time Attributes of a Process., label=lst:rtprocess]
 chrt -f -p 99 [PID]
@@ -741,7 +740,7 @@ As can be derived from Figure \ref{fig:stressGET}, this stressor does not fully 
 
 \paragraph{Generation of CPU Load by Real-Time Processes}
 
-stress-ng allows for the specification of a scheduling policy and priority as additional options. This allows each stressor to be executed as a real-time process. For generating load, the CPU stressor described in section \ref{chap:CPUStressor} was used with the \texttt{SCHED\_FIFO} scheduling policy described in section \ref{chap:RTProcess} and a scheduling priority of 50. The scheduling priority was intentionally set lower than that of the TestSuite because communication processes have a higher priority in the distributed test system.
+stress-ng allows for the specification of a scheduling policy and priority as additional options. This allows each stressor to be executed as a real-time process. For generating load, the CPU stressor described in section \ref{chap:CPUStressor} was used with the \texttt{SCHED\_FIFO} scheduling policy described in section \ref{chap:RTProcess} and a scheduling priority of 50. The scheduling priority was intentionally set lower than that of the TestSuite because communication processes have a higher priority in the Distributed Test Support System.
 
 \subsubsection{Memory Load} \label{chap:stressngMemeory}
 To generate memory load, the stress-ng 'bigheap' stressor is utilized. The stressor grows its heap by reallocating memory. If the Out Of Memory (OOM) killer on Linux, which is a process emplyed by the kernel when low memory is available on the system and kills one or more processes to resolve the situation \cite{stress09}, kills the process or the allocation fails then the stressor starts again.
