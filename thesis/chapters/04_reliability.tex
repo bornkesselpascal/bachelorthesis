@@ -103,22 +103,30 @@ Regarding the examined network load scenario, it is logical to discard packets i
 \paragraph{Motivation and Context}
 In the previous campaign (refer to \ref{chap:relcamp1}), individual operating states were considered in isolation. The highest possible load was always taken into account, but this does not correspond to the typical load in a Distributed Test Support System.
 
+{
+\renewcommand{\arraystretch}{1.3}
+
 \begin{table}[h]
 \centering
 \newcolumntype{C}[1]{>{\raggedright\arraybackslash}p{#1}}
-\begin{tabular}{C{9cm} C{1.5cm} C{3cm}}
+
+\begin{tabularx}{\textwidth}{C{8cm} | l | X}
 	\toprule
-	Load Component & Quantity & Analogy\\
+	\textbf{Load Component} & \textbf{Quantity} & \textbf{Analogy}\\
 	\midrule
 	Real-Time Process with 100\% CPU Utilization & 4 & Simulations\\
 	Real-Time Process with 5\% CPU Utilization & 20 & Global Memories\\
 	Process with I/O Load on internal Disk with Data Rate limited to 1 GBit/s & 1 & Data Logging\\
 	Timer with a Frequency of 100 kHz & 1 & \\
 	\bottomrule
-\end{tabular}
+\end{tabularx}
+
 \caption{Components of the Realistic Load Scenario for a Computer System.}
 \label{tab:realpc}
 \end{table}
+}
+
+\vspace{20pt}
 
 \begin{figure}[h!]
     \centering
@@ -311,24 +319,25 @@ CPU utilization at the endpoints was also considered. The High-Performance PCs s
 
 Figure \ref{fig:diagr3Loss} displays the overall packet loss ratio for this test campaign, categorized by datagram size and communication direction. No packet losses were observed during the tests conducted with datagram sizes of 80 and 8900 bytes. However, packet losses were observed in both the 'H' and 'R' directions during testing with a datagram size of 65000 bytes when using fragmented packets. Table \ref{tab:LossesC1} presents a breakdown of the losses by channel. The packet losses in the 'H' and 'R' directions will be analyzed separately separately below.
 
-\begin{table}[h]
+\begin{table}[h!]
 \centering
 \newcolumntype{C}[1]{>{\raggedright\arraybackslash}p{#1}}
 
 \begin{subtable}{\linewidth}
 \centering
-\begin{tabular}{lll}
+\begin{tabular}{l| C{2.3cm} C{1.2cm} | l}
 	\toprule
-	Channel & Lost Packets (Total) & Average Throughput (Net) \\
+	\textbf{Channel} & \multicolumn{2}{l|}{\textbf{Lost Packets}} & \textbf{Average Throughput} \\
+	\scriptsize{ }& \multicolumn{2}{l|}{\scriptsize{(Ratio/Total)}} & \scriptsize{ }\\
 	\midrule
- 	1A-H & 0    & 9.90 GBit/s \\ 
- 	1B-H & 0    & 9.90 GBit/s \\
- 	2A-H & 0    & 9.89 GBit/s \\
- 	2B-H & 0    & 9.89 GBit/s \\
- 	3A-H & 4313 & 9.89 GBit/s \\
- 	3B-H & 4285 & 9.89 GBit/s \\
- 	4A-H & 0    & 9.90 GBit/s \\
- 	4B-H & 0    & 9.90 GBit/s \\
+ 	1A-H & \num{0} \% & / 0    & 9.90 GBit/s \\ 
+ 	1B-H & \num{0} \% & / 0    & 9.90 GBit/s \\
+ 	2A-H & \num{0} \% & / 0    & 9.89 GBit/s \\
+ 	2B-H & \num{0} \% & / 0    & 9.89 GBit/s \\
+ 	3A-H & \num{3.9e-03} \% & / 4313 & 9.89 GBit/s \\
+ 	3B-H & \num{3.8e-03} \% & / 4285 & 9.89 GBit/s \\
+ 	4A-H & \num{0} \% & / 0    & 9.90 GBit/s \\
+ 	4B-H & \num{0} \% & / 0    & 9.90 GBit/s \\
 	\bottomrule
 \end{tabular}
 \caption{Direction 'H'}
@@ -338,18 +347,19 @@ Figure \ref{fig:diagr3Loss} displays the overall packet loss ratio for this test
 
 \begin{subtable}{\linewidth}
 \centering
-\begin{tabular}{lll}
+\begin{tabular}{l|C{2.3cm} C{1.2cm}|l}
 	\toprule
-	Channel & Lost Packets (Total) & Average Throughput (Net) \\
+	\textbf{Channel} & \multicolumn{2}{l|}{\textbf{Lost Packets}} & \textbf{Average Throughput} \\
+	\scriptsize{ }& \multicolumn{2}{l|}{\scriptsize{(Ratio/Total)}} & \scriptsize{ }\\
 	\midrule
-	1A-R & 7  & 8.25 GBit/s \\ 
- 	1B-R & 11 & 8.75 GBit/s \\
-	2A-R & 8  & 8.23 GBit/s \\
- 	2B-R & 8  & 8.13 GBit/s \\
- 	3A-R & 7  & 8.12 GBit/s \\
- 	3B-R & 16 & 8.09 GBit/s \\
- 	4A-R & 9  & 8.20 GBit/s \\
- 	4B-R & 9  & 8.40 GBit/s \\
+	1A-R & \num{5.0e-06} \% & / 7  & 8.25 GBit/s \\ 
+ 	1B-R & \num{9.1e-06} \% & / 11 & 8.75 GBit/s \\
+	2A-R & \num{5.8e-06} \% & / 8  & 8.23 GBit/s \\
+ 	2B-R & \num{5.8e-06} \% & / 8  & 8.13 GBit/s \\
+ 	3A-R & \num{5.1e-06} \% & / 7  & 8.12 GBit/s \\
+ 	3B-R & \num{1.1e-05} \% & / 16 & 8.09 GBit/s \\
+ 	4A-R & \num{7.9e-06} \% & / 9  & 8.20 GBit/s \\
+ 	4B-R & \num{7.8e-06} \% & / 9  & 8.40 GBit/s \\
 	\bottomrule
 \end{tabular}
 \caption{Direction 'R'}
@@ -397,9 +407,9 @@ The statistics (Standard Interface Statistic and Network Stack Statistic) record
 
 \begin{table}[h]
 \centering
-\begin{tabular}{llll}
+\begin{tabular}{l|l|l|l}
 	\toprule
-	Interface & Channel & \texttt{rx\_dropped} & \texttt{rx\_missed\_errors} \\
+	\textbf{Interface} & \textbf{Channel} & \textbf{\texttt{rx\_dropped}} & \textbf{\texttt{rx\_missed\_errors}} \\
 	\midrule
  	enp1s0f0 & 3A-(H/R) & 0 & 19507 \\ 
  	enp1s0f1 & 3B-(H/R) & 0 & 19414 \\
