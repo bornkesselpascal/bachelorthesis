@@ -17,14 +17,14 @@ Although the topology with the iHawk in the center is used, in contrast to the r
     \begin{subfigure}[b]{0.45\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figures/performance/sut_1a.pdf}
-        \caption{Direction 'H'}
+        \caption{Direction `H'}
         \label{fig:SutHpcPerf:H}
     \end{subfigure}
     \hfill
     \begin{subfigure}[b]{0.45\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figures/performance/sut_1b.pdf}
-        \caption{Direction 'R'}
+        \caption{Direction `R'}
         \label{fig:SutHpcPerf:R}
     \end{subfigure}
     \caption{Illustration of the used System under Test with a High-Performance PC.}
@@ -76,27 +76,27 @@ All tests were conducted using the iHawk and HPC1 systems under test, with a cyc
 
 \begin{figure}[h!]
   \centering
-  \subcaptionbox{Direction 'H'\label{fig:SockTypeWc:a}}{%
+  \subcaptionbox{Direction `H'\label{fig:SockTypeWc:a}}{%
     \includegraphics[width=1\textwidth]{figures/performance/d_2a.pdf}
   }
-  \subcaptionbox{Direction 'R'\label{fig:SockTypeWc:b}}{%
+  \subcaptionbox{Direction `R'\label{fig:SockTypeWc:b}}{%
     \includegraphics[width=1\textwidth]{figures/performance/d_2b.pdf}
   }
-  \caption{Worst-Case Latency by Datagram Size and Socket Type (Campaign 'Tests with UDP, Raw and Packet Sockets').}
+  \caption{Worst-Case Latency by Datagram Size and Socket Type (Campaign `Tests with UDP, Raw and Packet Sockets').}
   \label{fig:SockTypeWc}
 \end{figure}
 
-Figure \ref{fig:SockTypeWc} displays the worst-case latency for the three investigated socket types in relation to the datagram size. A distinction is made between direction 'H' and 'R'.
+Figure \ref{fig:SockTypeWc} displays the worst-case latency for the three investigated socket types in relation to the datagram size. A distinction is made between direction `H' and `R'.
 
-The worst-case latency for UDP sockets in the 'H' direction is 163.97 µs, while Raw sockets have a slightly higher worst-case latency of 169.32 µs. Packet sockets, on the other hand, have a slightly lower worst-case latency of 150.61 µs. Figure \ref{fig:SockTypeWc:a} illustrates the worst-case latency as in relation of datagram size. The figure shows that the worst-case latency fluctuates, but no trend is apparent from the data.
+The worst-case latency for UDP sockets in direction `H' is 163.97 µs, while Raw sockets have a slightly higher worst-case latency of 169.32 µs. Packet sockets, on the other hand, have a slightly lower worst-case latency of 150.61 µs. Figure \ref{fig:SockTypeWc:a} illustrates the worst-case latency as in relation of datagram size. The figure shows that the worst-case latency fluctuates, but no trend is apparent from the data.
 
-The worst-case latency in direction 'R' is significantly lower than in direction 'H'. When using UDP sockets, the worst-case latency is 109.31 µs, with Raw sockets it is 81.19 µs, and with Packet sockets it is 93.87 µs. Figure \ref{fig:SockTypeWc:b} displays the worst-case latency as a function of datagram size, but again no trend can be identified.
+The worst-case latency in direction `R' is significantly lower than in direction `H'. When using UDP sockets, the worst-case latency is 109.31 µs, with Raw sockets it is 81.19 µs, and with Packet sockets it is 93.87 µs. Figure \ref{fig:SockTypeWc:b} displays the worst-case latency as a function of datagram size, but again no trend can be identified.
 
-It is noticeable that the measured worst-case latency in the 'R' direction is 33\% lower than in the 'H' direction when using UDP sockets. This reduction is even greater at 52\% when using Raw sockets. The exact reason for this difference is difficult to determine at this point due to the inability to obtain time stamps from the network interface, which makes it impossible to identify which system causes how much latency. Both systems use the same network interface, so a likely cause of these differences between the 'H' and 'R' directions is the different hardware of the systems.
+It is noticeable that the measured worst-case latency in the `R' direction is 33\% lower than in direction `H' when using UDP sockets. This reduction is even greater at 52\% when using Raw sockets. The exact reason for this difference is difficult to determine at this point due to the inability to obtain time stamps from the network interface, which makes it impossible to identify which system causes how much latency. Both systems use the same network interface, so a likely cause of these differences between directions `H' and `R' is the different hardware of the systems.
 
 When examining the time distribution of latencies, it is evident that the highest latencies (worst-case latencies) consistently occur for the first 10 packets sent during the test. This applies to all socket types in both directions. As previously mentioned, no time stamps can be obtained from the network interface, making it difficult to analyze the reason for this observation.
 
-During the tests, no packet losses were detected with any of the three socket types examined. However, it was found that when Packet sockets are used in both the 'H' and 'R' directions, the packets are re-sorted and do not arrive in the correct order. This behavior was not observed with UDP sockets and Raw sockets.
+During the tests, no packet losses were detected with any of the three socket types examined. However, it was found that when Packet sockets are used in both directions `H' and `R', the packets are re-sorted and do not arrive in the correct order. This behavior was not observed with UDP sockets and Raw sockets.
 
 \paragraph{Mean Latency}
 
@@ -104,21 +104,21 @@ Figure \ref{fig:SockTypeMl} shows the mean latency for different datagram sizes,
 
 \begin{figure}[h!]
   \centering
-  \subcaptionbox{Direction 'H'\label{fig:SockTypeMl:a}}{%
+  \subcaptionbox{Direction `H'\label{fig:SockTypeMl:a}}{%
     \includegraphics[width=1\textwidth]{figures/performance/d_3a.pdf}
   }
-  \subcaptionbox{Direction 'R'\label{fig:SockTypeMl:b}}{%
+  \subcaptionbox{Direction `R'\label{fig:SockTypeMl:b}}{%
     \includegraphics[width=1\textwidth]{figures/performance/d_3b.pdf}
   }
-  \caption{Mean Latency by Datagram Size and Socket Type (Campaign 'Tests with UDP, Raw and Packet Sockets').}
+  \caption{Mean Latency by Datagram Size and Socket Type (Campaign `Tests with UDP, Raw and Packet Sockets').}
   \label{fig:SockTypeMl}
 \end{figure}
 
-In the direction 'H', the mean latency is 26.4 µs across all datagram sizes when using UDP sockets. Raw socket have has a comparable mean latency of 27.15 µs. Packet sockets had the lowest mean latency of 21.83 µs, which is 17\% lower than UDP sockets.
+In the direction `H', the mean latency is 26.4 µs across all datagram sizes when using UDP sockets. Raw socket have has a comparable mean latency of 27.15 µs. Packet sockets had the lowest mean latency of 21.83 µs, which is 17\% lower than UDP sockets.
 
 Figure \ref{fig:SockTypeMl:a} illustrates the correlation between datagram size and mean latency. The data indicates that as the size of the datagram increases, the mean latency also increases. This is primarily due to the fact that larger packets require more processing.
 
-In the direction 'R', UDP sockets had a mean latency of 24.67 µs. Raw sockets and Packet sockets had a mean latency that was approximately 10\% lower, as shown in Figure \ref{fig:SockTypeMl:b}. The figure also demonstrates that the mean latency increases also in this direction when the datagram size is increased. The mean latency in the 'R' direction is lower than that in the 'H' direction.
+In the direction `R', UDP sockets had a mean latency of 24.67 µs. Raw sockets and Packet sockets had a mean latency that was approximately 10\% lower, as shown in Figure \ref{fig:SockTypeMl:b}. The figure also demonstrates that the mean latency increases also in this direction when the datagram size is increased. The mean latency in direction `R' is lower than that in direction `H'.
 
 \paragraph{Influence of Fragmentation on Latency}
 
@@ -151,17 +151,17 @@ The campaign also examined the latency associated with fragmentation, using a da
     \label{fig:histFrag:d}
   \end{subfigure}
   
-  \caption{Latency Distribution for UDP Sockets with different Datagram Sizes in Direction 'H' (Campaign 'Tests with UDP, Raw and Packet Sockets').}
+  \caption{Latency Distribution for UDP Sockets with different Datagram Sizes in Direction `H' (Campaign `Tests with UDP, Raw and Packet Sockets').}
   \label{fig:histFrag}
 \end{figure}
 
-Figure \ref{fig:histFrag} displays histograms of the latency for datagram sizes of 80 bytes, 8900 bytes and 65000 bytes in direction 'H'. Figure \ref{fig:histFrag:d} presents an enlarged version of the histogram, showing only the section from 150 µs to 300 µs.
+Figure \ref{fig:histFrag} displays histograms of the latency for datagram sizes of 80 bytes, 8900 bytes and 65000 bytes in direction `H'. Figure \ref{fig:histFrag:d} presents an enlarged version of the histogram, showing only the section from 150 µs to 300 µs.
 
 With a datagram size of 65000 bytes (see Figure \ref{fig:histFrag:c}), a worst case latency of 3431.16 µs was observed, which is more than 20 times higher than with a datagram size of 8900 bytes (163.97 µs). The mean latency for a datagram size of 65000 bytes is 215.78 µs, which is approximately 7.5 times higher than for a datagram size of 8900 bytes. This difference can be attributed to fragmentation (see \ref{chap:frag}). When a UDP datagram with a size of 65000 bytes is sent, it is divided into 8 packets at an MTU of 9000 bytes. This correlates with the observed increase in mean latency.
 
 While the distribution is close to the mean for datagram sizes of 80 bytes (see Figure \ref{fig:histFrag:a}) and 8900 bytes (see Figure \ref{fig:histFrag:b}), a wider distribution can be seen for a datagram size of 65000 bytes. Upon closer inspection of the enlarged section in Figure \ref{fig:histFrag:d}, a multimodal distribution is observed.
 
-Additionally, it was discovered that datagrams are rearranged at a datagram size of 65000 bytes due to fragmentation.  These fundamental observations about fragmentation also apply to direction 'R'.
+Additionally, it was discovered that datagrams are rearranged at a datagram size of 65000 bytes due to fragmentation.  These fundamental observations about fragmentation also apply to direction `R'.
 
 \subsubsection{Classification of Results}
 One outcome of this campaign is that Packet have a lower worst-case and mean latency than UDP sockets or Raw sockets, but it was observed as a secondary result observed that packets do not arrive in the application in the order in which they were sent. Another argument against Packet sockets is that they are more complex to handle, since layer 2, 3, and 4 headers must be generated by the application. For this reason, this Socket Type will not be considered in the further performance analysis.
@@ -174,7 +174,7 @@ Regarding fragmentation, the campaign discovered that latency increases signific
 \subsection{Tests using the System under Test with a Traffic PC}
 
 \subsubsection{Motivation and Context}
-The purpose of this test campaign is to examine the latency of the system under test utilizing the iHawk and a Traffic PC. Both directions 'H' and 'R' are considered.
+The purpose of this test campaign is to examine the latency of the system under test utilizing the iHawk and a Traffic PC. Both directions `H' and `R' are considered.
 
 Based on the results of the previous test campaign 'Tests with UDP, Raw and Packet Sockets' (see \ref{chap:PerfSockType}), the tests were performed only with UDP sockets and datagram sizes from 80 to 8080 bytes in steps of 1000 bytes. The cycle time and test duration used in this campaign are the same as in the previous one.
 
@@ -183,43 +183,43 @@ Based on the results of the previous test campaign 'Tests with UDP, Raw and Pack
 
 \begin{figure}[h!]
   \centering
-  \subcaptionbox{Direction 'H'\label{fig:TrafficWc:a}}{%
+  \subcaptionbox{Direction `H'\label{fig:TrafficWc:a}}{%
     \includegraphics[width=1\textwidth]{figures/performance/d_5a.pdf}
   }
-  \subcaptionbox{Direction 'R'\label{fig:TrafficWc:b}}{%
+  \subcaptionbox{Direction `R'\label{fig:TrafficWc:b}}{%
     \includegraphics[width=1\textwidth]{figures/performance/d_5b.pdf}
   }
-  \caption{Worst-Case Latency by Datagram Size and System under Test (Campaign 'Tests using the System under Test with a Traffic PC').}
+  \caption{Worst-Case Latency by Datagram Size and System under Test (Campaign `Tests using the System under Test with a Traffic PC').}
   \label{fig:TrafficWc}
 \end{figure}
 
 Figure \ref{fig:TrafficWc} displays the worst-case latency for the system under test with a Traffic PC. Additionally, the results from the previous test campaign (see \ref{chap:PerfSockType}) for a UDP socket with a high performance PC as the system under test are shown for comparison.
 
-In direction 'H' a worst case latency of 229.20 µs was measured. Figure \ref{fig:TrafficWc:a} shows it in relation to the datagram size. The worst-case latency of the system under test with a Traffic PC is therefore approximately 30\% higher than with a High Performance PC.
+In direction `H' a worst case latency of 229.20 µs was measured. Figure \ref{fig:TrafficWc:a} shows it in relation to the datagram size. The worst-case latency of the system under test with a Traffic PC is therefore approximately 30\% higher than with a High Performance PC.
 
-Possible reasons for the higher latency in the direction 'H' compared to a High-Performance PC are the  less capable hardware of the Traffic PCs, resulting in a longer processing time of a received packet in the network stack. Additionally, the Traffic PCs use different network cards that use a different driver.
+Possible reasons for the higher latency in the direction `H' compared to a High-Performance PC are the  less capable hardware of the Traffic PCs, resulting in a longer processing time of a received packet in the network stack. Additionally, the Traffic PCs use different network cards that use a different driver.
 
-In the 'R' direction, the worst-case latency is 80.73 µs, which is 26\% lower than the worst-case latency of a High-Performance PC used as the system under test. This could be due to the use of a different network interface, the Intel X540-T2, in the Traffic PCs.
+In the `R' direction, the worst-case latency is 80.73 µs, which is 26\% lower than the worst-case latency of a High-Performance PC used as the system under test. This could be due to the use of a different network interface, the Intel X540-T2, in the Traffic PCs.
 
 \paragraph{Mean Latency}
 \begin{figure}[h!]
   \centering
-  \subcaptionbox{Direction 'H'\label{fig:TrafficMean:a}}{%
+  \subcaptionbox{Direction `H'\label{fig:TrafficMean:a}}{%
     \includegraphics[width=1\textwidth]{figures/performance/d_6a.pdf}
   }
-  \subcaptionbox{Direction 'R'\label{fig:TrafficMean:b}}{%
+  \subcaptionbox{Direction `R'\label{fig:TrafficMean:b}}{%
     \includegraphics[width=1\textwidth]{figures/performance/d_6b.pdf}
   }
-  \caption{Mean Latency by Datagram Size and System under Test (Campaign 'Tests using the System under Test with a Traffic PC').}
+  \caption{Mean Latency by Datagram Size and System under Test (Campaign `Tests using the System under Test with a Traffic PC').}
   \label{fig:TrafficMean}
 \end{figure}
 
-Regarding the mean latency in Direction 'H' with a traffic PC in the system under test, shown in Figure \ref{fig:TrafficMean:a}, it can be observed that it is 108.79 µs on average. This is 76\% higher than in the tests with a High-Performance PC. In direction 'R', shown in figure \ref{fig:TrafficMean:b}, the average mean latency is 24.8 µs, which is almost the same as the average latency measured in the tests with a High-Performance PC. In both directions, there is an increase in latency as the datagram size increases.
+Regarding the mean latency in Direction `H' with a traffic PC in the system under test, shown in Figure \ref{fig:TrafficMean:a}, it can be observed that it is 108.79 µs on average. This is 76\% higher than in the tests with a High-Performance PC. In direction `R', shown in figure \ref{fig:TrafficMean:b}, the average mean latency is 24.8 µs, which is almost the same as the average latency measured in the tests with a High-Performance PC. In both directions, there is an increase in latency as the datagram size increases.
 
 \subsubsection{Classification of Results}
 The test campaign examined the latency of UDP communication with a Traffic PC in the setup and compared it to a setup with a High-Performance PC.
 
-It was found that the latency in direction "H" is higher for communication between the iHawk and a Traffic PC than for communication between the iHawk and a High-Performance PC. This applies to both the worst-case and mean latency. In contrast, in the 'R' direction, a significantly lower worst-case latency and a comparably high average latency are observed.
+It was found that the latency in direction "H" is higher for communication between the iHawk and a Traffic PC than for communication between the iHawk and a High-Performance PC. This applies to both the worst-case and mean latency. In contrast, in the `R' direction, a significantly lower worst-case latency and a comparably high average latency are observed.
 
 
 \subsection{Tests with additional Load}
@@ -237,33 +237,33 @@ The tests were conducted using UDP sockets and datagram sizes ranging from 80 to
 
 \begin{figure}[h!]
   \centering
-  \subcaptionbox{Direction 'H'\label{fig:StressWc:a}}{%
+  \subcaptionbox{Direction `H'\label{fig:StressWc:a}}{%
     \includegraphics[width=1\textwidth]{figures/performance/d_7a.pdf}
   }
-  \subcaptionbox{Direction 'R'\label{fig:StressWc:b}}{%
+  \subcaptionbox{Direction `R'\label{fig:StressWc:b}}{%
     \includegraphics[width=1\textwidth]{figures/performance/d_7b.pdf}
   }
-  \caption{Worst-Case Latency by Datagram Size and Load Scenario with the System under Test with a High-Performance PC (Campaign 'Tests with additional Load').}
+  \caption{Worst-Case Latency by Datagram Size and Load Scenario with the System under Test with a High-Performance PC (Campaign `Tests with additional Load').}
   \label{fig:StressWc}
 \end{figure}
 
-Figure \ref{fig:StressWc} displays the worst-case latency under additional system and network load in directions 'H' and 'R' and compares it to the worst-case latency without additional load.
+Figure \ref{fig:StressWc} displays the worst-case latency under additional system and network load in directions `H' and `R' and compares it to the worst-case latency without additional load.
 
 The realistic scenario causes a CPU utilization of 19.5\% on the iHawk and 47.8\% on the High-Performance PC during the test. In both directions, the worst-case latency remains unaffected by the system load from the realistic scenario. The worst-case latency values are similar to those without additional load.
 
-A network load in direction 'H' (Center to Endpoint) also causes only a small increase in worst-case latency compared to the test with no additional load. The worst-case latency in this direction is 180 µs.
+A network load in direction `H' (Center to Endpoint) also causes only a small increase in worst-case latency compared to the test with no additional load. The worst-case latency in this direction is 180 µs.
 
-However, in direction 'R' (Endpoint to Center), the network load causes a significant increase in worst-case latency, as shown in Figure \ref{fig:StressWc:b}. The maximum value, measured in tests with a datagram size of 2080 bytes, is 742.73 µs. This increase is due to the high network load on the iHawk in the center. In addition to the measured communication, the system is loaded on 7 other channels with bidirectional communication and an average throughput of 9.68 GBit/s per direction. This high load is causing additional latency during processing in the receiving system.
+However, in direction `R' (Endpoint to Center), the network load causes a significant increase in worst-case latency, as shown in Figure \ref{fig:StressWc:b}. The maximum value, measured in tests with a datagram size of 2080 bytes, is 742.73 µs. This increase is due to the high network load on the iHawk in the center. In addition to the measured communication, the system is loaded on 7 other channels with bidirectional communication and an average throughput of 9.68 GBit/s per direction. This high load is causing additional latency during processing in the receiving system.
 
 \paragraph{Mean Latency}
-When both computer systems were stressed with the realistic load scenario, average latencies were observed in both directions that were comparable to the tests without load. This also applies to the network load in the direction 'H'.
+When both computer systems were stressed with the realistic load scenario, average latencies were observed in both directions that were comparable to the tests without load. This also applies to the network load in the direction `H'.
 
-However, when network load was applied in the 'R' direction, a significantly higher mean latency was observed compared to the test without additional load, as already described for the worst-case latency. The mean latency in this direction was 243.67 µs, which is almost 10 times higher than without additional load (24.67 µs).
+However, when network load was applied in the `R' direction, a significantly higher mean latency was observed compared to the test without additional load, as already described for the worst-case latency. The mean latency in this direction was 243.67 µs, which is almost 10 times higher than without additional load (24.67 µs).
 
 \subsubsection{Classification of Results}
 The results of the campaign suggest that the latency is not affected by additional system load, such as those from realistic scenarios, which involves CPU load, I/O load, and interrupt load.
 
-When a network load is applied, the worst-case latency increased 4.5 times in the 'R' direction, but remained unchanged in the 'H' direction. This is due to the high network load in the center. It is important to note that this scenario involved applying maximum utilization to all available communication channels.
+When a network load is applied, the worst-case latency increased 4.5 times in direction `R', but remained unchanged in direction `H'. This is due to the high network load in the center. It is important to note that this scenario involved applying maximum utilization to all available communication channels.
 
 \subsection{Tests to Investigate the Influence of CPU Affinity}
 \subsubsection{Motivation and Context}
@@ -276,19 +276,19 @@ The tests in this campaign examine the CPU affinity option 'enabled' and compare
 
 \begin{figure}[h!]
   \centering
-  \subcaptionbox{Direction 'H'\label{fig:AffWc:a}}{%
+  \subcaptionbox{Direction `H'\label{fig:AffWc:a}}{%
     \includegraphics[width=1\textwidth]{figures/performance/d_8a.pdf}
   }
-  \subcaptionbox{Direction 'R'\label{fig:AffWc:b}}{%
+  \subcaptionbox{Direction `R'\label{fig:AffWc:b}}{%
     \includegraphics[width=1\textwidth]{figures/performance/d_8b.pdf}
   }
-  \caption{Worst-Case Latency by Datagram Size and Affinity Setting with the System under Test with a High-Performance PC (Campaign 'Tests to Investigate the Influence of CPU Affinity').}
+  \caption{Worst-Case Latency by Datagram Size and Affinity Setting with the System under Test with a High-Performance PC (Campaign `Tests to Investigate the Influence of CPU Affinity').}
   \label{fig:AffWc}
 \end{figure}
 
-Figure \ref{fig:AffWc} shows the worst-case latencies for the two investigated CPU affinity settings in both directions, 'H' and 'R'.
+Figure \ref{fig:AffWc} shows the worst-case latencies for the two investigated CPU affinity settings in both directions, `H' and `R'.
 
-In direction 'H' (Center to Endpoint), a maximum worst case latency of 144.76 µs was observed with CPU affinity enabled, which is 11.7\% lower than without CPU affinity enabled. In direction 'R' (Endpoint to Center), a 12.4\% reduction in worst-case latency was observed. Again, as in the previous test campaigns, a higher latency was observed in direction 'H' than in direction 'R'.
+In direction `H' (Center to Endpoint), a maximum worst case latency of 144.76 µs was observed with CPU affinity enabled, which is 11.7\% lower than without CPU affinity enabled. In direction `R' (Endpoint to Center), a 12.4\% reduction in worst-case latency was observed. Again, as in the previous test campaigns, a higher latency was observed in direction `H' than in direction `R'.
 
 It can be assumed that with configured CPU affinity, the fact that the CPU can access its local resources faster than the resources of the remote CPU has a positive influence on the worst-case latency. However, as explained in \ref{chap:iHawkChar}, accessing resources from the other CPU via the UPI link results in a latency of around 130 ns \cite{setup07}. This is a rather small value compared to the measured latencies of UDP communication, which are in the double to triple-digit microsecond range. A further contribution to the observed lower worst-case latencies could also be fluctuations in the measured results.
 
@@ -312,21 +312,21 @@ In addition to the previously used disabled interrupt moderation, the timeout va
 
 \begin{figure}[h!]
   \centering
-  \subcaptionbox{Direction 'H'\label{fig:IMWc:a}}{%
+  \subcaptionbox{Direction `H'\label{fig:IMWc:a}}{%
     \includegraphics[width=1\textwidth]{figures/performance/d_9a.pdf}
   }
-  \subcaptionbox{Direction 'R'\label{fig:IMWc:b}}{%
+  \subcaptionbox{Direction `R'\label{fig:IMWc:b}}{%
     \includegraphics[width=1\textwidth]{figures/performance/d_9b.pdf}
   }
-  \caption{Worst-Case Latency by Datagram Size for different Interrupt Moderation Configurations with the System under Test with a High-Performance PC (Campaign 'Tests to Investigate the Influence of Interrupt-Moderation').}
+  \caption{Worst-Case Latency by Datagram Size for different Interrupt Moderation Configurations with the System under Test with a High-Performance PC (Campaign `Tests to Investigate the Influence of Interrupt-Moderation').}
   \label{fig:IMWc}
 \end{figure}
 
-Figure \ref{fig:IMWc} displays the worst-case latency for various interrupt moderation configurations in direction 'H' and 'R'.
+Figure \ref{fig:IMWc} displays the worst-case latency for various interrupt moderation configurations in direction `H' and `R'.
 
-The highest worst-case latency in direction 'H' is observed with interrupt moderation set to a timeout of 84 µs, with a maximum of 476.73 µs. The setting with a timeout value of 62 µs has a worst-case latency of 226.05 µs, which is considerably lower. With adaptive interrupt moderation, a worst case latency of 211.16 µs was observed with a datagram size of 3080 bytes. However, when interrupt moderation was disabled, the lowest worst-case latency was observed at 163.97 µs. Figure \ref{fig:IMWc:a} shows the worst-case latency against datagram size for all interrupt moderation configurations. No clear trend can be identified.
+The highest worst-case latency in direction `H' is observed with interrupt moderation set to a timeout of 84 µs, with a maximum of 476.73 µs. The setting with a timeout value of 62 µs has a worst-case latency of 226.05 µs, which is considerably lower. With adaptive interrupt moderation, a worst case latency of 211.16 µs was observed with a datagram size of 3080 bytes. However, when interrupt moderation was disabled, the lowest worst-case latency was observed at 163.97 µs. Figure \ref{fig:IMWc:a} shows the worst-case latency against datagram size for all interrupt moderation configurations. No clear trend can be identified.
 
-In direction 'R', the highest worst-case latency of 488.94 µs is also observed with interrupt moderation set to a timeout value of 84 µs. Adaptive interrupt moderation has a worst-case latency of 214.11 µs in this direction, which is similar to the value in the 'H' direction. With a timeout value of 62 µs, a worst-case latency of 158.13 µs is measured, while the lowest worst-case latency of 109.31 µs is also observed in this direction with disabled interrupt moderation. Similar to previous campaigns, the worst-case latency is lower in the 'R' direction compared to the 'H' direction, except for adaptive interrupt moderation.
+In direction `R', the highest worst-case latency of 488.94 µs is also observed with interrupt moderation set to a timeout value of 84 µs. Adaptive interrupt moderation has a worst-case latency of 214.11 µs in this direction, which is similar to the value in the `H' direction. With a timeout value of 62 µs, a worst-case latency of 158.13 µs is measured, while the lowest worst-case latency of 109.31 µs is also observed in this direction with disabled interrupt moderation. Similar to previous campaigns, the worst-case latency is lower in direction `R' compared to direction `H', except for adaptive interrupt moderation.
 
 The finding that the timeout values have a higher worst-case latency than the disabled interrupt moderation was expected, since interrupt moderation, as described in \ref{chap:InterMod}, delays the generation of interrupts.  The worst-case latency in both directions for adaptive interrupt moderation ranges from 210 µs to 215 µs. Based on the test results, no clear dependency between datagram size and latency can be recognized for this configuration, although the description of the functionality (see \ref{chap:InterMod}) suggests otherwise.
 
@@ -336,17 +336,17 @@ Figure \ref{fig:IMean} shows the mean latency based on datagram size and interru
 
 \begin{figure}[h!]
   \centering
-  \subcaptionbox{Direction 'H'\label{fig:IMean:a}}{%
+  \subcaptionbox{Direction `H'\label{fig:IMean:a}}{%
     \includegraphics[width=1\textwidth]{figures/performance/d_10a.pdf}
   }
-  \subcaptionbox{Direction 'R'\label{fig:IMean:b}}{%
+  \subcaptionbox{Direction `R'\label{fig:IMean:b}}{%
     \includegraphics[width=1\textwidth]{figures/performance/d_10b.pdf}
   }
-  \caption{Mean Latency by Datagram Size for different Interrupt Moderation Configurations with the System under Test with a High-Performance PC (Campaign 'Tests to Investigate the Influence of Interrupt-Moderation').}
+  \caption{Mean Latency by Datagram Size for different Interrupt Moderation Configurations with the System under Test with a High-Performance PC (Campaign `Tests to Investigate the Influence of Interrupt-Moderation').}
   \label{fig:IMean}
 \end{figure}
 
-The results show that activating interrupt moderation with a timeout value of 62 µs increases the average latency in direction 'H' by more than two times and in direction 'R' by more than three times. As expected, the configuration with a timeout value of 84 µs has an even higher mean latency.
+The results show that activating interrupt moderation with a timeout value of 62 µs increases the average latency in direction `H' by more than two times and in direction `R' by more than three times. As expected, the configuration with a timeout value of 84 µs has an even higher mean latency.
 
 The mean latency for adaptive interrupt moderation is 103 µs in both directions, making it the highest observed mean latency. Figure \ref{fig:IMean} shows a slight increase in mean latency with increasing datagram size. The interrupt moderation rate for adaptive interrupt moderation is determined by the number of connections and packet size. In this test with a low number of connections, a high number of interrupts per second should be configured for low latency \cite{intermod04}. However, this behavior cannot be confirmed in the performed tests, as the measured average latency is the highest compared to the other options examined. One possible reason for this could be the test duration, which may be too short for the adaptive interrupt moderation to configure itself.
 
@@ -371,24 +371,24 @@ Figure \ref{fig:540Wc} shows the worst-case latency when using the Intel X540-T2
 
 \begin{figure}[h!]
   \centering
-  \subcaptionbox{Direction 'H'\label{fig:540Wc:a}}{%
+  \subcaptionbox{Direction `H'\label{fig:540Wc:a}}{%
     \includegraphics[width=1\textwidth]{figures/performance/d_11a.pdf}
   }
   \vspace{10pt}
-  \subcaptionbox{Direction 'R'\label{fig:540Wc:b}}{%
+  \subcaptionbox{Direction `R'\label{fig:540Wc:b}}{%
     \includegraphics[width=1\textwidth]{figures/performance/d_11b.pdf}
   }
-  \caption{Worst-Case Latency by Datagram Size of the Intel X540-T2 Network Interface compared with the Intel X710-T2L Network interface (Campaign 'Tests with the Intel X540-T2 Network Interface').}
+  \caption{Worst-Case Latency by Datagram Size of the Intel X540-T2 Network Interface compared with the Intel X710-T2L Network interface (Campaign `Tests with the Intel X540-T2 Network Interface').}
   \label{fig:540Wc}
 \end{figure}
 
-The results show that the worst-case latency is greater when using the Intel X540-T2 in both directions compared to the Intel X710-T2L. Across all datagram sizes, the worst-case latency is 257.79 µs in direction 'H' and 229.56 µs in direction 'R'.
+The results show that the worst-case latency is greater when using the Intel X540-T2 in both directions compared to the Intel X710-T2L. Across all datagram sizes, the worst-case latency is 257.79 µs in direction `H' and 229.56 µs in direction `R'.
 
 The higher worst-case latencies with the same configuration with the Intel X540-T2 can be attributed to the fact that the network interface itself is older compared to the Intel X710-T2L. Additionally, the network interfaces use different drivers (see Table \ref{tab:drivernic}), which also affects the latency.
 
 \paragraph{Mean Latency}
 
-Figure \ref{fig:540Mean} displays a comparison of the mean latency of the Intel X540-T2 and Intel X710-T2L network interfaces. The mean latency in both directions, 'H' and 'R', increases with larger datagram sizes and is on average about 90.30 µs in direction 'H' and 98.34 µs in direction 'R'.
+Figure \ref{fig:540Mean} displays a comparison of the mean latency of the Intel X540-T2 and Intel X710-T2L network interfaces. The mean latency in both directions, `H' and `R', increases with larger datagram sizes and is on average about 90.30 µs in direction `H' and 98.34 µs in direction `R'.
 
 It is noticeable that with a datagram size of 80 bytes, the average latency in both directions has a value of about 42 µs and increases significantly with a datagram size of 1080 bytes. These differences are not observable when using the Intel X710-T2L network interfaces with small datagrams.
 
@@ -397,13 +397,13 @@ The campaign has demonstrated that the Intel X540-T2 network interfaces exhibit 
 
 \begin{figure}[h!]
   \centering
-  \subcaptionbox{Direction 'H'\label{fig:540Mean:a}}{%
+  \subcaptionbox{Direction `H'\label{fig:540Mean:a}}{%
     \includegraphics[width=1\textwidth]{figures/performance/d_12a.pdf}
   }
-  \subcaptionbox{Direction 'R'\label{fig:540Mean:b}}{%
+  \subcaptionbox{Direction `R'\label{fig:540Mean:b}}{%
     \includegraphics[width=1\textwidth]{figures/performance/d_12b.pdf}
   }
-  \caption{Mean Latency by Datagram Size of the Intel X540-T2 Network Interface compared with the Intel X710-T2L Network interface (Campaign 'Tests with the Intel X540-T2 Network Interface').}
+  \caption{Mean Latency by Datagram Size of the Intel X540-T2 Network Interface compared with the Intel X710-T2L Network interface (Campaign `Tests with the Intel X540-T2 Network Interface').}
   \label{fig:540Mean}
 \end{figure}
 

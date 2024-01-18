@@ -683,30 +683,30 @@ In order to generate the additional system load in the CPU, memory, I/O and time
 As per the requirements, the CPU load must be generated in both user space and kernel space for which different stressors have to be used. Additionally, section \ref{chap:loadgeneration} specifies the need to create a load through real-time processes.
 
 \paragraph{Generation of CPU Load in User Space} \label{chap:CPUStressor}
-To generate CPU load in the user space of the system, the stressor 'cpu' from stress-ng is used. This stressor performs complex mathematical calculations, including integer and floating-point calculations, matrix operations, and checksum calculations, which place a heavy load on the CPU.
+To generate CPU load in the user space of the system, the stressor `cpu' from stress-ng is used. This stressor performs complex mathematical calculations, including integer and floating-point calculations, matrix operations, and checksum calculations, which place a heavy load on the CPU.
 
 A worker of this stressor fully utilizes one CPU core. stress-ng provides an option for this particular stressor to limit the CPU load to an integer value between 0\% and 100\%. To fully utilize the system, stress-ng creates as many workers as the computer system has cores.
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=1\linewidth]{figures/method/stress1.pdf}
-    \caption{CPU Utilization during Execution of 16 stress-ng 'cpu' stressors on HPC1.}
+    \caption{CPU Utilization during Execution of 16 stress-ng `cpu' stressors on HPC1.}
     \label{fig:stressCPU}
 \end{figure}
 
-Figure \ref{fig:stressCPU} displays the 1-minute execution of 16 'cpu' stressors on the HPC1 system, which has 16 logical CPU cores. It is evident that the 'cpu' stressor fully utilizes this system. The load is generated in user space.
+Figure \ref{fig:stressCPU} displays the 1-minute execution of 16 `cpu' stressors on the HPC1 system, which has 16 logical CPU cores. It is evident that the `cpu' stressor fully utilizes this system. The load is generated in user space.
 
 \paragraph{Generation of CPU Load in Kernel Space}
-The 'get' stressor is used to generate CPU load in kernel space. This calls various system calls, which leads to a predominant CPU load in kernel space. System calls such as \texttt{getpid} (retrieving the PID of the process \cite{stress06}), \texttt{getuid} (retrieving the user ID of the process \cite{stress07}) or \texttt{gettimeofday} (retrieving the current time \cite{stress08}) are used.
+The `get' stressor is used to generate CPU load in kernel space. This calls various system calls, which leads to a predominant CPU load in kernel space. System calls such as \texttt{getpid} (retrieving the PID of the process \cite{stress06}), \texttt{getuid} (retrieving the user ID of the process \cite{stress07}) or \texttt{gettimeofday} (retrieving the current time \cite{stress08}) are used.
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=1\linewidth]{figures/method/stress2.pdf}
-    \caption{CPU Utilization during Execution of 16 stress-ng 'get' stressors on HPC1.}
+    \caption{CPU Utilization during Execution of 16 stress-ng `get' stressors on HPC1.}
     \label{fig:stressGET}
 \end{figure}
 
-Figure \ref{fig:stressGET} displays the 1-minute execution of 16 'get' stressors on the HPC1 system. The stressor utilizes approximately 87.5\% of the total system load, with 20.1\% generated in user space and 67.4\% generated in kernel space.
+Figure \ref{fig:stressGET} displays the 1-minute execution of 16 `get' stressors on the HPC1 system. The stressor utilizes approximately 87.5\% of the total system load, with 20.1\% generated in user space and 67.4\% generated in kernel space.
 
 As can be derived from Figure \ref{fig:stressGET}, this stressor does not fully utilize a CPU core. However, it still generates 60\% to 70\% of load in kernel space on a CPU core, making it suitable for generating CPU load in kernel space during tests.
 
@@ -715,37 +715,37 @@ As can be derived from Figure \ref{fig:stressGET}, this stressor does not fully 
 stress-ng allows for the specification of a scheduling policy and priority as additional options. This allows each stressor to be executed as a real-time process. For generating load, the CPU stressor described in section \ref{chap:CPUStressor} was used with the \texttt{SCHED\_FIFO} scheduling policy described in section \ref{chap:RTProcess} and a scheduling priority of 50. The scheduling priority was intentionally set lower than that of the TestSuite because communication processes have a higher priority in the Distributed Test Support System.
 
 \subsubsection{Memory Load} \label{chap:stressngMemeory}
-To generate memory load, the stress-ng 'bigheap' stressor is utilized. The stressor grows its heap by reallocating memory. If the Out Of Memory (OOM) killer on Linux, which is a process emplyed by the kernel when low memory is available on the system and kills one or more processes to resolve the situation \cite{stress09}, kills the process or the allocation fails then the stressor starts again.
+To generate memory load, the stress-ng `bigheap' stressor is utilized. The stressor grows its heap by reallocating memory. If the Out Of Memory (OOM) killer on Linux, which is a process emplyed by the kernel when low memory is available on the system and kills one or more processes to resolve the situation \cite{stress09}, kills the process or the allocation fails then the stressor starts again.
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=1\linewidth]{figures/method/stress3.pdf}
-    \caption{Memory Utilization during Execution of stress-ng 'bigheap' stressors on HPC1.}
+    \caption{Memory Utilization during Execution of stress-ng `bigheap' stressors on HPC1.}
     \label{fig:stressMEM}
 \end{figure}
 
-Figure \ref{fig:stressMEM} displays the memory utilization over time for a 'bigheap' stressor on HPC1 and compares it with the execution of 16 'bigheap' stressors that utilize all cores of the investigated computer system. The procedure for memory utilization is shown. The stressor requests more memory between 0 and 15 seconds until the memory is full, after which the system's swap increases. If the system has no more memory, the OOM killer terminates the process. The stressor is then restarted. If 16 'bigheap' stressors are executed simultaneously, this procedure overlaps.
+Figure \ref{fig:stressMEM} displays the memory utilization over time for a `bigheap' stressor on HPC1 and compares it with the execution of 16 'bigheap' stressors that utilize all cores of the investigated computer system. The procedure for memory utilization is shown. The stressor requests more memory between 0 and 15 seconds until the memory is full, after which the system's swap increases. If the system has no more memory, the OOM killer terminates the process. The stressor is then restarted. If 16 'bigheap' stressors are executed simultaneously, this procedure overlaps.
 
 The memory stressor, like any other process, also utilizes the system's CPU. Executing a memory stressor results in 100\% CPU utilization for one core.
 
 \subsubsection{I/O Load} \label{chap:stressngIO}
-The 'hdd' stressor is used to generate I/O load. It performs continuous writes to the system's hard disk.
+The `hdd' stressor is used to generate I/O load. It performs continuous writes to the system's hard disk.
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=1\linewidth]{figures/method/stress4.pdf}
-    \caption{Disk Utilization during Execution of one stress-ng 'hdd' stressors on HPC1.}
+    \caption{Disk Utilization during Execution of one stress-ng `hdd' stressors on HPC1.}
     \label{fig:stressIO}
 \end{figure}
 
-Figure \ref{fig:stressIO} shows the hard disk load for a 1-minute execution of an hdd stressor. It can be seen that this performs write operations at an average data rate of around 3.2 GBit/s. Furthermore, the data rate can fluctuate between 3 GBit/s and 3.8 GBit/s. The reasons for this is that the stressor works internally with different methods and iterates through them. The methods differ, for example, in the size of the files that are written to the hard disk. The execution of an hdd stressor leads to 100\% CPU utilization of a CPU core.
+Figure \ref{fig:stressIO} shows the hard disk load for a 1-minute execution of an `hdd' stressor. It can be seen that this performs write operations at an average data rate of around 3.2 GBit/s. Furthermore, the data rate can fluctuate between 3 GBit/s and 3.8 GBit/s. The reasons for this is that the stressor works internally with different methods and iterates through them. The methods differ, for example, in the size of the files that are written to the hard disk. The execution of an hdd stressor leads to 100\% CPU utilization of a CPU core.
 
 Linux has I/O scheduling, which reorders and groups requests based on the logical address of the data, with the goal of improving I/O throughput \cite{stress10}. To maximize I/O device stress, I/O scheduling was disabled by selecting the "none" scheduling policy.
 
 stress-ng does not provide a default way to limit I/O stress by limiting the data rate. To achieve this limit, Control Groups (cgroup) were used. Control groups are a kernel function that can limit the resource utilization of processes. In some tests in this work, control groups were used to limit the maximum data rate of the HDD stressor. Further information on the used cgroup2 can be found in its documentation \cite{stress11}.
 
 \subsubsection{Interrupt Load} \label{chap:stressngInterrupt}
-The 'timer' stressor was utilized to generate load in the domain of interrupts. This produces timer events at a rate of 1 MHz, resulting in timer clock interrupts. Each timer event is then intercepted by a signal handler. The purpose of this stressor is to test the system under high interrupt load \cite{stress02}. The execution of one timer stressor also fully utilizes a CPU core to 100\%. Additionally, the system is loaded by the processing of the signal handler. The entire system's utilization was examined using an HPC as an example, which amounts to approximately 6.3\%.
+The `timer' stressor was utilized to generate load in the domain of interrupts. This produces timer events at a rate of 1 MHz, resulting in timer clock interrupts. Each timer event is then intercepted by a signal handler. The purpose of this stressor is to test the system under high interrupt load \cite{stress02}. The execution of one timer stressor also fully utilizes a CPU core to 100\%. Additionally, the system is loaded by the processing of the signal handler. The entire system's utilization was examined using an HPC as an example, which amounts to approximately 6.3\%.
 
 It is important to note that the timer results generated in this manner differ from interrupts generated by external hardware. Although both events are asynchronous \cite{like02}, there is a significant difference between them. Timer events are generated periodically by the operating system, while hardware interrupts are triggered unpredictably by external devices such as network devices \cite{stress14}. Signal handlers execute timer events in the context of the respective process, while interrupt handlers process hardware interrupts directly in the kernel \cite{like02}.
 
