@@ -410,15 +410,20 @@ It is noticeable that with a datagram size of 80 bytes, the average latency in b
 \subsubsection{Classification of Results}
 The campaign has demonstrated that the Intel X540-T2 network interfaces exhibit significantly higher worst-case and mean latencies than the Intel X710-T2L network interfaces with the same configuration. Therefore, when using these network interfaces in the Distributed Test Support System, a higher latency should be expected. \\
 
-\section{Insights}
-The analysis of performance has revealed the anticipated latencies of a UDP communication on the application level. The lowest latencies are to be expected when communication is between the iHawk and a High-Performance PC. However, when communicating systems similar to Traffic PCs, higher latencies should be expected in some cases.
+\section{Insights} \label{insight:perf}
+The test campaigns conducted to investigate the performance of an topology with an iHawk at the center provided the following key insights:
 
-The study also examined latencies with Raw sockets and Packet sockets, in addition to UDP sockets. The results indicate that Packet sockets have lower latency than the other socket types, but sometimes packets do not arrive in the order in which they were sent.
+\begin{enumerate}[label=(\roman*),resume]
+    \item The analysis revealed the anticipated latencies of a UDP communication on the application level. The lowest latencies are to be expected when communication is between the iHawk and a High-Performance PC. However, when communicating systems similar to Traffic PCs, higher latencies should be expected in some cases. \label{insight:perf:1}
+    \item The analysis also examined latencies with Raw sockets and Packet sockets, in addition to UDP sockets. The results indicate that Packet sockets have lower latency than the other socket types, but sometimes packets do not arrive in the order in which they were sent. \label{insight:perf:2}
+    \item Further the investigation analyzed the impact of different load scenarios on the computer systems involved. The study found that exceptionally high network load on the receiving side increases the worst-case latency by a factor of ten. In contrast, a system with similar load to that in the Test Support System does not show an increase in latency. \label{insight:perf:3}
+    \item The analyis investigated the impact of CPU affinity on multi-socket systems and found that it has a minor effect on latency. Also the latencies can be expected with different interrupt moderation options are presented. As expected, the lowest latency was observed when interrupt moderation was disabled. \label{insight:perf:4}
+    \item Additionally, the investigation examined the latency of the Intel X540-T2 network interface and found it to be higher than that of the newer Intel X710-T2L network interface. \label{insight:perf:5}
+    \item These observed latencies and their variation with respect to the computer system, network hardware, and system load must be taken into account when using a UDP-based implementation in a Distributed Test Support System. \label{insight:perf:6}
+\end{enumerate}
 
-Further the investigation analyzed the impact of different load scenarios on the computer systems involved. The study found that exceptionally high network load on the receiving side increases the worst-case latency by a factor of ten. In contrast, a system with similar load to that in the Test Support System does not show an increase in latency.
 
-The study investigated the impact of CPU affinity on multi-socket systems and found that it has a minor effect on latency. Also the latencies can be expected with different interrupt moderation options are presented. As expected, the lowest latency was observed when interrupt moderation was disabled. 
+ 
 
-Additionally, the investigation examined the latency of the Intel X540-T2 network interface and found it to be higher than that of the newer Intel X710-T2L network interface.
 
-These observed latencies and their variation with respect to the computer system, network hardware, and system load must be taken into account when using a UDP-based implementation in a Distributed Test Support System.
+

@@ -240,14 +240,15 @@ A major reason for the high number of packet losses at 65000 byte datagram size 
 \paragraph{Classification of Results}
 Compared to using iPerf (see \ref{chap:campaignloadscen}), a separate network stressor significantly reduces packet losses. This suggests that iPerf generates bursts that overload the switch and cause packet loss. However, it should be noted that the systems in the Distributed test support system are asynchronous, meaning they can also send out bursts that should not overload the network.
 
-\subsection{Insights}
-The investigation of the star topology with a switch in the center has revealed that an Ethernet switch is unsuitable for use in the Distributed Test Support System. The switch was found to be the cause of packet loss, particularly in connection with burst traffic.
+\subsection{Insights} \label{insight:Switch}
+The test campaigns conducted to investigate the reliability of an topology with an Switch at the center provided the following key insights:
 
-Another concern is that the maximum bandwidth at which each participant is connected to the switch may be exceeded. Since the Distributed Test Support System is an arrangement of independent systems, such an exceedance cannot be excluded.
-
-Regarding the computer systems, the investigation showed that a memory load that provokes a constant memory overflow can lead to packet loss. However, it was also found that both High-Performance PC and Traffic PC systems do not experience packet losses when subjected to a load similar to that in a real Test Support System.
-
-Furthermore, in addition to the standard network interfaces in the topology, the Intel X540-T2, Inspur X540-T2, and Lenovo QL41134 network interfaces were also examined, and no reduction in reliability based on packet loss was found, making them equally suitable for use in a Distributed Test Support System.
+\begin{enumerate}[label=(\roman*)]
+    \item The investigation of the star topology with a switch in the center has revealed that an Ethernet switch is unsuitable for use in the Distributed Test Support System. The switch was found to be the cause of packet loss, particularly in connection with burst traffic. \label{insight:Switch:1}
+    \item Another concern is that the maximum bandwidth at which each participant is connected to the switch may be exceeded. Since the Distributed Test Support System is an arrangement of independent systems, such an exceedance cannot be excluded. \label{insight:Switch:1}
+    \item Regarding the computer systems, the investigation showed that a memory load that provokes a constant memory overflow can lead to packet loss. However, it was also found that both High-Performance PC and Traffic PC systems do not experience packet losses when subjected to a load similar to that in a real Test Support System. \label{insight:Switch:1}
+    \item Furthermore, in addition to the standard network interfaces in the topology, the Intel X540-T2, Inspur X540-T2, and Lenovo QL41134 network interfaces were also examined, and no reduction in reliability based on packet loss was found, making them equally suitable for use in a Distributed Test Support System. \label{insight:Switch:1}
+\end{enumerate}
 
 
 
@@ -581,12 +582,20 @@ Moreover, there were no notable variations in the transmission data rates of the
 \paragraph{Classification of Results}
 The results indicate that both network interfaces, the Intel X710-T2L and the Intel X540-T2, are suitable for use in the Distributed Test Support System from a reliability standpoint. 
 
-\subsection{Insights}
-Overall, packet losses were detected during the tests, but only under maximum load and in relation to fragmented packets with a size of 65,000 bytes. Therefore, although packet losses occurred, the investigated topology can still be considered suitable for a Distributed Test Support System.
+\subsection{Insights} \label{insight:relHawk}
+The test campaigns conducted to investigate the reliability of an topology with an iHawk at the center provided the following key insights:
 
-No degradation was found with increased stress at the center or when changing the location of the CPU socket on which the send or receive process is executed. Additionally, no differences in reliability were found among the different interrupt moderation rates tested, despite a noticeable variation in CPU utilization.
+\begin{enumerate}[label=(\roman*),resume]
+    \item Packet losses were detected during the tests, but only under maximum load and in relation to fragmented packets with a size of 65,000 bytes. Therefore, although packet losses occurred, the investigated topology can still be considered suitable for a Distributed Test Support System. \label{insight:relHawk:1}
+    \item No degradation was found with increased stress at the center or when changing the location of the CPU socket on which the send or receive process is executed. Additionally, no differences in reliability were found among the different interrupt moderation rates tested, despite a noticeable variation in CPU utilization. \label{insight:relHawk:2}
+    \item The reliability of the Intel X540-T2 network card in the center was tested and no differences were found compared to the X710-T2L. Therefore, the Intel X540-T2 is also suitable for use in the center of a Distributed Test Support System. \label{insight:relHawk:3}
+\end{enumerate}
 
-The reliability of the Intel X540-T2 network card in the center was tested and no differences were found compared to the X710-T2L. Therefore, the Intel X540-T2 is also suitable for use in the center of a Distributed Test Support System.
+
+
+
+
+
 
 
 

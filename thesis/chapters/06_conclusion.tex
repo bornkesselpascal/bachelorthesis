@@ -1,1 +1,30 @@
 \chapter{Conclusion} \label{chap:Conclusion}
+This thesis investigates the reliability and performance of a local Ethernet network using a UDP communication under conditions comparable to those of the Distributed Test Support System. The investigations suggest that an Ethernet-based implementation has potential for further consideration for use in the distributed test support system.
+
+\section{Key Results}
+Important insights from the test are listed in \ref{insight:Switch}, \ref{insight:relHawk} and \ref{insight:perf}. Key results are summarized below.
+
+\begin{itemize}
+	\item Because an Ethernet switch was identified as a primary source of packet loss (see Insight \ref{insight:Switch:1}), the Distributed Test Support System should use a topology without an Ethernet switch, such as the investigated topology with the iHawk in the center.
+	\item When a topology with an iHawk in the center is used, a high network load can result in a low number of packet losses (see Insight \ref{insight:relHawk:1}). Additionally, a high network load can increase the latency of the system (see Insight \ref{insight:perf:3}).
+	\item Stressing the computer systems with a load comparable to the stress in the test support system has no effect on reliability (see Insight \ref{insight:Switch:1}) and performance (see Insight \ref{insight:perf:3}).
+	\item There are no restrictions in terms of reliability when using different network interfaces (see Insight \ref{insight:relHawk:3}). However, it should be considered that the older Intel X540-T2 network interfaces have a significantly higher latency than the Intel X710-T2L network interfaces (see Insight \ref{insight:perf:5}).
+	\item For the implementation of an Ethernet-based distributed test support system using the Linux network stack, UDP sockets should be used, since Raw and Packet sockets have disadvantages such as changing the packet order (see Insight \ref{insight:perf:2}) and an increased implementation effort.
+	\item The characteristics of multi-socket systems, such as iHawk, do not affect reliability (see Insight \ref{insight:relHawk:2}), but paying attention to the architecture of such systems can result in reduced latency (see Insight \ref{insight:perf:4}) and increased throughput.
+\end{itemize}
+
+
+\section{Conditions and Settings}
+To attain the reliability and performance values outlined in this thesis, certain conditions and settings should be met.
+
+\begin{itemize}
+	\item Usage of the RedHawk Linux Real-Time Operating System
+	\item Observing the Recommendations from the Intel Linux Performance Tuning Guide \cite{intermod03}
+		\begin{itemize}
+  			\item Disabling of Energy Efficient Ethernet
+  			\item Enlargement of the RX\_Ring and TX\_Ring to 4096 slots
+  			\item Deactivation of Interrupt Moderation
+		\end{itemize}
+	\item Adjustment of UDP Receive Socket Buffer based on Network Conditions
+	\item Consideration of the Characteristics of a Multi-Socket System
+\end{itemize}
