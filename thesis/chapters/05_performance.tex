@@ -5,11 +5,10 @@ The test campaigns presented here aim to investigate the performance of UDP comm
 
 Contrary to the investigation of reliability, no direct requirement can be defined here under which this test can be considered a success. The aim of the investigation is rather to determine the expected latencies, which may lead to certain restrictions concerning the use of a UDP communication within a Distributed Test Support System.
 
-There are several factors that can contribute to the latency of a network. However, since there are no intermediate stations between the computer systems in the network topology, the focus will be on these computer systems and their operating states. In a computer system, latency is influenced by the network interface and driver, processing in the network stack, and the application.
+There are several factors that can contribute to the latency of a network. However, since there are no intermediate stations between the computer systems in the network topology, the focus will be on these computer systems and their operating states. In a computer system, latency is influenced by the network interface and driver, processing in the network stack, and the application. Prytz and Johannessen contend in \cite{perfnew01} that the latency is primarily determined by the performance of the end node.
 
 The worst-case latency (see \ref{chap:LatencyExplanation}) is the most important indicator for these investigations. However, the mean latency should be also considered. Additionally, secondary data, such as packet losses and datagram sequence, are taken into consideration.
 
-\clearpage
 \section{System under Test}
 Although the topology with the iHawk in the center is used, in contrast to the reliability tests with this topology (see \ref{chap:ReliabIhawk}), not all bi-directional links between the iHawk in the center and the High-Performance or Traffic PCs are to be examined simultaneously. Instead, a single isolated communication is considered.
 
@@ -38,7 +37,6 @@ Similarly, a UDP communication between the iHawk and TPC1 was also considered a 
 
 The network interfaces mentioned in the topology description are used unless otherwise stated in the test campaign description. Furthermore, as with the reliability tests with the iHawk in the center, several settings recommended in the Intel Linux Performance Tuning Guide for the Ethernet 700 series were used. A list of these settings can be found in chapter \ref{chap:ReliabIhawk:SuT}.
 
-\clearpage
 \section{Accuracy of Measurements}
 As demonstrated in \ref{chap:LatencyExplanation}, latency calculation is based on the difference between two time stamps. One of them is recorded at the sender and the other at the receiver. In order to calculate a valid latency value, clock synchronization between the systems is required. The accuracy and reliability of the measurements depend on the accuracy of this clock synchronization.
 
@@ -95,7 +93,7 @@ The worst-case latency for UDP sockets in direction `H' is 163.97 µs, while Raw
 
 The worst-case latency in direction `R' is significantly lower than in direction `H'. When using UDP sockets, the worst-case latency is 109.31 µs, with Raw sockets it is 81.19 µs, and with Packet sockets it is 93.87 µs. Figure \ref{fig:SockTypeWc:b} displays the worst-case latency as a function of datagram size, but again no trend can be identified.
 
-It is noticeable that the measured worst-case latency in the `R' direction is 33\% lower than in direction `H' when using UDP sockets. This reduction is even greater at 52\% when using Raw sockets. The exact reason for this difference is difficult to determine at this point due to the inability to obtain time stamps from the network interface, which makes it impossible to identify which system causes how much latency. Both systems use the same network interface, so a likely cause of these differences between directions `H' and `R' is the different hardware of the systems.
+It is noticeable that the measured worst-case latency in the `R' direction is 33\% lower than in direction `H' when using UDP sockets. This reduction is even greater at 52\% when using Raw sockets. The exact reason for this difference is difficult to determine at this point due to the inability to obtain time stamps from the network interface, which makes it impossible to identify which system causes how much latency. Both systems use the same network interface, so a likely cause of these differences between directions `H' and `R' is the different hardware of the systems. As \cite{perfnew01} suggests, latency is primarily determined by the performance of the end node. Since the iHawk as receiver in direction 'R' has a more powerful hardware, this could be a reason for the observed lower latencies in this direction.
 
 When examining the time distribution of latencies, it is evident that the highest latencies (worst-case latencies) consistently occur for the first 10 packets sent during the test. This applies to all socket types in both directions. As previously mentioned, no time stamps can be obtained from the network interface, making it difficult to analyze the reason for this observation.
 
@@ -162,7 +160,7 @@ Figure \ref{fig:histFrag} displays histograms of the latency for datagram sizes 
 
 With a datagram size of 65000 bytes (see Figure \ref{fig:histFrag:c}), a worst case latency of 3431.16 µs was observed, which is more than 20 times higher than with a datagram size of 8900 bytes (163.97 µs). The mean latency for a datagram size of 65000 bytes is 215.78 µs, which is approximately 7.5 times higher than for a datagram size of 8900 bytes. This difference can be attributed to fragmentation (see \ref{chap:frag}). When a UDP datagram with a size of 65000 bytes is sent, it is divided into 8 packets at an MTU of 9000 bytes. This correlates with the observed increase in mean latency.
 
-While the distribution is close to the mean for datagram sizes of 80 bytes (see Figure \ref{fig:histFrag:a}) and 8900 bytes (see Figure \ref{fig:histFrag:b}), a wider distribution can be seen for a datagram size of 65000 bytes. Upon closer inspection of the enlarged section in Figure \ref{fig:histFrag:d}, a multimodal distribution is observed.
+While the distribution is close to the mean for datagram sizes of 80 bytes (see Figure \ref{fig:histFrag:a}) and 8900 bytes (see Figure \ref{fig:histFrag:b}), indicating low Jitter. However, for a datagram size of 65000 bytes, a wider distribution can be seen. Upon closer inspection of the enlarged section in Figure \ref{fig:histFrag:d}, a multimodal distribution is observed.
 
 Additionally, it was discovered that datagrams are rearranged at a datagram size of 65000 bytes due to fragmentation.  These fundamental observations about fragmentation also apply to direction `R'.
 

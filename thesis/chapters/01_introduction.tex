@@ -1,13 +1,33 @@
 \chapter{Introduction} \label{chap:introduction}
-% TODO
+Testing is an essential aspect of validating and verifying software for airborne systems in an aircraft. This includes testing of components as well as integration and system testing. The purpose of these tests is to demonstrate compliance with specified requirements and they are also required for aircraft certification.
+
+An essential component of these tests is the Test Support System. It is connected to the components to be tested via hardware buses and is used for data acquisition, stimulation, and data analysis. The test support system essentially consists of a host computer for controlling and monitoring the tests, a real-time computer for data acquisition and stimulation via the hardware buses, and the components to be tested, referred to as the system under test.
+
+The Distributed Test Support System is a specialized case where there are multiple real-time computers in the same system. Thus, it is necessary to exchange data between these independent computers.
+
+Das Distributed Test Support System stellt dabei einen sonderfall dar, bei dem mehrere Echtzeit-Rechner im System existieren. Dadurch besteht die Notwendigkeit, Daten zwischen diesen unabhängigen Systemen auszutauschen. The Distributed Test Support System currently uses a proprietary technology called Dolphin Interconnect, which is based on PCI Express, for data exchange. This solution provides high reliability and low latency.
+
+In order to reduce the dependency on this proprietary technology, the aim of this thesis is to analyze whether standard Ethernet with off-the-shelf components also offers the potential for use in the distributed test support system from a reliability and performance perspective.
+
+Ethernet-based networks are based on open standards. There are also a large number of manufacturers that produce network interfaces for Ethernet, which reduces dependency on a single supplier. Additionally, Ethernet and the commonly used TCP/IP protocol family are widely supported by operating systems.
 
 
-%\section{Motivation} \label{chap:introduction:motivation}
-%Motivation – Warum soll dies untersucht werden? Kurze Einordnung. Vorstellung TSS (kompakt).
+\section{Objectives} \label{chap:introduction:research_questions}
+This thesis aims to examine the reliability and performance of an Ethernet-based network. The UDP protocol is used for this purpose. It is defined by Postel in \cite{introRelW04}, UDP provides faster and more efficient performance than TCP, making it more suitable for time-critical applications such as the Distributed Test Support System.
 
-%\section{Related Work} \label{chap:introduction:related_work}
-%Vorstellung von 3 Papern die auch UDP Kommunikation untersuchen, Heraustellung der Besonderheiten in dieser Arbeit
+ The focus will be on the following aspects:
+
+\begin{enumerate}[label=\arabic*.]
+    \item The \textbf{reliability} of the test setup under different operating conditions shall be investigated by analyzing the \textbf{packet losses}. This involves investigating the conditions under which packet losses occur with the hardware used and determining the reliability through measurements. To achieve this, a measurement setup should be designed and implemented that allows high quality measurements.
+    \item The \textbf{performance} of an Ethernet-based solution in different operating states shall be determined. For this, the \textbf{latency} should be evaluated. A measurement setup that allows high quality measurements should also be used.
+\end{enumerate}
 
 
-%\section{Research Questions} \label{chap:introduction:research_questions}
-%3 Forschungsfragen aus Themenbeschreibung, mit Requirements an Arbeit (evtl. als seperaten Punkt).
+\section{Related Work} \label{chap:introduction:related_work}
+The standards describing Ethernet and UDP were developed in the early 1980s \cite{introRelW01}. Recently, Ethernet-based solutions have been increasingly used in real-time systems, with Avionics Full-Duplex Switched Ethernet (AFDX) being a prominent example. However, this thesis will focus on the use of standard Ethernet with off-the-shelf componets under Linux.
+
+Gong et al. address the problems of real-time performance and reliability of Ethernet in an industrial context in \cite{introRelW02}. The paper highlights the challenges of meeting the stringent real-time requirements of industrial applications and examines the limitations of standard Ethernet in this context. It proposes solutions that incorporate advanced network architectures and protocols. These solutions focus on optimizing data transmission and reducing latency.
+
+Soares et al. highlight in \cite{introRelW03} the challenges related to the reliability of Ethernet technology in automotive communication networks. They focus on the challenges of real-time communication, especially for safety-critical systems. It highlights the adverse effects of increasing traffic load on network efficiency and safety and discusses solutions to mitigate these challenges.
+
+This thesis also examines the reliability and performance of an Ethernet-based network. In contrast to existing work, a selection of which was presented above, the focus is specifically on the conditions in a Distributed Test Support System. This includes, for example, the use of the operating system used in a Distributed Test Support System or an investigation of the typical operating conditions.
