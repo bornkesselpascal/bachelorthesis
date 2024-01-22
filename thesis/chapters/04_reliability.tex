@@ -1,7 +1,5 @@
 \chapter{Analysis of Reliability}
 
-\section{Test Objectives}
-
 The test campaigns presented here aim to investigate the reliability of UDP communication using an UDP socket in a local network under conditions similar to those in the Distributed Test Support System. Reliability is measured by the number of lost packets. Both topologies presented in \ref{chap:Architectures} were considered.
 
 The investigation can be considered successful if no packet loss occurs in the test setup under all operating conditions.
@@ -47,7 +45,7 @@ As mentioned above, certain operating conditions can cause packet loss due to li
 
 The tools presented in \ref{chap:loadgeneration} are used to generate this load. The system is tested under maximum load. This means that as many stressors are used for the load generated with stress-ng as the system has logical CPU cores. A bandwidth of 10 GBit/s is used for the network stressors.
 
-The presented operating states were tested individually for client and server. The two Traffic PCs as well as the High-Performance PCs were used as the system under test. The test duration for all tests was 100 seconds and a cycle time of 0 µs was used, whereby the maximum possible bandwidth was used for transmission. The datagram sizes used were 80 bytes as a representative for small datagrams in the test support system, 8900 bytes as a datagram size close to the MTU, and 65000 bytes as a datagram size close to the maximum of UDP.
+The presented operating states were tested individually for client and server. The two Traffic PCs as well as the High-Performance PCs were used as the system under test. The test duration for all tests was 100 seconds and a cycle time of 0 µs was used, whereby the maximum possible bandwidth was used for transmission. The datagram sizes used were 80 bytes as a representative for small datagrams in the Test Support System, 8900 bytes as a datagram size close to the MTU, and 65000 bytes as a datagram size close to the maximum of UDP.
 
 \paragraph{Results}
 In tests where the client was subjected to a generated load, no packet loss was detected in any of the tested operating states. This applies to both the tests with High-Performance PCs and Traffic PCs as a system under test.
@@ -140,7 +138,7 @@ Therefore, a realistic load scenario has been developed based on practical exper
 
 This scenario generates a CPU utilization of 56.9\% on a High-Performance PCs without running a test. On a Traffic PCs, the scenario generates a much higher CPU utilization of 100\%, which means the system is fully utilized.
 
-The objective of this campaign is to assess the reliability of the setup under this load. Similar to the previous campaign, datagram sizes of 80 bytes, 8900 bytes, and 65000 bytes will be considered. Additionally, the query function of the TestSuite described in \label{chap:targetcom:query} is used for these tests. A test will be terminated if more than 50 datagram losses occur, as this is considered to be an unreliable communication. The maximum duration of the test is 2 hours.
+The objective of this campaign is to assess the reliability of the setup under this load. Similar to the previous campaign, datagram sizes of 80 bytes, 8900 bytes, and 65000 bytes will be considered. Additionally, the query function of the TestSuite described in \ref{chap:targetcom:query} is used for these tests. A test will be terminated if more than 50 datagram losses occur, as this is considered to be an unreliable communication. The maximum duration of the test is 2 hours.
 
 To examine various bandwidths, the cycle time is systematically increased as well. Starting with an initial value of 0 µs for all datagram sizes, the cycle time is increased in steps of 10 µs. For datagram sizes of 65,000 bytes, the increase starts at a cycle time of 60 µs. This is because, as shown in table \ref{tab:senditertime}, a run through the send loop takes more than 60 µs on average. Testing shorter cycle times would therefore not provide any further insight. The objective of varying the cycle time is to determine the maximum bandwidth possible without experiencing packet loss.
 
@@ -566,7 +564,7 @@ The campaign has shown that all examined interruption moderation rates exhibit c
 
 Although adaptive interrupt moderation was found to be as reliable as other settings, it should not be used in the Distributed Test Support System at this time due to the uncontrollability of its implementation. While the function is described in \cite{intermod04}, the behavior of the implementation may be unpredictable if used without closer examination.
 
-However, the interrupt moderation in connection with the selected interrupt rate also has an influence on the latency, which is considered in section 5. %TODO - Change Reference
+However, the interrupt moderation in connection with the selected interrupt rate also has an influence on the latency, which is considered in section \ref{chap:perfAnalysis}.
 
 \subsubsection{Tests with the Intel X540-T2 Network Interfaces in the Center} \label{chap:IntelRel540}
 \paragraph{Motivation and Context}

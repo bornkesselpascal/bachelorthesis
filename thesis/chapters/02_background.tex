@@ -19,16 +19,16 @@ DML uses a publish-subscribe model to exchange data with the Processing Units. T
 
 The DML ID consists a 12-bit \textit{Interface ID} assigned to each interface by the Test Support System. In addition, a 52-bit \textit{Message ID} is part of the DML ID. This contains fields for the unique identification of a message, depending on the bus system implemented at the respective hardware interface.
 
-The current implementation connects the involved asynchronous computer systems using a Dolphin Interconnect based on PCI Express. This connection is the focus of this thesis, since an Ethernet network based on UDP is to be investigated as a possible alternative.
+The current implementation connects the involved independent computer systems using a PCI Express-based solution called Dolphin Interconnect \cite{dml01, add01}. This connection is the focus of this thesis since an Ethernet network based on UDP is to be investigated as a possible, more cost-efficient, alternative.
 
 Direct Memory Access (DMA) is primarily used as a method of communication between all components involved. It is described in chapter \ref{chap:hwdependcode}.
 
 \subsection{Receive Path}
 
-\subsubsection{Single Mode Operation}
+\subsubsection{Single Node Operation}
 This section outlines the procedure for receiving data when a subscribing Processing Unit is present on the local node.
 
-When a message is received by a hardware interface (see Figure \ref{fig:DmlRecSingleNode}, Arrow 1), the interface uses DMA to copy the data to a FIFO buffer (see Figure \ref{fig:DmlRecSingleNode}, Arrow 2). A FIFO buffer is implemented as a ring buffer and is located in the main memory of the node. Each interface has a separate FIFO buffer, which allows for asynchronous access without mutual exclusion, as the FIFO buffer is only written to by the respective interface.
+When a message is received by a hardware interface (see Figure \ref{fig:DmlRecSingleNode}, Arrow 1), the interface uses DMA to copy the data to a FIFO buffer (see Figure \ref{fig:DmlRecSingleNode}, Arrow 2). A FIFO buffer is implemented as a ring buffer and is located in the main memory of the node. Each interface has a separate FIFO buffer, which allows for asynchronous access without mutual exclusion, as the payload and metadata of the FIFO buffer is only written to by a single entity. Additionally, the it is only accessed by one reader, the Data Manager.
 
 The Data Manager, a process running on each node, polls all of the FIFO buffers of the node at a specified time interval. If a new message is found in a FIFO and there is a subscriber for that message, it is processed further.
 
@@ -59,7 +59,7 @@ The Data Manager of the remote node then copies the message to the monitor memor
 
 \subsection{Transmit Path}
 
-\subsubsection{Single Mode Operation}
+\subsubsection{Single Node Operation}
 This section outlines the procedure for sending data when the interface is located in the same node as the Processing Unit that intends to send it.
 
 To send a message on a bus system using a hardware interface, a Processing Unit writes the message into a FIFO buffer (see figure \ref{fig:DmlTransSingleNode}, Arrow 1). It is important to note that these FIFO buffers are distinct from those on the receiving side. Each node in the Distributed Test Support System has a FIFO for every processing unit and for every other remote node.
@@ -303,7 +303,7 @@ The \textit{UDP length} field indicates the length of the segment, including the
 
 The last field of the header is a 16-bit \textit{UDP checksum}. This checksum is formed via the so-called IP pseudoheader, which contains the source and destination IP address, the protocol number from the IP header, and the \textit{UDP length} field of the UDP header.
 
-Compared to TCP, UDP can achieve higher data transmission speeds due to its lower protocol overhead, ase the UDP header is only 8 bytes in size. Furthermore, UDP does not require an acknowledgement of the transport or other mechanisms used by TCP to provide a reliable connection. This makes it very efficient and reduces processing overhead.
+Compared to TCP, UDP can achieve higher data transmission speeds due to its lower protocol overhead, as the UDP header is only 8 bytes in size. Furthermore, UDP does not require an acknowledgement of the transport or other mechanisms used by TCP to provide a reliable connection. This makes it very efficient and reduces processing overhead.
 
 \clearpage
 
@@ -447,7 +447,7 @@ Other socket types, such as Raw sockets or Packet sockets, also exist.
 
 
 \subparagraph{Socket Address}
-A socket can be identified externally using the socket address. In the context of Internet sockets, this address consists of the IP address and a port number and uniquely identifies the socket in the network \cite{sock02}.
+A socket can be identified externally using the socket address. In the context of Internet sockets, this address consists of the IP address and a port number and uniquely identifies the socket globally \cite{sock02}.
 
 
 \paragraph{Operation of Sockets}
@@ -500,14 +500,14 @@ The technical report 'Introduction to RAW sockets' \cite{sock07} provides a comp
 
 
 \subsubsection{Layers 3 and 4 in the Networking Subsystem}
-The networking subsystem of the Linux kernel includes not only sockets but also layers 3 and 4, namely the transport and network layers. These layers implement the protocols described in \label{chap:ProtosRefModel}, while sockets provide an interface between the application and the network stack.
+The networking subsystem of the Linux kernel includes not only sockets but also layers 3 and 4, namely the transport and network layers. These layers implement the protocols described in \ref{chap:ProtosRefModel}, while sockets provide an interface between the application and the network stack.
 
 \paragraph{Protocol Handler}
 The corresponding protocols are implemented in layers 3 and 4, including implementations for protocols from the TCP/IP reference model and other protocols in their respective layers. It is also possible to develop handlers for your own protocols \cite{lins06}.
 
 An important task in the network subsystem is to execute the correct protocol handler for the corresponding layer. For outgoing packets, this is determined by the socket. For instance, an Internet socket that uses the datagram type employs the UDP protocol at layer 4 and the IPv4 protocol at layer 3. The protocol handler to be executed for incoming packets is determined from the header of the underlying layer. Both the Ethernet header and the IP header contain a corresponding field for the service-using protocol \cite{lins06}.
 
-The protocol handlers of the respective layer implement the standardized behavior for this protocol. These are described in the chapter \label{chap:ProtosRefModel}. Implementation details will not be discussed further at this point. For more information, please refer to \cite{lins01}.
+The protocol handlers of the respective layer implement the standardized behavior for this protocol. These are described in the chapter \ref{chap:ProtosRefModel}. Implementation details will not be discussed further at this point. For more information, please refer to \cite{lins01}.
 
 \paragraph{Data Structures in the Networking Subsystem of the Linux Kernel}
 This chapter presents two significant data structures of the networking subsystem in the Linux kernel, as described in \cite{lins06}.
@@ -590,7 +590,7 @@ The actual transmission of the packet over the network interface card is usually
 \section{Advanced Networking Options}
 
 \subsection{Hardware Offloading} \label{chap:HWOffload}
-Hardware offloading enables specialized hardware to perform compute-intensive tasks instead of the system's CPU, reducing its workload. The workload for the CPU is reduced by utilizing specialized In terms of networking, this specialized hardware is integrated into the network interface \cite{tuning01}. Linux distinguishes between two types of offload: Checksum Offload and Segmentation Offload \cite{tuning02, tuning03}.
+Hardware offloading enables specialized hardware to perform compute-intensive tasks instead of the system's CPU, reducing its workload. In terms of networking, this specialized hardware is integrated into the network interface \cite{tuning01}. Linux distinguishes between two types of offload: Checksum Offload and Segmentation Offload \cite{tuning02, tuning03}.
 
 Checksum Offload refers to the ability to calculate various checksums of the protocols in the TCP/IP reference model, including the checksum in the Ethernet frame and the checksum in the IP or UDP header \cite{tuning02}.
 

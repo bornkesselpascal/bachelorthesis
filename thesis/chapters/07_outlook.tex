@@ -21,13 +21,36 @@ Based on the results of the investigation that unfragmented UDP datagrams are no
 \begin{figure}[h!]
     \centering
     \includegraphics[width=1\linewidth]{figures/outlook/frag_header.pdf}
-    \caption{Proposed Message Format for Implementation of a Fragmentation Mechanism}
+    \caption{Proposed Header for the Implementation of a Fragmentation Mechanism}
     \label{fig:FragProposal}
 \end{figure}
 
-Figure \ref{fig:FragProposal} shows the proposed message format for the implementation of a fragmentation mechanism. A `Fragments-Flag' of 1 bit size is used. This is followed by the data. The maximum message size passed to the UDP socket is 8958 bytes, so no fragmentation is performed by the IP protocol with an MTU of 9000 bytes.
+Figure \ref{fig:FragProposal} shows the proposed header format for the implementation of a fragmentation mechanism. The header is 4 bytes in size and is followed by the payload. The maximum payload size for a message passed to the UDP socket is determined by the MTU, as the IP protocol should not perform any fragmentation. For an MTU of 9000 Bytes, the maximum payload size is 8968 bytes. Equation \ref{eq:PayloadSize} illustrates the calculation.
 
-The 'Fragments-Flag' is not set for unfragmented messages. For fragmented messages, the 'Fragments-Flag' should be set for all fragments except the last one. This allows the recipient to identify the individual fragments and assemble them into a complete message. The absence of the flag on the last fragment indicates that all parts of the message have been received and defragmentation can be initiated.
+\begin{alignat}{2}
+&\text{Maximum Payload} &&= 9000\ \text{Bytes \textit{(MTU)}} \label{eq:PayloadSize}\\
+&&&\phantom{=}\ - 20\ \text{Bytes \textit{(IP Header)}} \notag \\
+&&&\phantom{=}\ - \phantom{0}8\ \text{Bytes \textit{(UDP Header)}} \notag \\
+&&&\phantom{=}\ - \phantom{0}4\ \text{Bytes \textit{(Fragmentation Header)}} \notag \\
+&&&= 8968\ \text{Bytes} \notag
+\end{alignat}
+
+The proposed fragmentation header (see Figure \ref{fig:FragProposal}) includes the following information:
+
+\begin{itemize}
+  \item \textbf{Message Identifier} \textit{(2 Bytes)}: The Message Identifier is a sequential number assigned to each message by the sender. All message fragments share the same identifier.
+  \item \textbf{Fragment Index} \textit{(1 Byte)}: The Fragment Index is used to number the individual fragments of a message.
+  \item \textbf{Fragment Flag} \textit{(1 Bit)}: The Fragment Flag indicates whether the message is fragmented and more fragments will follow.
+\end{itemize}
+
+The maximum size that can be handled by this proposed fragmentation algorithm is limited by the \textit{Fragment Index}. Since this field has a size of 1 byte, it can represent 256 different values. Therefore, a message can be divided into a maximum of 256 fragments. Each fragment has a maximum payload of 8968 bytes (see Equation \ref{eq:PayloadSize}), resulting in a maximum message size of $256 \times 8968$ Bytes $= 2,295,808$ Bytes.
+
+The \textit{Fragments Flag} is set by the sender to allow the defragmentation of a message. The flag should not be set for unfragmented messages. For fragmented messages, the flag should be set for all fragments except the last one. This allows the recipient to recognize the individual message fragments and reassemble them into a complete message. The absence of the flag on the last fragment indicates that all parts of the message have been received and defragmentation can be initiated.
+
+The proposed mechanism also allows the detection of errors. The loss of a message, whether fragmented or unfragmented, can be detected using the \textit{Message Identifier}. The \textit{Fragment Index} can be used to detect the loss of fragments of a message.
+
+Additionally, the proposed header format includes 7 unused bits that are available for possible future extensions.
+
 
 \section{Reduction of Latency with DPDK}
 DPDK (Data Plane Development Kit) is a collection of software libraries and drivers that enable the processing of network traffic directly in user space. This reduces latency and increases throughput by eliminating context switches between user space and kernel space, as well as the overhead of the standard Linux network stack \cite{outl02}.

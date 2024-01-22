@@ -1,4 +1,4 @@
-\chapter{Analysis of Performance}
+\chapter{Analysis of Performance} \label{chap:perfAnalysis}
 
 \section{Test Objectives}
 The test campaigns presented here aim to investigate the performance of UDP communication in a local network under conditions similar to those in a Distributed Test Support System. The considered performance indicators are latency and jitter. The investigations are performed using the star topology with the iHawk in the center, presented in \ref{chap:TopoiHawk}.
@@ -38,9 +38,9 @@ Similarly, a UDP communication between the iHawk and TPC1 was also considered a 
 The network interfaces mentioned in the topology description are used unless otherwise stated in the test campaign description. Furthermore, as with the reliability tests with the iHawk in the center, several settings recommended in the Intel Linux Performance Tuning Guide for the Ethernet 700 series were used. A list of these settings can be found in chapter \ref{chap:ReliabIhawk:SuT}.
 
 \section{Accuracy of Measurements}
-As demonstrated in \ref{chap:LatencyExplanation}, latency calculation is based on the difference between two time stamps. One of them is recorded at the sender and the other at the receiver. In order to calculate a valid latency value, clock synchronization between the systems is required. The accuracy and reliability of the measurements depend on the accuracy of this clock synchronization.
+As showed in \ref{chap:LatencyExplanation}, latency calculation is based on the difference between two time stamps. One of them is recorded at the sender and the other at the receiver. In order to calculate a valid latency value, clock synchronization between the systems is required. The accuracy and reliability of the measurements depend on the accuracy of this clock synchronization.
 
-The Precision Time Protocol (PTP) is utilized to synchronize clocks between the systems. PTP, as defined in IEEE 1588-2008 \cite{perf01}, synchronizes distributed clocks in a network using the master-slave principle. The master sends messages with synchronization information, enabling all slaves to synchronize their internal clocks with the master. The protocol is also able to handle time delays introduced by the network.
+As previously stated in \ref{chap:targetcom:timestamps}, PTP is utilized to synchronize clocks between systems. To minimize the interference between test execution and clock synchronization, a separate network with an Ethernet switch was used soley for clock synchronization, independent of the topology under investigation. This approach also reduces the configuration effort required for PTP.
 
 The programs ptp4l and phc2sys implement the PTP standard for Linux. They provide information about the accuracy of the synchronization with the master offset \cite{perf02}. Table \ref{tab:PTPMasterOffset} shows this information for the setup used in the test. HPC1 was the master and TPC1 and the iHawk were the slaves.
 
