@@ -13,7 +13,7 @@ According to the key results (see Section \ref{chap:KeyResults}), high network l
 
 This mechanism could be implemented in the Data Manager of the DML. A possible solution is to monitor the average throughput of all UDP communications of the system and to issue a warning message to the user at a certain threshold, which depends on the type of system.
 
-\section{Fragmentation Algorithm based on UDP}
+\section{Fragmentation Algorithm based on UDP} \label{chap:fragProposalOutlook}
 In the Distributed Test Support System, messages exchanged through the DML may exceed the maximum datagram size of the UDP protocol of 65,515 bytes. To transmit these messages using a UDP socket, a fragmentation algorithm must be implemented by the application.
 
 Based on the results of the investigation that unfragmented UDP datagrams are not reordered in a local network without a switch, the information required for fragmentation and defragmentation can be significantly reduced compared to the IP protocol (see \ref{chap:frag}). A proposal for a fragmentation mechanism is outlined below.

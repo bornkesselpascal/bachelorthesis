@@ -1,6 +1,4 @@
 \chapter{Analysis of Performance} \label{chap:perfAnalysis}
-
-\section{Test Objectives}
 The test campaigns presented here aim to investigate the performance of UDP communication in a local network under conditions similar to those in a Distributed Test Support System. The considered performance indicators are latency and jitter. The investigations are performed using the star topology with the iHawk in the center, presented in \ref{chap:TopoiHawk}.
 
 Contrary to the investigation of reliability, no direct requirement can be defined here under which this test can be considered a success. The aim of the investigation is rather to determine the expected latencies, which may lead to certain restrictions concerning the use of a UDP communication within a Distributed Test Support System.
@@ -14,14 +12,14 @@ Although the topology with the iHawk in the center is used, in contrast to the r
 
 \begin{figure}[h]
     \centering
-    \begin{subfigure}[b]{0.45\textwidth}
+    \begin{subfigure}[b]{0.48\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figures/performance/sut_1a.pdf}
         \caption{Direction `H'}
         \label{fig:SutHpcPerf:H}
     \end{subfigure}
     \hfill
-    \begin{subfigure}[b]{0.45\textwidth}
+    \begin{subfigure}[b]{0.48\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figures/performance/sut_1b.pdf}
         \caption{Direction `R'}
@@ -63,11 +61,12 @@ The data indicates that the clocks of the two slaves synchronize with the master
 
 \clearpage
 \section{Test Campaigns}
+The first test campaign performed as part of the latency investigation is to examine the latency when using a High-Performance PC. The campaign includes a comparison of UDP sockets with Raw and Packet sockets. Subsequently, a campaign was conducted to investigate latency when using a Traffic PC. Additional campaigns were carried out to examine the influence of additional load, CPU affinity, and interrupt moderation. Finally, the latency when using Intel X540-T2 network interfaces was also investigated.
 
-\subsection{Tests with UDP, Raw and Packet Sockets} \label{chap:PerfSockType}
-\subsubsection{Motivation and Context}
+\subsection{Tests with UDP, Raw and Packet Sockets using a High-Performance PC} \label{chap:PerfSockType}
 The purpose of this test campaign is to examine and compare the latency of UDP, Raw, and Packet sockets. Both the sender and receiver will use the respective socket type. No additional system load will be applied to either computer system.
 
+\subsubsection{Test Setup}
 The test campaigns will be carried out with datagram sizes ranging from 80 to 8080 bytes, increasing in steps of 1000 bytes. Additionally, a datagram size of 65000 bytes was tested for UDP sockets utilizing fragmentation.
 
 All tests were conducted using the iHawk and HPC1 systems under test, with a cycle time of 0 µs used, which corresponds to an uninterrupted transmission process. The test duration for each datagram size was 60 seconds.
@@ -172,11 +171,10 @@ The campaign also revealed that Raw sockets have a latency comparable to that of
 Regarding fragmentation, the campaign discovered that latency increases significantly for datagram sizes above the MTU due to fragmentation. Additionally, it was observed that fragmented packets arrive in reverse order.
 
 
-\subsection{Tests using the System under Test with a Traffic PC}
-
-\subsubsection{Motivation and Context}
+\subsection{Tests with UDP Sockets using a Traffic PC}
 The purpose of this test campaign is to examine the latency of the system under test utilizing the iHawk and a Traffic PC. Both directions `H' and `R' are considered.
 
+\subsubsection{Test Setup}
 Based on the results of the previous test campaign 'Tests with UDP, Raw and Packet Sockets' (see \ref{chap:PerfSockType}), the tests were performed only with UDP sockets and datagram sizes from 80 to 8080 bytes in steps of 1000 bytes. The cycle time and test duration used in this campaign are the same as in the previous one.
 
 \subsubsection{Results}
@@ -223,14 +221,14 @@ The test campaign examined the latency of UDP communication with a Traffic PC in
 It was found that the latency in direction "H" is higher for communication between the iHawk and a Traffic PC than for communication between the iHawk and a High-Performance PC. This applies to both the worst-case and mean latency. In contrast, in the `R' direction, a significantly lower worst-case latency and a comparably high average latency are observed.
 
 
-\subsection{Tests with additional Load}
-\subsubsection{Motivation and Context}
+\subsection{Tests with additional Load using a High-Performance PC}
 The purpose of this test campaign is to analyze and compare latency under different load situations.
 
 One load situation is to stress all participating computer systems. For this purpose, the realistic load scenario described in Table \ref{tab:realpc} is used. The number and intensity of the stress-ng stressors remain the same. However, no network stressors are used as the focus of this load scenario is on the computer systems.
 
 Additionally, the overall system is subjected to network load. The TestSuite is utilized to generate maximum network load through UDP communications with a datagram size of 8900 bytes and a maximum bandwidth of 10 GBit/s between the iHawk in the center and all participating computer systems of the topology used. This is comparable to the load in the reliability test with the iHawk in the center (refer to Figure \ref{fig:topoihawknaming}). No additional network load is generated on the communication channel whose latency is being measured.
 
+\subsubsection{Test Setup}
 The tests were conducted using UDP sockets and datagram sizes ranging from 80 to 8080 bytes in increments of 1000 bytes. A cycle time of 0 µs and a test duration of 60 seconds were utilized. Only the system under test with the High-Performance PC was evaluated.
 
 \subsubsection{Results}
@@ -267,9 +265,9 @@ The results of the campaign suggest that the latency is not affected by addition
 When a network load is applied, the worst-case latency increased 4.5 times in direction `R', but remained unchanged in direction `H'. This is due to the high network load in the center. It is important to note that this scenario involved applying maximum utilization to all available communication channels.
 
 \subsection{Tests to Investigate the Influence of CPU Affinity}
-\subsubsection{Motivation and Context}
 This campaign aims to investigate the impact of CPU affinity on latency. Such an investigation has already been done as part of the reliability analysis, so please refer to \ref{chap:AffinityAnalysis} for a detailed description of the goal and motivation of this campaign.
 
+\subsubsection{Test Setup}
 The tests in this campaign examine the CPU affinity option 'enabled' and compare it to no affinity setting. The tests are performed with UDP sockets and datagram sizes from 80 to 8080 bytes in steps of 1000 bytes. A cycle time of 0 µs and a test duration of 60 seconds were used. Only the system under test with the High-Performance PC was used.
 
 \subsubsection{Results}
@@ -291,21 +289,21 @@ Figure \ref{fig:AffWc} shows the worst-case latencies for the two investigated C
 
 In direction `H' (Center to Endpoint), a maximum worst case latency of 144.76 µs was observed with CPU affinity enabled, which is 11.7\% lower than without CPU affinity enabled. In direction `R' (Endpoint to Center), a 12.4\% reduction in worst-case latency was observed. Again, as in the previous test campaigns, a higher latency was observed in direction `H' than in direction `R'.
 
-It can be assumed that with configured CPU affinity, the fact that the CPU can access its local resources faster than the resources of the remote CPU has a positive influence on the worst-case latency. However, as explained in \ref{chap:iHawkChar}, accessing resources from the other CPU via the UPI link results in a latency of around 130 ns \cite{setup07}. This is a rather small value compared to the measured latencies of UDP communication, which are in the double to triple-digit microsecond range. A further contribution to the observed lower worst-case latencies could also be fluctuations in the measured results.
+It can be assumed that with configured CPU affinity, the fact that the CPU can access its local resources faster than the resources of the remote CPU has a positive influence on the worst-case latency. As explained in \ref{chap:iHawkChar}, accessing resources from the other CPU via the UPI link results in a latency of around 130 ns \cite{setup07}. This value is small compared to the measured latencies of UDP communication, which typically range from double to triple digits in microseconds. However, if CPU affinity is not taken into account, the latency caused by the UPI link can occur multiple times, resulting in a higher worst-case latency.
 
 \paragraph{Mean Latency}
 
 In both directions a mean latency comparable to the mean latency without CPU affinity could be observed for all datagram sizes with enabled CPU affinity (see Figure \ref{fig:SockTypeWc}, Data Series 'UDP Socket'). The maximum deviation observed was 1 µs.
 
 \subsubsection{Classification of Results}
-The campaign results indicate that enabling CPU affinity reduces worst-case latency by over 10\% compared to when CPU affinity is not enabled. However, it is important to note that fluctuations in the measurements may have also contributed to these results, in addition to faster resource access by the application. CPU affinity has no effect on the mean latency.
+The campaign results indicate that enabling CPU affinity reduces worst-case latency by over 10\% compared to when CPU affinity is not enabled. CPU affinity has no effect on the mean latency.
 
-\subsection{Tests to Investigate the Influence of Interrupt-Moderation}
-\subsubsection{Motivation and Context}
+\subsection{Tests to Investigate the Influence of Interrupt Moderation}
 The purpose of this campaign is to analyze the latency associated with various interrupt moderation configurations.
 
 Interrupt moderation, which can decrease the number of interrupts generated by the network interface, is described in \ref{chap:InterMod}. When examining reliability under different interrupt moderation settings (see \ref{chap:RelInterMod}), it was found that the options examined did not differ in the number of packet losses, but did vary in CPU utilization.
 
+\subsubsection{Test Setup}
 In addition to the previously used disabled interrupt moderation, the timeout values 62 µs and 84 µs recommended in the Intel Linux Performance Tuning Guide \cite{intermod03} as well as the adaptive interrupt moderation were examined. Tests were conducted using UDP sockets and datagram sizes ranging from 80 to 8080 bytes in increments of 1000 bytes. A cycle time of 0 µs and a test duration of 60 seconds were utilized. The campaign only considered the system under test with the High-Performance PC.
 
 \subsubsection{Results}
@@ -335,6 +333,10 @@ The finding that the timeout values have a higher worst-case latency than the di
 
 Figure \ref{fig:IMean} shows the mean latency based on datagram size and interrupt moderation configuration.
 
+The results show that activating interrupt moderation with a timeout value of 62 µs increases the average latency in direction `H' by more than two times and in direction `R' by more than three times. As expected, the configuration with a timeout value of 84 µs has an even higher mean latency.
+
+The mean latency for adaptive interrupt moderation is 103 µs in both directions, making it the highest observed mean latency. Figure \ref{fig:IMean} shows a slight increase in mean latency with increasing datagram size. The interrupt moderation rate for adaptive interrupt moderation is determined by the number of connections and packet size. In this test with a low number of connections, a high number of interrupts per second should be configured for low latency \cite{intermod04}. However, this behavior cannot be confirmed in the performed tests, as the measured average latency is the highest compared to the other options examined. One possible reason for this could be the test duration, which may be too short for the adaptive interrupt moderation to configure itself.
+
 \begin{figure}[h!]
   \centering
   \subcaptionbox{Direction `H'\label{fig:IMean:a}}{%
@@ -347,20 +349,15 @@ Figure \ref{fig:IMean} shows the mean latency based on datagram size and interru
   \label{fig:IMean}
 \end{figure}
 
-The results show that activating interrupt moderation with a timeout value of 62 µs increases the average latency in direction `H' by more than two times and in direction `R' by more than three times. As expected, the configuration with a timeout value of 84 µs has an even higher mean latency.
-
-The mean latency for adaptive interrupt moderation is 103 µs in both directions, making it the highest observed mean latency. Figure \ref{fig:IMean} shows a slight increase in mean latency with increasing datagram size. The interrupt moderation rate for adaptive interrupt moderation is determined by the number of connections and packet size. In this test with a low number of connections, a high number of interrupts per second should be configured for low latency \cite{intermod04}. However, this behavior cannot be confirmed in the performed tests, as the measured average latency is the highest compared to the other options examined. One possible reason for this could be the test duration, which may be too short for the adaptive interrupt moderation to configure itself.
-
 \subsubsection{Classification of Results}
 The results indicate that latency is at its lowest when interrupt moderation is deactivated. Additionally, the campaign presents the expected worst-case and mean latencies for interrupt moderation configurations with timeout values of 62 µs and 84 µs.
 
 The highest latencies were measured with an adaptive interrupt configuration. However, the configuration changes due to factors such as the number of packets, packet size, or number of connections. As a result, the measured latency may fluctuate, making this option unsuitable for use in a Distributed Test Support System.
 
 \subsection{Tests with the Intel X540-T2 Network Interface}
-\subsubsection{Motivation and Context}
-
 This campaign aims to investigate the latency of the Intel X540-T2 network interfaces in both iHawk and HPC1. The reliability of these interfaces has already been examined in \ref{chap:IntelRel540}, where no difference was found compared to the currently used Intel X710-T2L.
 
+\subsubsection{Test Setup}
 The test also employed the settings from the Intel Linux Performance Tuning Guide (see \cite{intermod03}) for the Intel X540-T2 network interfaces. This means for example that interrupt moderation is disabled.
 
 The test mode used for this campaign was the same as in the previous campaigns. This involved the use of UDP sockets and datagram sizes ranging from 80 to 8080 bytes, with a cycle time of 0 µs and a test duration of 60 seconds. Only the system under test with the High-Performance PC was utilized.
@@ -389,10 +386,6 @@ The higher worst-case latencies with the same configuration with the Intel X540-
 
 \paragraph{Mean Latency}
 
-Figure \ref{fig:540Mean} displays a comparison of the mean latency of the Intel X540-T2 and Intel X710-T2L network interfaces. The mean latency in both directions, `H' and `R', increases with larger datagram sizes and is on average about 90.30 µs in direction `H' and 98.34 µs in direction `R'.
-
-It is noticeable that with a datagram size of 80 bytes, the average latency in both directions has a value of about 42 µs and increases significantly with a datagram size of 1080 bytes. These differences are not observable when using the Intel X710-T2L network interfaces with small datagrams.
-
 \begin{figure}[h!]
   \centering
   \subcaptionbox{Direction `H'\label{fig:540Mean:a}}{%
@@ -405,15 +398,22 @@ It is noticeable that with a datagram size of 80 bytes, the average latency in b
   \label{fig:540Mean}
 \end{figure}
 
+
+Figure \ref{fig:540Mean} displays a comparison of the mean latency of the Intel X540-T2 and Intel X710-T2L network interfaces. The mean latency in both directions, `H' and `R', increases with larger datagram sizes and is on average about 90.30 µs in direction `H' and 98.34 µs in direction `R'.
+
+It is noticeable that with a datagram size of 80 bytes, the average latency in both directions has a value of about 42 µs and increases significantly with a datagram size of 1080 bytes. These differences are not observable when using the Intel X710-T2L network interfaces with small datagrams.
+
 \subsubsection{Classification of Results}
 The campaign has demonstrated that the Intel X540-T2 network interfaces exhibit significantly higher worst-case and mean latencies than the Intel X710-T2L network interfaces with the same configuration. Therefore, when using these network interfaces in the Distributed Test Support System, a higher latency should be expected. \\
 
+\clearpage
 \section{Insights} \label{insight:perf}
 The test campaigns conducted to investigate the performance of an topology with an iHawk at the center provided the following key insights:
 
 \begin{enumerate}[label=(\roman*),resume]
     \item The analysis revealed the anticipated latencies of a UDP communication on the application level. The lowest latencies are to be expected when communication is between the iHawk and a High-Performance PC. However, when communicating systems similar to Traffic PCs, higher latencies should be expected in some cases. \label{insight:perf:1}
     \item The analysis also examined latencies with Raw sockets and Packet sockets, in addition to UDP sockets. The results indicate that Packet sockets have lower latency than the other socket types, but sometimes packets do not arrive in the order in which they were sent. \label{insight:perf:2}
+    \item Upon examination of the temporal distribution of latencies, it was found that the highest latencies occur during the first 10 transmitted packets. Therefore, it may be useful to integrate a warm-up phase in the Distributed Test Support System as part of the initialization process, during which a few packets are exchanged.
     \item Further the investigation analyzed the impact of different load scenarios on the computer systems involved. The study found that exceptionally high network load on the receiving side increases the worst-case latency by a factor of ten. In contrast, a system with similar load to that in the Test Support System does not show an increase in latency. \label{insight:perf:3}
     \item The analyis investigated the impact of CPU affinity on multi-socket systems and found that it has a minor effect on latency. Also the latencies can be expected with different interrupt moderation options are presented. As expected, the lowest latency was observed when interrupt moderation was disabled. \label{insight:perf:4}
     \item Additionally, the investigation examined the latency of the Intel X540-T2 network interface and found it to be higher than that of the newer Intel X710-T2L network interface. \label{insight:perf:5}

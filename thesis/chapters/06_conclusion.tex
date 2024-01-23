@@ -6,7 +6,7 @@ Important insights from the test are listed in \ref{insight:Switch}, \ref{insigh
 
 \begin{itemize}
 	\item Because an Ethernet switch was identified as a primary source of packet loss (see Insight \ref{insight:Switch:1}), the Distributed Test Support System should use a topology without an Ethernet switch, such as the investigated topology with the iHawk in the center.
-	\item When a topology with an iHawk in the center is used, a high network load can result in a low number of packet losses (see Insight \ref{insight:relHawk:1}). Additionally, a high network load can increase the latency of the system (see Insight \ref{insight:perf:3}).
+	\item When a topology with an iHawk in the center is used, a high network load can result packet losses (see Insight \ref{insight:relHawk:1}). Additionally, a high network load can increase the latency of the system (see Insight \ref{insight:perf:3}).
 	\item Stressing the computer systems with a load comparable to the stress in the test support system has no effect on reliability (see Insight \ref{insight:Switch:1}) and performance (see Insight \ref{insight:perf:3}).
 	\item There are no restrictions in terms of reliability when using different network interfaces (see Insight \ref{insight:relHawk:3}). However, it should be considered that the older Intel X540-T2 network interfaces have a significantly higher latency than the Intel X710-T2L network interfaces (see Insight \ref{insight:perf:5}).
 	\item For the implementation of an Ethernet-based distributed test support system using the Linux network stack, UDP sockets should be used, since Raw and Packet sockets have disadvantages such as changing the packet order (see Insight \ref{insight:perf:2}) and an increased implementation effort.
