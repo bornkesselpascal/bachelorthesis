@@ -82,7 +82,7 @@ All tests were conducted using the iHawk and HPC1 systems under test, with a cyc
   \subcaptionbox{Direction `R'\label{fig:SockTypeWc:b}}{%
     \includegraphics[width=1\textwidth]{figures/performance/d_2b.pdf}
   }
-  \caption{Worst-Case Latency by Datagram Size and Socket Type (Campaign `Tests with UDP, Raw and Packet Sockets').}
+  \caption{Worst-Case Latency by Datagram Size and Socket Type (Campaign `Tests with UDP, Raw and Packet Sockets using a High-Performance PC').}
   \label{fig:SockTypeWc}
 \end{figure}
 
@@ -110,7 +110,7 @@ Figure \ref{fig:SockTypeMl} shows the mean latency for different datagram sizes,
   \subcaptionbox{Direction `R'\label{fig:SockTypeMl:b}}{%
     \includegraphics[width=1\textwidth]{figures/performance/d_3b.pdf}
   }
-  \caption{Mean Latency by Datagram Size and Socket Type (Campaign `Tests with UDP, Raw and Packet Sockets').}
+  \caption{Mean Latency by Datagram Size and Socket Type (Campaign `Tests with UDP, Raw and Packet Sockets using a High-Performance PC').}
   \label{fig:SockTypeMl}
 \end{figure}
 
@@ -151,7 +151,7 @@ The campaign also examined the latency associated with fragmentation, using a da
     \label{fig:histFrag:d}
   \end{subfigure}
   
-  \caption{Latency Distribution for UDP Sockets with different Datagram Sizes in Direction `H' (Campaign `Tests with UDP, Raw and Packet Sockets').}
+  \caption{Latency Distribution for UDP Sockets with different Datagram Sizes in Direction `H' (Campaign `Tests with UDP, Raw and Packet Sockets using a High-Performance PC').}
   \label{fig:histFrag}
 \end{figure}
 
@@ -188,7 +188,7 @@ Based on the results of the previous test campaign 'Tests with UDP, Raw and Pack
   \subcaptionbox{Direction `R'\label{fig:TrafficWc:b}}{%
     \includegraphics[width=1\textwidth]{figures/performance/d_5b.pdf}
   }
-  \caption{Worst-Case Latency by Datagram Size and System under Test (Campaign `Tests using the System under Test with a Traffic PC').}
+  \caption{Worst-Case Latency by Datagram Size and System under Test (Campaign `Tests with UDP Sockets using a Traffic PC').}
   \label{fig:TrafficWc}
 \end{figure}
 
@@ -209,7 +209,7 @@ In the `R' direction, the worst-case latency is 80.73 µs, which is 26\% lower t
   \subcaptionbox{Direction `R'\label{fig:TrafficMean:b}}{%
     \includegraphics[width=1\textwidth]{figures/performance/d_6b.pdf}
   }
-  \caption{Mean Latency by Datagram Size and System under Test (Campaign `Tests using the System under Test with a Traffic PC').}
+  \caption{Mean Latency by Datagram Size and System under Test (Campaign `Tests with UDP Sockets using a Traffic PC').}
   \label{fig:TrafficMean}
 \end{figure}
 
@@ -226,7 +226,7 @@ The purpose of this test campaign is to analyze and compare latency under differ
 
 One load situation is to stress all participating computer systems. For this purpose, the realistic load scenario described in Table \ref{tab:realpc} is used. The number and intensity of the stress-ng stressors remain the same. However, no network stressors are used as the focus of this load scenario is on the computer systems.
 
-Additionally, the overall system is subjected to network load. The TestSuite is utilized to generate maximum network load through UDP communications with a datagram size of 8900 bytes and a maximum bandwidth of 10 GBit/s between the iHawk in the center and all participating computer systems of the topology used. This is comparable to the load in the reliability test with the iHawk in the center (refer to Figure \ref{fig:topoihawknaming}). No additional network load is generated on the communication channel whose latency is being measured.
+Additionally, the overall system is subjected to network load. The TestSuite is used to generate a maximum network load through UDP communications with a datagram size of 8900 bytes and a maximum bandwidth of 10 GBit/s between the iHawk in the center and all participating computer systems of the topology used, resulting in 7 generated bidirectional communications. This is comparable to the load in the reliability test with the iHawk in the center (refer to Figure \ref{fig:topoihawknaming}). No additional network load is generated on communication link 1A, where the latency is measured.
 
 \subsubsection{Test Setup}
 The tests were conducted using UDP sockets and datagram sizes ranging from 80 to 8080 bytes in increments of 1000 bytes. A cycle time of 0 µs and a test duration of 60 seconds were utilized. Only the system under test with the High-Performance PC was evaluated.
@@ -242,7 +242,7 @@ The tests were conducted using UDP sockets and datagram sizes ranging from 80 to
   \subcaptionbox{Direction `R'\label{fig:StressWc:b}}{%
     \includegraphics[width=1\textwidth]{figures/performance/d_7b.pdf}
   }
-  \caption{Worst-Case Latency by Datagram Size and Load Scenario with the System under Test with a High-Performance PC (Campaign `Tests with additional Load').}
+  \caption{Worst-Case Latency by Datagram Size and Load Scenario with the System under Test with a High-Performance PC (Campaign `Tests with additional Load using a High-Performance PC').}
   \label{fig:StressWc}
 \end{figure}
 
@@ -252,12 +252,23 @@ The realistic scenario causes a CPU utilization of 19.5\% on the iHawk and 47.8\
 
 A network load in direction `H' (Center to Endpoint) also causes only a small increase in worst-case latency compared to the test with no additional load. The worst-case latency in this direction is 180 µs.
 
-However, in direction `R' (Endpoint to Center), the network load causes a significant increase in worst-case latency, as shown in Figure \ref{fig:StressWc:b}. The maximum value, measured in tests with a datagram size of 2080 bytes, is 742.73 µs. This increase is due to the high network load on the iHawk in the center. In addition to the measured communication, the system is loaded on 7 other channels with bidirectional communication and an average throughput of 9.68 GBit/s per direction. This high load is causing additional latency during processing in the receiving system.
+However, in direction `R' (Endpoint to Center), maximum network load causes a significant increase in worst-case latency, as shown in Figure \ref{fig:StressWc:b}. The maximum value, measured in tests with a datagram size of 7080 bytes, is 721.73 µs. Additionally, there is a more noticeable variation in worst-case latency across different datagram sizes. This increase is due to the high network load on the iHawk in the center. In addition to the measured communication, the system is stressed with 7 additional links of bidirectional communication, each with an average throughput of 9.68 GBit/s per direction. This high load is causing additional latency during processing in the receiving system.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=1\linewidth]{figures/performance/d_13.pdf}
+    \caption{Worst-Case Latency by Datagram Size and Number of Links in Direction 'R' with the System under Test with a High-Performance PC (Campaign `Tests with additional Load using a High-Performance PC').}
+    \label{fig:NetLoadLinkReduction}
+\end{figure}
+
+To examine the worst-case latency not only at the maximum network load of 7 bidirectional links, additional tests were performed. These tests analyzed latencies with different numbers of links that generate additional load. The results are presented in Figure \ref{fig:NetLoadLinkReduction}.
+
+The results show that the highest worst case latency of 721.73 µs occurs when using 7 links. However, with 6 and 5 bidirectional links, the worst case latency is reduced to approximately 480 µs, a 33\% reduction compared to the use of 7 links. A further significant reduction to 175.84 µs is observed when using 4 links. When using 3, 2 or 1 bidirectional links, the worst-case latency is comparable to the latency no additional network load.
 
 \paragraph{Mean Latency}
 When both computer systems were stressed with the realistic load scenario, average latencies were observed in both directions that were comparable to the tests without load. This also applies to the network load in the direction `H'.
 
-However, when network load was applied in the `R' direction, a significantly higher mean latency was observed compared to the test without additional load, as already described for the worst-case latency. The mean latency in this direction was 243.67 µs, which is almost 10 times higher than without additional load (24.67 µs).
+However, when maximum network load with 7 links was applied in the `R' direction, a significantly higher mean latency was observed compared to the test without additional load, as already described for the worst-case latency. The mean latency in this direction was 243.67 µs, which is almost 10 times higher than without additional load (24.67 µs). As the number of links decreases, the mean latency also decreases. Here too, no difference in mean latency was observed when using 3, 2, or 1 links compared to the tests without additional load.
 
 \subsubsection{Classification of Results}
 The results of the campaign suggest that the latency is not affected by additional system load, such as those from realistic scenarios, which involves CPU load, I/O load, and interrupt load.
@@ -414,7 +425,7 @@ The test campaigns conducted to investigate the performance of an topology with 
     \item The analysis revealed the anticipated latencies of a UDP communication on the application level. The lowest latencies are to be expected when communication is between the iHawk and a High-Performance PC. However, when communicating systems similar to Traffic PCs, higher latencies should be expected in some cases. \label{insight:perf:1}
     \item The analysis also examined latencies with Raw sockets and Packet sockets, in addition to UDP sockets. The results indicate that Packet sockets have lower latency than the other socket types, but sometimes packets do not arrive in the order in which they were sent. \label{insight:perf:2}
     \item Upon examination of the temporal distribution of latencies, it was found that the highest latencies occur during the first 10 transmitted packets. Therefore, it may be useful to integrate a warm-up phase in the Distributed Test Support System as part of the initialization process, during which a few packets are exchanged.
-    \item Further the investigation analyzed the impact of different load scenarios on the computer systems involved. The study found that exceptionally high network load on the receiving side increases the worst-case latency by a factor of ten. In contrast, a system with similar load to that in the Test Support System does not show an increase in latency. \label{insight:perf:3}
+    \item Furthermore, the impact of different load scenarios on the participating computer systems was analyzed. The study found that exceptionally high network load on the receiving side using seven bidirectional links increases the worst-case latency by a factor of seven. However, when using three or fewer links to generate load, no increase in latency can be noticed. Similarly, a system with load comparable to the Test Support System shows no increase in latency. \label{insight:perf:3}
     \item The analyis investigated the impact of CPU affinity on multi-socket systems and found that it has a minor effect on latency. Also the latencies can be expected with different interrupt moderation options are presented. As expected, the lowest latency was observed when interrupt moderation was disabled. \label{insight:perf:4}
     \item Additionally, the investigation examined the latency of the Intel X540-T2 network interface and found it to be higher than that of the newer Intel X710-T2L network interface. \label{insight:perf:5}
     \item These observed latencies and their variation with respect to the computer system, network hardware, and system load must be taken into account when using a UDP-based implementation in a Distributed Test Support System. \label{insight:perf:6}

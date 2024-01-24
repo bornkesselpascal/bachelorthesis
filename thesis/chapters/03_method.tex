@@ -266,20 +266,20 @@ For the tests with the described setup, two different topologies were utilized f
     \label{fig:startopoGeneral}
 \end{figure}
 
-In a star topology, each node connects to a central instance, typically a hub or a switch. A generic star topology is shown in Figure \ref{fig:startopoGeneral}. The advantages of the star topology are simple installation beacuse of a linear hardware complexity (the number of required links is proportional to the number of nodes in the network) and high fault tolerance, as the network remains functional if a node fails. However, if the central instance fails, the network becomes non-functional.
+In a star topology, each node connects to a central instance, typically a hub or a switch. A generic star topology is shown in Figure \ref{fig:startopoGeneral}. An advantage of the star topology is its linear hardware complexity $O(n)$, meaning that the number of links required is proportional to the number of nodes in the network. This results in a decrease in installation effort in comparison to, for example, a mesh network, which has a hardware complexity of $O(n^2)$. Furthermore, the star topology has a high fault tolerance because if a node fails, the network remains functional. However, if the central instance fails, the network becomes non-functional.
 
 Both topologies used are described in detail below. Any modifications made for specific test campaigns are indicated in the corresponding places in the thesis. This includes, for example, changes to the network interfaces used.
 
 \subsection{Star Topology with a Switch in the Center} \label{chap:TopoSwitch}
 
-\begin{figure}[h]
+The first topology used is a star topology with a switch in the center, as shown in Figure \ref{fig:startopoSwitch}.
+
+\begin{figure}[h!]
     \centering
     \includegraphics[width=1\linewidth]{figures/method/topo2.pdf}
     \caption[Visualization of the Star Topology with a Switch in the Center]{Visualization of the Star Topology with a Switch in the Center.}
     \label{fig:startopoSwitch}
 \end{figure}
-
-The first topology used is a star topology with a switch in the center, as shown in Figure \ref{fig:startopoSwitch}.
 
 In this architecture, the Cisco CBS350-8XT switch, presented in \ref{chap:EthernetSwitch}, is located in the center of the star. All other participants, including two computer systems of type HPC and the computer systems of type TPC, are connected to this switch.
 
@@ -294,7 +294,7 @@ The HPC1 and HPC2 systems are both equipped with the Intel X710-T2L network card
     \label{fig:startopoIHawk}
 \end{figure}
 
-As the first topology presented proved to be unsuitable in the course of the tests carried out, a new topology as shown in Figure \ref{fig:startopoIHawk} was developed.
+As the first topology presented proved to be unsuitable in the course of the tests carried out (see Section \ref{chap:switchtest}), a new topology as shown in Figure \ref{fig:startopoIHawk} was developed.
 
 This new topology features an iHawk computer system at the center of the star, equipped with four Intel X710-T2L network interfaces. The HPC computer systems in this topology also have Intel X710-T2L network interfaces, while the TPC systems use Intel X520-T2 network interfaces. Each node is connected to the iHawk in the center via two bidirectional 10 GbE links.
 
@@ -413,8 +413,7 @@ The output data also contains statistics of the network interface or network sta
 	These statistics contain information about the protocol layer of the system. The information about UDP and IP is stored in the output data. This includes the number of packets sent and received by each protocol layer, as well as counters for dropped packets. The information about receive errors, such as insufficient buffer space, is particularly relevant for testing.
 \end{itemize}
 
-The output data also includes logs from the nmon tool. This is described in more detail in Section 2.3.X. The data includes minute-by-minute records of the system's CPU usage, memory usage, network interface data, and disk usage information.
-% TODO
+The output data also includes logs from the nmon tool. This is described in more detail in Section \ref{chap:metricsNmon}. The data includes minute-by-minute records of the system's CPU usage, memory usage, network interface data, and disk usage information.
 
 \paragraph{Classes}
 TestSuite has 5 central classes, the functionality of which is briefly explained below.
@@ -450,14 +449,14 @@ The additional system load can be executed during a test on the client PC or the
 
 All configuration data for the additional system load is contained in the Test Description. This includes parameters such as the type of load, its intensity, or its location.
 
-\subparagraph{Metrics}
+\subparagraph{Metrics} \label{chap:metricsNmon}
 The 'Metrics' class is responsible for collecting system metrics before, during, and after a test.
 
 On the one hand, `Metrics' is responsible for recording the statistics of the network interface or the network stack in the systems before and after a test. The statistics are collected using the command line utilities 'ip' from 'iproute2' and 'netstat'. The output of these utilities is then processed using regular expressions, among other things, and important parameters are stored in the 'Statistics' section of the output data.
 
-Another task of the `Metrics' class is to control the `nmon' program. `nmon' is a system monitoring tool for Linux operating systems. It monitors various system parameters such as CPU usage, memory usage, network traffic, disk activity, and other important system metrics \cite{tsd04}. Furthermore, nmon offers the possibility to record and store the system parameters cyclically.
+Another task of the `Metrics' class is to control the `nmon' program. `nmon' is a system monitoring tool for Linux operating systems. It monitors various system parameters such as CPU usage, memory usage, network traffic, disk activity, and other important system metrics \cite{tsd04}. Furthermore, `nmon' offers the possibility to record and store the system parameters cyclically.
 
-The TestSuite creates an nmon recording for each test at runtime, in which the system parameters are recorded every 60 seconds. This recording is part of the 'Result Data'.
+The TestSuite creates an `nmon' recording for each test at runtime, in which the system parameters are recorded every 60 seconds. This recording is part of the 'Result Data'.
 
 \subsection{Generation and Measurement of Target Communication} \label{chap:targetcom}
 As explained in the description of the software design in \ref{chap:customtester}, the `Custom Tester' class is used to generate and measure the UDP communication.  In the following, this class will be introduced and the send and receive routines will be described in more detail.
@@ -641,7 +640,7 @@ The packet rate (see equation \ref{eq:packetrate}) represents the number of pack
 
 
 \begin{equation}
-Packet\ Rate = Number of Packets / Duration
+Packet\ Rate = Number\ of\ Packets\ /\ Duration
 \label{eq:packetrate}
 \end{equation}
 

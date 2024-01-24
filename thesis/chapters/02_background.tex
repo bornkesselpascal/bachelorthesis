@@ -42,7 +42,7 @@ If a subscriber exists on the local node, referred to as Single Node Operation, 
 \end{figure}
 
 \subsubsection{Multi Node Operation}
-This section covers the procedure for receiving data when a subscribing Processing Unit is present on a remote node of the Distributed Test Support System. The process depicted in figure \ref{fig:DmlRecMultiNode} for receiving a message (Arrow 1) and copying it to the FIFO buffer (Arrow 2) does not differ from the single node operation.
+This section covers the procedure for receiving data when a subscribing Processing Unit is present on a remote node of the Distributed Test Support System. The process depicted in Figure \ref{fig:DmlRecMultiNode} for receiving a message (Arrow 1) and copying it to the FIFO buffer (Arrow 2) does not differ from the single node operation.
 
 If a subscriber for a message exists on a remote node, the message must be forwarded by the Data Manager. To achieve this, the nodes exchange subscriber lists. This forwarding process is illustrated in Figure \ref{fig:DmlRecMultiNode}, Arrow 3. The Data Manager of the local node copies the message by DMA over the Dolphin Interconnect into a FIFO buffer of the remote node. Each node has, in addition to the FIFO buffers for each interface of the node, a FIFO buffer for each remote node in the Distributed Test Support System.
 
@@ -117,7 +117,7 @@ Protocols define the format of control information required by layer k to provid
 
 \subsection{Introduction of the Reference Model}
 
-The following section presents a explanation of the TCP/IP reference model. Throughout this section, we will refer to the hybrid reference model proposed by Andrew S. Tanenbaum in \cite{Tanenbaum2010}. Figure \ref{fig:RefModel} shows this hybrid reference model. The physical layer is at the bottom, and the application layer is at the top. The tasks of each layer are briefly described here. For additional information, please refer to \cite{Tanenbaum2010}.
+The following section presents a explanation of the TCP/IP reference model. Compared to the OSI reference model, it is a more pragmatic framework that focuses on Internet functionality, compared to the comprehensive seven-layer scheme for network architecture of OSI. Throughout this section, it will be refered to the hybrid reference model proposed by Andrew S. Tanenbaum in \cite{Tanenbaum2010}. Figure \ref{fig:RefModel} shows this hybrid reference model. The physical layer is at the bottom, and the application layer is at the top. The tasks of each layer are briefly described here. For additional information, please refer to \cite{Tanenbaum2010}.
 
 \begin{figure}[h]
     \centering
@@ -176,7 +176,7 @@ At the link layer, Ethernet defines frame formatting, addressing, error detectio
     \label{fig:EthernetFrame}
 \end{figure}
 
-Figure \ref{fig:EthernetFrame} shows the IEE 802.3 frame format. The Ethernet header consists of the fields '\textit{Destination address}', '\textit{Source address}' and '\textit{Length}' and therefore has a size of 14 bytes.
+Figure \ref{fig:EthernetFrame} shows the IEEE 802.3 frame format. The Ethernet header consists of the fields '\textit{Destination address}', '\textit{Source address}' and '\textit{Length}' and therefore has a size of 14 bytes.
 
 Each frame begins with a \textit{preamble}. This has a length of 8 bytes and contains the bit sequence 10101010. An exception is the last byte, which contains the bit sequence 10101011 and is referred to as the \textit{Start of Frame} (SoF). The preamble is used for synchronization between the sender and receiver. The last byte of the preamble marks the start of a frame \cite{Tanenbaum2010}.
 
@@ -308,6 +308,7 @@ Compared to TCP, UDP can achieve higher data transmission speeds due to its lowe
 \clearpage
 
 \section{Linux Kernel}
+This investigation in this thesis and the Distributed Test Support System use an operating system based on the Linux kernel. Therefore, a brief introduction to this kernel is provided.
 
 The Linux kernel is an operating system kernel that is available under a free software license and has been under development since 1991 \cite{like01}. The Linux kernel is the main component of a Linux operating system and is used by a large number of operating systems, called distributions. Popular examples of such distributions are Ubuntu or Linux Mint, which are used in this thesis.
 
@@ -415,7 +416,7 @@ The purpose of this chapter is to explain UDP communication using a Linux operat
     \label{fig:NWStack}
 \end{figure}
 
-Figure \ref{fig:NWStack} presents a simplified schematic of the components of the Linux network stack and how they relate to the layers of the hybrid TCP/IP reference model presented in chapter \ref{chap:RefModel}. This section provides a simplified representation, based on \cite{lins06}, that illustrates the relationship between the components of the network stack. 
+Figure \ref{fig:NWStack} presents a simplified schematic of the components of the Linux network stack and how they relate to the layers of the hybrid TCP/IP reference model presented in Section \ref{chap:RefModel}. This section provides a simplified representation, based on \cite{lins06}, that illustrates the relationship between the components of the network stack. 
 
 First, the components of the network stack will be presented, with a focus on the protocols represented in the TCP/IP reference model. Then, the interaction between the components will be explained by following the path of a packet through the network stack during transmission and reception.
 
@@ -487,7 +488,7 @@ Raw sockets and Packet sockets are additional types of Internet sockets. These a
     \label{fig:SocketAccessPossib}
 \end{figure}
 
-Figure \ref{fig:SocketAccessPossib} displays the access possibilities with different socket types. Raw sockets provide access to the transport layer (4) and network layer (3) of the network stack \cite{sock08}, including TCP or UDP as well as IP in the case of the TCP/IP reference model. Packet sockets can also be utilized to access the link layer (2), enabling access to almost the entire Ethernet frame, except for the preamble and trailer \cite{sock09}.
+Figure \ref{fig:SocketAccessPossib} displays the access possibilities with different socket types. Raw sockets provide access to the transport layer (4) and network layer (3) of the network stack \cite{sock08}, including TCP or UDP as well as IP in the case of the TCP/IP reference model. Packet sockets in addition can also be utilized to access the link layer (2), enabling access to almost the entire Ethernet frame, except for the preamble and trailer \cite{sock09}.
 
 The concept underlying Raw and Packet sockets involves the implementation of separate protocol layers in the application. Depending on the chosen socket type, the application can implement layers 2 to 4 \cite{sock08}. Furthermore, Packet sockets can also be used to capture the entire communication of a system, as used by Wireshark, for example.
 
@@ -556,7 +557,7 @@ This section explains how a packet travels through the Linux network stack by ex
 The following overview provides a general understanding of the process and will serve as a foundation. For a more detailed explanation of the packet's path, please refer to \cite{lins01} and \cite{lins06}.
 
 \subsubsection{Receiving a Packet} \label{chap:recpath}
-When a frame is received by the network card, it first checks for errors using the Ethernet frame checksum and then verifies if it is intended for the network interface by using the MAC address. The frame is then written to a free buffer in the RX\_Ring via DMA, which was created by the device driver during initialization. If no buffers are available, the frame is dropped \cite{lins03, lins06, lins14}.
+When a frame is received by the network card, it is first checked for errors using the Ethernet frame checksum and then verifies if it is intended for the network interface by using the MAC address. The frame is then written to a free buffer in the RX\_Ring via DMA, which was created by the device driver during initialization. If no buffers are available, the frame is dropped \cite{lins03, lins06, lins14}.
 
 Interrupts are utilized to notify the system about a packet. Different strategies can be employed for this purpose. In the simplest case, a hardware interrupt is triggered for each received frame \cite{lins06}.
 
