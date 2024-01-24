@@ -19,7 +19,7 @@ DML uses a publish-subscribe model to exchange data with the Processing Units. T
 
 The DML ID consists a 12-bit \textit{Interface ID} assigned to each interface by the Test Support System. In addition, a 52-bit \textit{Message ID} is part of the DML ID. This contains fields for the unique identification of a message, depending on the bus system implemented at the respective hardware interface.
 
-The current implementation connects the involved independent computer systems using a PCI Express-based solution called Dolphin Interconnect \cite{dml01, add01}. This connection is the focus of this thesis since an Ethernet network based on UDP is to be investigated as a possible, more cost-efficient, alternative.
+The current implementation connects the involved independent computer systems using a \ac{pcie}-based solution called Dolphin Interconnect \cite{dml01, add01}. This connection is the focus of this thesis since an Ethernet network based on UDP is to be investigated as a possible, more cost-efficient, alternative.
 
 Direct Memory Access (DMA) is primarily used as a method of communication between all components involved. It is described in chapter \ref{chap:hwdependcode}.
 
