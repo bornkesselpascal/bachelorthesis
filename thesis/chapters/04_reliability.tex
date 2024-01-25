@@ -62,9 +62,9 @@ In tests where the client was subjected to a generated load, no packet loss was 
   \label{fig:resuc1}
 \end{figure}
 
-During the stress tests where the server was subjected to a generated load, packet losses occurred on both systems under test. Figure \ref{fig:resuc1a} displays the percentage of packet losses in different load scenarios for High-Performance PCs, while Figure \label{fig:resuc1b} shows the results for Traffic PCs. The diagrams demonstrate that packet losses occurred in both systems under test when subjected to the stress-ng 'bigheap' stressor which generates memory load and to network load on the server.
+During the stress tests where the server was subjected to a generated load, packet losses occurred on both systems under test. Figure \ref{fig:resuc1a} displays the percentage of packet losses in different load scenarios for High-Performance PCs, while Figure \ref{fig:resuc1b} shows the results for Traffic PCs. The diagrams demonstrate that packet losses occurred in both systems under test when subjected to the stress-ng 'bigheap' stressor which generates memory load and to network load on the server.
 
-Under stress from memory load, the server experiences packet losses across all three datagram sizes tested. Losses are less than one percent for 80 bytes and 8900 bytes, which is why they are not visible on the diagram. However, they increase to 5.29\% and 7.81\% for 65000 bytes, which is due to fragmentation, since the entire datagram is lost when a fragment is lost. It is also observed that the losses are slightly lower with the High-Performance PC as the system under test compared to the Traffic PC as the system under test when under memory load.
+Under stress from memory load, the server experiences packet losses across all three datagram sizes tested. Losses are less than one percent for 80 bytes and 8900 bytes, which is why they are not visible on the diagram. However, they increase to 5.29\% (High-Performance PCs) and 7.81\% (Traffic PCs) for 65000 bytes, which is due to fragmentation, since the entire datagram is lost when a fragment is lost. It is also observed that the losses are slightly lower with the High-Performance PC as the system under test compared to the Traffic PC as the system under test when under memory load.
 
 The losses occurred in the server, and the network card dropped the packets, as determined by the standard interface statistics of the network interface in the server. The drops occur due to memory load, as explained in \ref{chap:stressngMemeory}. This results in insufficient memory to process the arriving packets through the network stack. For instance, the network stack may not be able to allocate a socket buffer structure to process an incoming packet.
 
@@ -176,7 +176,7 @@ In order to better understand the packet losses, certain tests were repeated and
     \label{fig:srpr4}
 \end{figure}
 
-Figure \ref{fig:srpr4} displays the send and receive packet rate over time for an example test with a datagram size of 65000 bytes and a cycle time of 120 µs. The average transmission rate was 4.3 Gbit/s, and there was a 61\% packet loss. The variation in packet losses between this implementation and the results presented in \ref{fig:resuc3} for a cycle time of 120 µs can be attributed to fluctuations.
+Figure \ref{fig:srpr4} displays the send and receive packet rate over time for an example test with a datagram size of 65000 bytes and a cycle time of 120 µs. The average transmission rate was 4.3 Gbit/s, and there was a 61\% packet loss. The variation in packet losses between this implementation and the results presented in Figure \ref{fig:resuc3} for a cycle time of 120 µs can be attributed to fluctuations.
 
 The diagram shows that the packet losses occur cyclically. It is illustrated that there are phases during which all packets are lost and phases during which nearly all packets are received. These phases of packet loss have a constant duration of 25 seconds, but the interval between these phases varies.
 
@@ -418,7 +418,7 @@ The statistics (Standard Interface Statistic and Network Stack Statistic) record
 \label{tab:ep3InterfaceStat}
 \end{table}
 
-According to the Linux kernel documentation, \texttt{rx\_missed\_errors} indicates the number of packets that were dropped by the computer due to insufficient space in the buffer \cite{sock11}. This indicates that the computer may not be able to handle incoming packets at the rate at which they arrive at the network interface, resulting in network congestion at the endpoint 3. The ksoftriq threads, which handle the processing of incoming packets as described in \label{chap:recpath} were unable to process all the packets available in the network device's ring buffer before their \ac{CPU} time expired.
+According to the Linux kernel documentation, \texttt{rx\_missed\_errors} indicates the number of packets that were dropped by the computer due to insufficient space in the buffer \cite{sock11}. This indicates that the computer may not be able to handle incoming packets at the rate at which they arrive at the network interface, resulting in network congestion at the endpoint 3. The ksoftriq threads, which handle the processing of incoming packets as described in \ref{chap:recpath}, were unable to process all the packets available in the network device's ring buffer before their \ac{CPU} time expired.
 
 The recorded losses of the TestSuite are lower than the values for \texttt{rx\_missed\_error}. This is due to the fact that losses only occurred at 65000 bytes, where the \ac{udp} packets were fragmented into 8 IP packets due to the configured \ac{mtu} of 9000 bytes. If a fragment is lost, the entire packet is discarded.
 

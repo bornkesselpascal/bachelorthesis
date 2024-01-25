@@ -13,7 +13,7 @@
     % start chapters on the right side
     open = right,
     % Use twosided layout? Every chapter starts on the right side, therefore sometimes blank pages are added between chapters.
-    twoside = false,
+    twoside = true,
     BCOR = 10mm,
     % add lists and bibliography to table of contents
     toc = listofnumbered,
@@ -21,6 +21,7 @@
     % enumerate chapters as x.y instead of x.y.
     numbers = noendperiod
 ]{scrreprt}
+
 
 \setcounter{secnumdepth}{6}
 % use some additional package, add your own below if required
@@ -45,7 +46,12 @@
 \usepackage[german, algochapter, linesnumbered]{algorithm2e}
 % package to create diagrams
 \usepackage{tikz}
-\usepackage{geometry}						% Für newgeometry in Titelseite
+\usepackage{geometry}
+\geometry{
+    a4paper,
+    twoside,
+    inner=38mm, % Adjust as needed for the inner margin
+}
 
 \usetikzlibrary{positioning}
 \usetikzlibrary{shapes.geometric, arrows}
@@ -77,14 +83,6 @@
 %%% additions by ACV
 \usepackage{hyperref}
 \usepackage{url}
-% Citations using APA style with biblatex
-%\usepackage[style=apa,backend=biber,backref=true,maxbibnames=20]{biblatex}
-% Biblatex allows multiple bib-files
-%\addbibresource{bibliography/references.bib}
-%\addbibresource{bibliography/websources.bib}
-%\addbibresource{bibliography/normen.bib}
-%\bibliographystyle{plain} % We choose the "plain" reference style
-
 
 % Tables using APA Style
 \usepackage{booktabs}
@@ -143,7 +141,6 @@
 \onehalfspacing
 
 \begin{document}
-	
 	%   ___     _  _            _         _ 
 	%  | _ \_ _(_)(_)__ _ _ __ | |__  ___| |
 	%  |  _/ '_/ _` / _` | '  \| '_ \/ -_) |

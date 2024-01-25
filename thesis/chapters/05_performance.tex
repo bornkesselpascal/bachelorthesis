@@ -180,6 +180,8 @@ Based on the results of the previous test campaign 'Tests with UDP, Raw and Pack
 \subsubsection{Results}
 \paragraph{Worst-Case Latency}
 
+Figure \ref{fig:TrafficWc} displays the worst-case latency for the system under test with a Traffic PC. Additionally, the results from the previous test campaign (see \ref{chap:PerfSockType}) for a UDP socket with a high performance PC as the system under test are shown for comparison.
+
 \begin{figure}[h!]
   \centering
   \subcaptionbox{Direction `H'\label{fig:TrafficWc:a}}{%
@@ -191,8 +193,6 @@ Based on the results of the previous test campaign 'Tests with UDP, Raw and Pack
   \caption{Worst-Case Latency by Datagram Size and System under Test (Campaign `Tests with UDP Sockets using a Traffic PC').}
   \label{fig:TrafficWc}
 \end{figure}
-
-Figure \ref{fig:TrafficWc} displays the worst-case latency for the system under test with a Traffic PC. Additionally, the results from the previous test campaign (see \ref{chap:PerfSockType}) for a UDP socket with a high performance PC as the system under test are shown for comparison.
 
 In direction `H' a worst case latency of 229.20 µs was measured. Figure \ref{fig:TrafficWc:a} shows it in relation to the datagram size. The worst-case latency of the system under test with a Traffic PC is therefore approximately 30\% higher than with a High Performance PC.
 
