@@ -3,55 +3,55 @@
 \chapter{Background}
 
 \section{Data Management Layer} \label{chap:DML}
-A Distributed Test Support System consists of multiple independent computer systems called nodes. A node may have hardware interfaces to communicate with different bus systems. Additionally, processes, called Processing Units (PU) are executed on a node to process data from the hardware interfaces or to generate data for transmission. The nodes collaborate in a common test environment, therefore it is necessary to exchange data between them. The exchange of data between hardware interfaces and Processing Units, including the exchange between different nodes is facilitated by the Data Management Layer (DML).
+A Distributed Test Support System consists of multiple independent computer systems called nodes. A node may have hardware interfaces to communicate with different bus systems. Additionally, processes, called \ac{pu} are executed on a node to process data from the hardware interfaces or to generate data for transmission. The nodes collaborate in a common test environment, therefore it is necessary to exchange data between them. The exchange of data between hardware interfaces and Processing Units, including the exchange between different nodes is facilitated by the \ac{dml}.
 
 This chapter provides an overview of the DML and explains the process of sending and receiving data according to \cite{dml01}.
 
 \subsection{Fundamentals}
-DML uses a publish-subscribe model to exchange data with the Processing Units. This enables the Processing Units to receive only the required messages from the interfaces. This principle is implemented through the use of a 64-bit identifier called a DML ID. Each message has a unique DML ID.  The structure of the DML ID is shown in Figure \ref{fig:DmlId}.
+\ac{dml} uses a publish-subscribe model to exchange data with the Processing Units. This enables the Processing Units to receive only the required messages from the interfaces. This principle is implemented through the use of a 64-bit identifier called a \ac{dml} ID. Each message has a unique \ac{dml} ID.  The structure of the \ac{dml} ID is shown in Figure \ref{fig:DmlId}.
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.8\linewidth]{figures/dml/dml01.pdf}
-    \caption[Structure of the DML ID]{Structure of the DML ID. Adapted from: \cite{dml01}.}
+    \caption[Structure of the DML ID]{Structure of the \ac{dml} ID. Adapted from: \cite{dml01}.}
     \label{fig:DmlId}
 \end{figure}
 
-The DML ID consists a 12-bit \textit{Interface ID} assigned to each interface by the Test Support System. In addition, a 52-bit \textit{Message ID} is part of the DML ID. This contains fields for the unique identification of a message, depending on the bus system implemented at the respective hardware interface.
+The \ac{dml} ID consists a 12-bit \textit{Interface ID} assigned to each interface by the Test Support System. In addition, a 52-bit \textit{Message ID} is part of the \ac{dml} ID. This contains fields for the unique identification of a message, depending on the bus system implemented at the respective hardware interface.
 
-The current implementation connects the involved independent computer systems using a PCI Express-based solution called Dolphin Interconnect \cite{dml01, add01}. This connection is the focus of this thesis since an Ethernet network based on UDP is to be investigated as a possible, more cost-efficient, alternative.
+The current implementation connects the involved independent computer systems using a \ac{pcie}-based solution called Dolphin Interconnect \cite{add01, dml01}. This connection is the focus of this thesis since an Ethernet network based on \ac{udp} is to be investigated as a possible, more cost-efficient, alternative.
 
-Direct Memory Access (DMA) is primarily used as a method of communication between all components involved. It is described in chapter \ref{chap:hwdependcode}.
+\ac{dma} is primarily used as a method of communication between all components involved. It is described in chapter \ref{chap:hwdependcode}.
 
 \subsection{Receive Path}
 
 \subsubsection{Single Node Operation}
 This section outlines the procedure for receiving data when a subscribing Processing Unit is present on the local node.
 
-When a message is received by a hardware interface (see Figure \ref{fig:DmlRecSingleNode}, Arrow 1), the interface uses DMA to copy the data to a FIFO buffer (see Figure \ref{fig:DmlRecSingleNode}, Arrow 2). A FIFO buffer is implemented as a ring buffer and is located in the main memory of the node. Each interface has a separate FIFO buffer, which allows for asynchronous access without mutual exclusion, as the payload and metadata of the FIFO buffer is only written to by a single entity. Additionally, the it is only accessed by one reader, the Data Manager.
+When a message is received by a hardware interface (see Figure \ref{fig:DmlRecSingleNode}, Arrow 1), the interface uses \ac{dma} to copy the data to a \ac{fifo} buffer (see Figure \ref{fig:DmlRecSingleNode}, Arrow 2). A \ac{fifo} buffer is implemented as a ring buffer and is located in the main memory of the node. Each interface has a separate \ac{fifo} buffer, which allows for asynchronous access without mutual exclusion, as the payload and metadata of the \ac{fifo} buffer is only written to by a single entity. Additionally, the it is only accessed by one reader, the Data Manager.
 
-The Data Manager, a process running on each node, polls all of the FIFO buffers of the node at a specified time interval. If a new message is found in a FIFO and there is a subscriber for that message, it is processed further.
+The Data Manager, a process running on each node, polls all of the \ac{fifo} buffers of the node at a specified time interval. If a new message is found in a \ac{fifo} and there is a subscriber for that message, it is processed further.
 
 If a subscriber exists on the local node, referred to as Single Node Operation, the Data Manager copies the message to the monitor memory (see Figure \ref{fig:DmlRecSingleNode}, Arrow 3). From there, it can be read by the subscribing Processing Units. \\
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.48\linewidth]{figures/dml/dml02a.pdf}
-    \caption[DML Receive Path in Single Node Operation]{DML Receive Path in Single Node Operation. Adapted from: \cite{dml01}.}
+    \caption[DML Receive Path in Single Node Operation]{\ac{dml} Receive Path in Single Node Operation. Adapted from: \cite{dml01}.}
     \label{fig:DmlRecSingleNode}
 \end{figure}
 
 \subsubsection{Multi Node Operation}
-This section covers the procedure for receiving data when a subscribing Processing Unit is present on a remote node of the Distributed Test Support System. The process depicted in Figure \ref{fig:DmlRecMultiNode} for receiving a message (Arrow 1) and copying it to the FIFO buffer (Arrow 2) does not differ from the single node operation.
+This section covers the procedure for receiving data when a subscribing Processing Unit is present on a remote node of the Distributed Test Support System. The process depicted in Figure \ref{fig:DmlRecMultiNode} for receiving a message (Arrow 1) and copying it to the \ac{fifo} buffer (Arrow 2) does not differ from the single node operation.
 
-If a subscriber for a message exists on a remote node, the message must be forwarded by the Data Manager. To achieve this, the nodes exchange subscriber lists. This forwarding process is illustrated in Figure \ref{fig:DmlRecMultiNode}, Arrow 3. The Data Manager of the local node copies the message by DMA over the Dolphin Interconnect into a FIFO buffer of the remote node. Each node has, in addition to the FIFO buffers for each interface of the node, a FIFO buffer for each remote node in the Distributed Test Support System.
+If a subscriber for a message exists on a remote node, the message must be forwarded by the Data Manager. To achieve this, the nodes exchange subscriber lists. This forwarding process is illustrated in Figure \ref{fig:DmlRecMultiNode}, Arrow 3. The Data Manager of the local node copies the message by \ac{dma} over the Dolphin Interconnect into a \ac{fifo} buffer of the remote node. Each node has, in addition to the \ac{fifo} buffers for each interface of the node, a \ac{fifo} buffer for each remote node in the Distributed Test Support System.
 
 The Data Manager of the remote node then copies the message to the monitor memory (see Figure \ref{fig:DmlRecMultiNode}, Arrow 4), similar to the local distribution. \\
 
 \begin{figure}[h!]
     \centering
     \includegraphics[width=\linewidth]{figures/dml/dml02b.pdf}
-    \caption[DML Receive Path in Multi Node Operation]{DML Receive Path in Multi Node Operation. Adapted from: \cite{dml01}.}
+    \caption[DML Receive Path in Multi Node Operation]{\ac{dml} Receive Path in Multi Node Operation. Adapted from: \cite{dml01}.}
     \label{fig:DmlRecMultiNode}
 \end{figure}
 
@@ -62,27 +62,27 @@ The Data Manager of the remote node then copies the message to the monitor memor
 \subsubsection{Single Node Operation}
 This section outlines the procedure for sending data when the interface is located in the same node as the Processing Unit that intends to send it.
 
-To send a message on a bus system using a hardware interface, a Processing Unit writes the message into a FIFO buffer (see figure \ref{fig:DmlTransSingleNode}, Arrow 1). It is important to note that these FIFO buffers are distinct from those on the receiving side. Each node in the Distributed Test Support System has a FIFO for every processing unit and for every other remote node.
+To send a message on a bus system using a hardware interface, a Processing Unit writes the message into a \ac{fifo} buffer (see figure \ref{fig:DmlTransSingleNode}, Arrow 1). It is important to note that these \ac{fifo} buffers are distinct from those on the receiving side. Each node in the Distributed Test Support System has a \ac{fifo} for every processing unit and for every other remote node.
 
-The Data Manager also polls these FIFO buffers. If the message is intended for an interface on the same node, the Data Manager copies it into the Transmit FIFO (Tx FIFO) of that interface (see Figure \ref{fig:DmlTransSingleNode}, Arrow 2). The interface then copies the message that will be sent out next on the bus system into the Tx Buffer (see Figure \ref{fig:DmlTransSingleNode}, Arrow 3). A composer mechanism is used to reuse certain parts of a previous message, which allows a Processing Unit to send only the parts that have changed from the prior message. The composer then builds the complete message based on this information. It is then transmitted through the front end of interface in accordance with the timing of the corresponding bus system. \\
+The Data Manager also polls these \ac{fifo} buffers. If the message is intended for an interface on the same node, the Data Manager copies it into the Transmit \ac{fifo} (Tx \ac{fifo}) of that interface (see Figure \ref{fig:DmlTransSingleNode}, Arrow 2). The interface then copies the message that will be sent out next on the bus system into the Tx Buffer (see Figure \ref{fig:DmlTransSingleNode}, Arrow 3). A composer mechanism is used to reuse certain parts of a previous message, which allows a Processing Unit to send only the parts that have changed from the prior message. The composer then builds the complete message based on this information. It is then transmitted through the front end of interface in accordance with the timing of the corresponding bus system. \\
 
 \begin{figure}[!htbp]
     \centering
     \includegraphics[width=0.48\linewidth]{figures/dml/dml03a.pdf}
-    \caption[DML Transmit Path in Single Node Operation]{DML Transmit Path in Single Node Operation. Adapted from: \cite{dml01}.}
+    \caption[DML Transmit Path in Single Node Operation]{\ac{dml} Transmit Path in Single Node Operation. Adapted from: \cite{dml01}.}
     \label{fig:DmlTransSingleNode}
 \end{figure}
 
 
 \subsubsection{Multi Node Operation}
-This section describes the procedure when a Processing Unit wants to send data over an interface located on a remote node. Similar to the Single Mode Operation, the Processing Unit writes the message to a FIFO buffer (see Figure \ref{fig:DmlTransMultiNode}, Arrow 1), which is polled by the data manager.
+This section describes the procedure when a Processing Unit wants to send data over an interface located on a remote node. Similar to the Single Mode Operation, the Processing Unit writes the message to a \ac{fifo} buffer (see Figure \ref{fig:DmlTransMultiNode}, Arrow 1), which is polled by the data manager.
 
-If the message is intended for an interface of a remote node, the Data Manager of the local node copies it using DMA over the Dolphin Interconnect to its FIFO buffer on the remote node (see Figure \ref{fig:DmlTransMultiNode}, Arrow 2). The Data Manager of the remote node then places it in the Tx FIFO of the corresponding interface (see Figure \ref{fig:DmlTransMultiNode}, Arrow 3), from where it is, if required, processed the composer and copied to the Tx Buffer (see Figure \ref{fig:DmlTransMultiNode}, Arrow 4). Subsequently, the message is transmitted through the front end of the interface. \\
+If the message is intended for an interface of a remote node, the Data Manager of the local node copies it using \ac{dma} over the Dolphin Interconnect to its \ac{fifo} buffer on the remote node (see Figure \ref{fig:DmlTransMultiNode}, Arrow 2). The Data Manager of the remote node then places it in the Tx \ac{fifo} of the corresponding interface (see Figure \ref{fig:DmlTransMultiNode}, Arrow 3), from where it is, if required, processed the composer and copied to the Tx Buffer (see Figure \ref{fig:DmlTransMultiNode}, Arrow 4). Subsequently, the message is transmitted through the front end of the interface. \\
 
 \begin{figure}[!h]
     \centering
     \includegraphics[width=\linewidth]{figures/dml/dml03b.pdf}
-    \caption[DML Transmit Path in Multi Node Operation]{DML Tranismit Path in Multi Node Operation. Adapted from: \cite{dml01}.}
+    \caption[DML Transmit Path in Multi Node Operation]{\ac{dml} Tranismit Path in Multi Node Operation. Adapted from: \cite{dml01}.}
     \label{fig:DmlTransMultiNode}
 \end{figure}
 
@@ -117,7 +117,7 @@ Protocols define the format of control information required by layer k to provid
 
 \subsection{Introduction of the Reference Model}
 
-The following section presents a explanation of the TCP/IP reference model. Compared to the OSI reference model, it is a more pragmatic framework that focuses on Internet functionality, compared to the comprehensive seven-layer scheme for network architecture of OSI. Throughout this section, it will be refered to the hybrid reference model proposed by Andrew S. Tanenbaum in \cite{Tanenbaum2010}. Figure \ref{fig:RefModel} shows this hybrid reference model. The physical layer is at the bottom, and the application layer is at the top. The tasks of each layer are briefly described here. For additional information, please refer to \cite{Tanenbaum2010}.
+The following section presents a explanation of the TCP/IP reference model. Compared to the \ac{osi} reference model, it is a more pragmatic framework that focuses on Internet functionality, compared to the comprehensive seven-layer scheme for network architecture of \ac{osi}. Throughout this section, it will be refered to the hybrid reference model proposed by Andrew S. Tanenbaum in \cite{Tanenbaum2010}. Figure \ref{fig:RefModel} shows this hybrid reference model. The physical layer is at the bottom, and the application layer is at the top. The tasks of each layer are briefly described here. For additional information, please refer to \cite{Tanenbaum2010}.
 
 \begin{figure}[h]
     \centering
@@ -148,11 +148,11 @@ The following section presents a explanation of the TCP/IP reference model. Comp
 
 Figure \ref{fig:RefModelProtos} shows a selection of important protocols of the TCP/IP reference model including their assignment to the respective layer. The illustration also shows the dependency of the protocols on each other.
 
-In this section, the characteristics of the protocols TCP, UDP, IP and Ethernet (IEEE 802.3), which are relevant for this work, are explained in detail according to \cite{Tanenbaum2010}. Further information about the protocols of the TCP/IP reference model can be found in \cite{Tanenbaum2010}.
+In this section, the characteristics of the protocols \acs{tcp}, \acs{udp}, \acs{ip} and Ethernet (\acs{ieee} 802.3), which are relevant for this work, are explained in detail according to \cite{Tanenbaum2010}. Further information about the protocols of the TCP/IP reference model can be found in \cite{Tanenbaum2010}.
 
 
 \subsubsection{Ethernet (IEEE 802.3)}
-Ethernet, as defined by IEEE standard 802.3, specifies both hardware and software for wired data networks.  This means that Ethernet includes both the physical layer and the link layer of the presented hybrid TCP/IP reference model.
+Ethernet, as defined by \ac{ieee} standard 802.3, specifies both hardware and software for wired data networks.  This means that Ethernet includes both the physical layer and the link layer of the presented hybrid TCP/IP reference model.
 
 
 \paragraph{Ethernet Physical Layer}
@@ -160,14 +160,14 @@ The Ethernet physical layer consists of a number of standards that define differ
 
 Ethernet defines physical layer standards with transmission rates ranging from 10 Mbit/s to 1.6 Tbit/s, which is currently under development as the 802.3dj standard \cite{IEEEOpeningPlenary}. Both fiber and copper are used as transmission media. In the following, the 802.3an standard will be briefly discussed, since it is the one that will be used most in this thesis.
 
-The 802.3an standard was published in 2006 and defines data transmission with a transmission rate of 10 Gbit/s over twisted-pair cables \cite{10GigabitEthernet}, also referred to as 10 GbE. Twisted-pair cables are copper cables in which pairs of copper wires are twisted together to reduce electromagnetic interference. Twisted-pair cables are divided into categories based on various characteristics, such as shielding or twist strength \cite{isoiec11801}. For 802.3an, a maximum cable length of 100 meters is specified in conjunction with Cat7 cables. 802.3an specifies the RJ45 connector as the plug connector.
+The 802.3an standard was published in 2006 and defines data transmission with a transmission rate of 10 Gbit/s over twisted-pair cables \cite{10GigabitEthernet}, also referred to as 10 GbE. Twisted-pair cables are copper cables in which pairs of copper wires are twisted together to reduce electromagnetic interference. Twisted-pair cables are divided into categories based on various characteristics, such as shielding or twist strength \cite{isoiec11801}. For 802.3an, a maximum cable length of 100 meters is specified in conjunction with Cat7 cables. Also, the RJ45 connector is specified as the plug connector.
 
-According to 802.3an, the PAM16 line coding is used for Ethernet at 10 Gbps. It uses the principle of pulse amplitude modulation, which is described in detail in \cite{PulseAmplitudeModulation}. PAM16 allows the transmission of data by varying the amplitude of a signal in 16 different stages. Each stage represents four bits of information.
+According to 802.3an, the PAM16 line coding is used for Ethernet at 10 Gbit/s. It uses the principle of pulse amplitude modulation, which is described in detail in \cite{PulseAmplitudeModulation}. PAM16 allows the transmission of data by varying the amplitude of a signal in 16 different stages. Each stage represents four bits of information.
 
-In addition to 802.3an, the Ethernet physical layer according to 802.3ae was also used in this work. This also defines the physical layer with a transmission rate of 10 Gbit/s. However, fiber optic cables are used in conjunction with transceiver modules called SPF+ SR \cite{10GigabitEthernet}.
+In addition to 802.3an, the Ethernet physical layer according to 802.3ae was also used in this work. This also defines the physical layer with a transmission rate of 10 Gbit/s. However, fiber optic cables are used in conjunction with transceiver modules called \ac{sfp} \cite{10GigabitEthernet}.
 
 \paragraph{Ethernet Link Layer} \label{chap:EthLinkLayer}
-At the link layer, Ethernet defines frame formatting, addressing, error detection, and access control. This is also called the Medium Access Control (MAC) sublayer.
+At the link layer, Ethernet defines frame formatting, addressing, error detection, and access control. This is also called the \ac{mac} sublayer.
 
 \begin{figure}[h]
     \centering
@@ -176,30 +176,30 @@ At the link layer, Ethernet defines frame formatting, addressing, error detectio
     \label{fig:EthernetFrame}
 \end{figure}
 
-Figure \ref{fig:EthernetFrame} shows the IEEE 802.3 frame format. The Ethernet header consists of the fields '\textit{Destination address}', '\textit{Source address}' and '\textit{Length}' and therefore has a size of 14 bytes.
+Figure \ref{fig:EthernetFrame} shows the \ac{ieee} 802.3 frame format. The Ethernet header consists of the fields '\textit{Destination address}', '\textit{Source address}' and '\textit{Length}' and therefore has a size of 14 bytes.
 
 Each frame begins with a \textit{preamble}. This has a length of 8 bytes and contains the bit sequence 10101010. An exception is the last byte, which contains the bit sequence 10101011 and is referred to as the \textit{Start of Frame} (SoF). The preamble is used for synchronization between the sender and receiver. The last byte of the preamble marks the start of a frame \cite{Tanenbaum2010}.
 
-This is followed by the \textit{destination} and \textit{source address}. This is the MAC address, which is uniquely assigned globally to a network interface \cite{Weigel2021}. This consists of a manufacturer code with a length of 3 bytes, followed by the serial number of the network interface, which also has a length of 3 bytes. The MAC address enables the Ethernet protocol to uniquely identify a station in the local network.
+This is followed by the \textit{destination} and \textit{source address}. This is the \ac{mac} address, which is uniquely assigned globally to a network interface \cite{Weigel2021}. This consists of a manufacturer code with a length of 3 bytes, followed by the serial number of the network interface, which also has a length of 3 bytes. The \ac{mac} address enables the Ethernet protocol to uniquely identify a station in the local network.
 
-The \textit{Length} field specifies the length of the data field. In IEEE 802.3 Ethernet, this has a maximum length, called the Maximum Transfer Unit (MTU), of 1500 bytes. However, there are Ethernet implementations that use a larger MTU than specified in the original standard. These are known as jumbo frames \cite{EthernetJumboFrames2009}. Jumbo frames can increase network throughput and reduce CPU usage, as demonstrated in studies \cite{swsetup03}. It is important to ensure that all network participants support jumbo frames to avoid packet loss \cite{swsetup04}.
+The \textit{Length} field specifies the length of the data field. In \ac{ieee} 802.3 Ethernet, this has a maximum length, called the \ac{mtu}, of 1500 bytes. However, there are Ethernet implementations that use a larger \ac{mtu} than specified in the original standard. These are known as jumbo frames \cite{EthernetJumboFrames2009}. Jumbo frames can increase network throughput and reduce the utilization of the \ac{CPU}, as demonstrated in studies \cite{swsetup03}. It is important to ensure that all network participants support jumbo frames to avoid packet loss \cite{swsetup04}.
 
 In addition to a maximum length, the Ethernet standard also specifies a minimum length. An entire Ethernet frame must therefore have a minimum length of 64 bytes from the destination address to the checksum. To ensure that this can be achieved even with a small data field, padding information is added. The specification of the minimum length is related to the access control used.
 
-The Ethernet frame ends with a 4-byte \textit{checksum} that is used for the Cyclic Redundancy Check (CRC) based on polynomial divisions, as explained in \cite{Tanenbaum2010}.  This checksum serves to detect errors during transmission.
+The Ethernet frame ends with a 4-byte \textit{checksum} that is used for the \ac{crc} based on polynomial divisions, as explained in \cite{Tanenbaum2010}.  This checksum serves to detect errors during transmission.
 
-Ethernet originally used a shared transmission medium, allowing multiple communication participants to use it simultaneously. To control access, the MAC sublayer employs the CSMA/CD algorithm, ensuring that only one device transmits data at a time. Each device listens to the medium (carrier sense) before sending data to determine whether it is free. It also performs collision detection to determine whether two devices have started sending at the same time. In such a case, the devices stop the transmission and retry it after a random waiting time to avoid the collision \cite{Tanenbaum2010}.
+Ethernet originally used a shared transmission medium, allowing multiple communication participants to use it simultaneously. To control access, the \ac{mac} sublayer employs the \ac{csmacd} algorithm, ensuring that only one device transmits data at a time. Each device listens to the medium (carrier sense) before sending data to determine whether it is free. It also performs collision detection to determine whether two devices have started sending at the same time. In such a case, the devices stop the transmission and retry it after a random waiting time to avoid the collision \cite{Tanenbaum2010}.
 
-The 802.3an specification for 10 Gigabit Ethernet is exclusively for point-to-point full-duplex connections, which eliminates the need for access control such as CSMA/CD. As a result, it is no longer included in the specification \cite{10GbEDefinition}.
+The 802.3an specification for 10 Gigabit Ethernet is exclusively for point-to-point full-duplex connections, which eliminates the need for access control such as \ac{csmacd}. As a result, it is no longer included in the specification \cite{10GbEDefinition}.
 
 In order to connect multiple network devices with point-to-point connections, Ethernet switches are used. They have multiple ports and forward packets based on the MAC address. Ethernet switches operate on layer 2 of the reference model.
 
-To summarise, with Ethernet there is no guarantee that data will be transmitted reliably and without loss. Although Ethernet uses CRC for error detection, faulty frames are generally discarded. Additionally, Ethernet does not provide flow control or overload detection, which must be performed by a higher layer.
+To summarise, with Ethernet there is no guarantee that data will be transmitted reliably and without loss. Although Ethernet uses \ac{crc} for error detection, faulty frames are generally discarded. Additionally, Ethernet does not provide flow control or overload detection, which must be performed by a higher layer.
 
 
 \subsubsection{IP}
 
-The Internet Protocol (IP) is a central protocol in the TCP/IP reference model. Its tasks include connecting different networks, addressing network participants, and fragmenting packets \cite{Weigel2021}. IP is a connectionless protocol that operates on the 'best effort' principle, meaning it does not guarantee delivery.
+The \ac{ip} is a central protocol in the TCP/IP reference model. Its tasks include connecting different networks, addressing network participants, and fragmenting packets \cite{Weigel2021}. \ac{ip} is a connectionless protocol that operates on the 'best effort' principle, meaning it does not guarantee delivery.
 
 There are two versions of the Internet Protocol: IPv4 and IPv6. As this work uses the IPv4 protocol, it is presented in more detail below.
 
@@ -214,13 +214,13 @@ The IPv4 datagram is divided into a header and a payload. The header typically s
     \label{fig:IPHeader}
 \end{figure}
 
-The first field in the header is the 4-bit \textit{Version} field. This indicates the IP version used. For IPv4, the value is always 4.
+The first field in the header is the 4-bit \textit{Version} field. This indicates the \ac{ip} version used. For IPv4, the value is always 4.
 
 The \textit{IHL} (Internet Header Length) field specifies the number of 32-bit words in the header. This is necessary because the header can contain options and therefore has a variable length. The minimum value of the field is 5 if there are no options.
 
-The \textit{Differenciated Services} field specifies the service class of a packet, allowing for prioritisation of certain data traffic using Quality of Service (QoS). For a more detailed description of Quality of Service, please refer to section \ref{background:tuning:qualityofservice}.
+The \textit{Differenciated Services} field specifies the service class of a packet, allowing for prioritisation of certain data traffic using \ac{qos}. For a more detailed description of \ac{qos}, please refer to section \ref{background:tuning:qualityofservice}.
 
-The \textit{Total Length} field indicates the total length of the datagram, including the header. Due to the field size of 16 bits, the maximum length is 65535 bytes. However, a packet's length is also limited by the Layer 2 MTU \cite{Weigel2021}, resulting in datagrams being split into multiple packets, known as fragmentation. 
+The \textit{Total Length} field indicates the total length of the datagram, including the header. Due to the field size of 16 bits, the maximum length is 65535 bytes. However, a packet's length is also limited by the Layer 2 \ac{mtu} \cite{Weigel2021}, resulting in datagrams being split into multiple packets, known as fragmentation. 
 
 The \textit{Identification} field is assigned a number by the sender, which is shared by all fragments of a datagram.
 
@@ -262,48 +262,48 @@ Routing, which is another important task of the network layer, is based on IP ad
 
 \paragraph{Address Resolution Protocol}
 
-The Address Resolution Protocol, abbreviated to ARP, is an auxiliary protocol of the network layer. Its task is to map the IP addresses to a MAC address and vice versa, as the sending and receiving of data in the underlying link layer is based on these MAC addresses \cite{Weigel2021}.
+The \ac{arp} is an auxiliary protocol of the network layer. Its task is to map the IP addresses to a MAC address and vice versa, as the sending and receiving of data in the underlying link layer is based on these MAC addresses \cite{Weigel2021}.
 
 
 \paragraph{Fragmentation and Defragmentation} \label{chap:frag}
 
-As explained in \ref{chap:EthLinkLayer}, the link layer defines a maximum data size known as MTU. Since IPv4 datagrams have a maximum size of 65535 bytes, they must be divided into smaller packets, or fragments, each with its own IP header.
+As explained in \ref{chap:EthLinkLayer}, the link layer defines a maximum data size known as \ac{mtu}. Since IPv4 datagrams have a maximum size of 65535 bytes, they must be divided into smaller packets, or fragments, each with its own IP header.
 
 The IP header (refer to Figure \ref{fig:IPHeader}) contains information necessary for the target system to assemble fragmented packets, a process known as defragmentation. This includes the ID that assigns all fragmented packets to a datagram, as well as the fragment offset that specifies their position within the datagram. The 'More Fragment' flag indicates whether additional fragments will follow.
 
-Fragmentation has the advantage of allowing IPv4 datagrams larger than the MTU to be sent, but the disadvantage is that the loss of a single fragment results in the loss of the entire datagram. Additionally, fragmentation can cause packet reordering \cite{IPFragDetail}.
+Fragmentation has the advantage of allowing IPv4 datagrams larger than the \ac{mtu} to be sent, but the disadvantage is that the loss of a single fragment results in the loss of the entire datagram. Additionally, fragmentation can cause packet reordering \cite{IPFragDetail}.
 
 \subsubsection{TCP and UDP}
-TPC and UDP are transport layer protocols. As a service, they provide the transmission of a data stream of any length between two application processes. The services of the network layer are used for this purpose.
+TPC and \ac{ieee} are transport layer protocols. As a service, they provide the transmission of a data stream of any length between two application processes. The services of the network layer are used for this purpose.
 
 \paragraph{TCP}
 
-TCP provides \textbf{reliable} transmission of a byte stream in a \textbf{connection-oriented} manner. A virtual connection is established between the two instances before transmission, which is terminated after transmission.
+The \acf{tcp} provides \textbf{reliable} transmission of a byte stream in a \textbf{connection-oriented} manner. A virtual connection is established between the two instances before transmission, which is terminated after transmission.
 
-TCP also implements flow control to ensure reliable data transfer between sender and receiver without losses and to prevent overloading at the receiver.  TCP provides congestion control to prevent network overload and ensures reliable transmission using Positive Acknowledgement with Re-Transmission (PAR) algorithm \cite{Holtkamp2024Transport}.  
+The protocol also implements flow control to ensure reliable data transfer between sender and receiver without losses and to prevent overloading at the receiver. \ac{tcp} provides congestion control to prevent network overload and ensures reliable transmission using Positive Acknowledgement with Re-Transmission (PAR) algorithm \cite{Holtkamp2024Transport}.  
 
-TCP is known for its secure data transmission. However, it requires a significant amount of control information to implement its functions. The Transmission Control Protocol (TCP) header is 20 bytes in size. In addition to an application identifier (port number), it contains flow control and congestion control information. This overhead can negatively impact transmission speed. Additionally, the data loss from the underlying layers combined with the flow control used by TCP leads to delays and reduced throughput, which can have a significant impact on the performance of the application.
+\ac{tcp} is known for its secure data transmission. However, it requires a significant amount of control information to implement its functions. The \ac{tcp} header is 20 bytes in size. In addition to an application identifier (port number), it contains flow control and congestion control information. This overhead can negatively impact transmission speed. Additionally, the data loss from the underlying layers combined with the flow control used by \ac{tcp} leads to delays and reduced throughput, which can have a significant impact on the performance of the application.
 
 \paragraph{UDP}
 
-In contrast to TCP, UDP is an \textbf{unreliable} and \textbf{connectionless} protocol. The protocol sends packets, called datagrams or segments, individually. UDP lacks mechanisms for detecting the loss of individual datagrams, and the correct sequence of these is not guaranteed.
+In contrast to \ac{tcp}, the \acf{udp} is an \textbf{unreliable} and \textbf{connectionless} protocol. The protocol sends packets, called datagrams or segments, individually. \ac{udp} lacks mechanisms for detecting the loss of individual datagrams, and the correct sequence of these is not guaranteed.
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\linewidth]{figures/tcpip_refmodel/image6.png}
-    \caption[Structure of the UDP Header]{Structure of the UDP Header. Source: \cite{Tanenbaum2010}.}
+    \caption[Structure of the UDP Header]{Structure of the \ac{udp} Header. Source: \cite{Tanenbaum2010}.}
     \label{fig:UDPHeader}
 \end{figure}
 
-Figure \ref{fig:UDPHeader} displays the UDP header, which has a size of 8 bytes. It is considerably smaller than the TPC header, which has a size of 20 bytes.
+Figure \ref{fig:UDPHeader} displays the \ac{udp} header, which has a size of 8 bytes. It is considerably smaller than the TPC header, which has a size of 20 bytes.
 
-The header includes the fields \textit{Source port} and \textit{Destination port} to identify the endpoints in the respective instance. When a packet arrives, the payload is passed to the application using the appropriate port number via the UDP protocol.
+The header includes the fields \textit{Source port} and \textit{Destination port} to identify the endpoints in the respective instance. When a packet arrives, the payload is passed to the application using the appropriate port number via the \ac{udp} protocol.
 
-The \textit{UDP length} field indicates the length of the segment, including the header. The maximum length of data that can be transmitted via UDP is limited to 65,515 bytes due to the underlying Internet Protocol.
+The \textit{\ac{udp} length} field indicates the length of the segment, including the header. The maximum length of data that can be transmitted via \ac{udp} is limited to 65,515 bytes due to the underlying Internet Protocol.
 
-The last field of the header is a 16-bit \textit{UDP checksum}. This checksum is formed via the so-called IP pseudoheader, which contains the source and destination IP address, the protocol number from the IP header, and the \textit{UDP length} field of the UDP header.
+The last field of the header is a 16-bit \textit{\ac{udp} checksum}. This checksum is formed via the so-called IP pseudoheader, which contains the source and destination IP address, the protocol number from the IP header, and the \textit{\ac{udp} length} field of the \ac{udp} header.
 
-Compared to TCP, UDP can achieve higher data transmission speeds due to its lower protocol overhead, as the UDP header is only 8 bytes in size. Furthermore, UDP does not require an acknowledgement of the transport or other mechanisms used by TCP to provide a reliable connection. This makes it very efficient and reduces processing overhead.
+Compared to \ac{tcp}, \ac{udp} can achieve higher data transmission speeds due to its lower protocol overhead, as the \ac{udp} header is only 8 bytes in size. Furthermore, \ac{udp} does not require an acknowledgement of the transport or other mechanisms used by \ac{tcp} to provide a reliable connection. This makes it very efficient and reduces processing overhead.
 
 \clearpage
 
@@ -341,7 +341,7 @@ This separation requires corresponding support in the processor. This system mon
 
 \subsection{System Call Interface}
 
-Processes that request a service from the Linux kernel use system calls. These calls are made through a software interrupt (trap), which causes the CPU to switch to kernel mode and call the so-called system call handler. In the handler, the requested service is identified using an ID transmitted by the user process, and the corresponding instructions are invoked \cite{like02}. A process or application executes a system call in kernel space. This is also referred to as the kernel running in the context of the process.
+Processes that request a service from the Linux kernel use system calls. These calls are made through a software interrupt (trap), which causes the \ac{CPU} to switch to kernel mode and call the so-called system call handler. In the handler, the requested service is identified using an ID transmitted by the user process, and the corresponding instructions are invoked \cite{like02}. A process or application executes a system call in kernel space. This is also referred to as the kernel running in the context of the process.
 
 In the monolithic kernel, individual instructions call other instructions of the kernel.  This sequence of instructions, executed during a system call, is referred to as the \textit{kernel control path} \cite{like07}.
 
@@ -350,8 +350,8 @@ The Linux kernel is a \textit{reentrant kernel}. Several processes can be execut
 It should be noted here that system calls are not the only way to execute instructions in the kernel. According to \cite{like02}, there exist other ways besides system calls:
 
 \begin{itemize}
-\item A exception is reported by the CPU, which are handled by the kernel for the originating process. An example of this is the execution of an invalid instruction.
-\item A peripheral device sends an interrupt signal to the CPU, which is processed by a function called the interrupt handler. As peripheral devices work asynchronously to the CPU, interrupts occur at unpredictable times.
+\item A exception is reported by the \ac{CPU}, which are handled by the kernel for the originating process. An example of this is the execution of an invalid instruction.
+\item A peripheral device sends an interrupt signal to the \ac{CPU}, which is processed by a function called the interrupt handler. As peripheral devices work asynchronously to the \ac{CPU}, interrupts occur at unpredictable times.
 \item A kernel thread is executed. These run in kernel mode and are mainly used to perform certain tasks periodically.
 \end{itemize}
 
@@ -370,9 +370,9 @@ The Linux kernel distinguishes between three different types of hardware devices
 
 The abstraction layer between the physical hardware and the Linux kernel are device drivers. Their primary function is to initialize the device and register its capabilities with the kernel. Additionally, drivers enable the kernel to access, control, and communicate with the device. Each driver is specific to a device and implements certain predefined interface functions to the Linux kernel, depending on the type of the device. The device drivers are available as modules that can be loaded dynamically at runtime \cite{like09}.
 
-One way for the physical hardware to interact with the kernel via the device drivers is through interrupts, which is referred to as \textit{Interrupt-Driven I/O}. The hardware uses \textit{interrupt requests} to inform about certain events, and the driver implements the associated \textit{interrupt handler} to process the request \cite{like09}.
+One way for the physical hardware to interact with the kernel via the device drivers is through interrupts, which is referred to as \textit{Interrupt-Driven \ac{io}}. The hardware uses \textit{interrupt requests} to inform about certain events, and the driver implements the associated \textit{interrupt handler} to process the request \cite{like09}.
 
-\textit{Direct Memory Access} (DMA) is another way of interaction between the hardware and a system, which is mainly used by block devices or network devices [9]. DMA is a mechanism that allows hardware devices to transfer data directly to or from system memory, bypassing the CPU. This method enhances data throughput and system performance, as it reduces CPU overhead during high-volume data transfers \cite{like05}.
+\ac{dma} is another way of interaction between the hardware and a system, which is mainly used by block devices or network devices [9]. \ac{dma} is a mechanism that allows hardware devices to transfer data directly to or from system memory, bypassing the \ac{CPU}. This method enhances data throughput and system performance, as it reduces \ac{CPU} overhead during high-volume data transfers \cite{like05}.
 
 Additional information regarding the interface between the Linux kernel and hardware, as well as device drivers, can be found in \cite{like09}.
 
@@ -391,7 +391,7 @@ The process management subsystem is responsible for the administration of proces
 \end{itemize}
 
 \subsubsection{Memory Management Subsystem}
-The primary function of the memory management subsystem is \textit{Virtual Memory Management}. This enables more efficient use of RAM. Each process is assigned a virtual address space, and parts of it that are not currently required can be swapped to disk. This is based on the locality principle of programs. Additionally, \textit{Virtual Memory Management} enables isolation between processes.
+The primary function of the memory management subsystem is \textit{Virtual Memory Management}. This enables more efficient use of the memory. Each process is assigned a virtual address space, and parts of it that are not currently required can be swapped to disk. This is based on the locality principle of programs. Additionally, \textit{Virtual Memory Management} enables isolation between processes.
 
 The memory management subsystem in the Linux kernel provides memory for other kernel modules, for example through malloc/free operations.
 
@@ -402,12 +402,12 @@ The storage subsystem is responsible for creating and managing the file system o
 \subsubsection{Networking Subsystem}
 The networking subsystem handles the sending and receiving of packets in networks and their distribution to applications in user space. Additionally, it implements network protocols such as those used by the TCP/IP protocol stack presented in \ref{chap:ProtosRefModel}.
 
-A detailed description of specific parts of the networking subsystem can be found in chapter \ref{chap:LinuxUDPNWStack}.
+A detailed description of specific parts of the networking subsystem can be found in Chapter \ref{chap:LinuxUDPNWStack}.
 
 \clearpage
 
 \section{UDP communication with a Linux Operating System} \label{chap:LinuxUDPNWStack}
-The purpose of this chapter is to explain UDP communication using a Linux operating system. The fundamental processes are described, with an emphasis on the interaction among the different components.
+The purpose of this chapter is to explain \ac{udp} communication using a Linux operating system. The fundamental processes are described, with an emphasis on the interaction among the different components.
 
 \begin{figure}[h]
     \centering
@@ -425,7 +425,7 @@ First, the components of the network stack will be presented, with a focus on th
 
 \subsubsection{Sockets and the Socket API}
 
-Sockets are objects in the operating system that allow data to be exchanged between two applications, usually on a client-server basis. Data can also be exchanged across computer boundaries. Sockets are part of the networking subsystem in the Linux kernel. The socket API represents the associated programming interface \cite{sock01}\cite{sock11}.
+Sockets are objects in the operating system that allow data to be exchanged between two applications, usually on a client-server basis. Data can also be exchanged across computer boundaries. Sockets are part of the networking subsystem in the Linux kernel. The socket \ac{api} represents the associated programming interface \cite{sock01}\cite{sock11}.
 
 Sockets serve as the interface between the application layer and the transport layer in the Linux kernel. Sockets can be defined as the endpoints of a communication channel between two applications. They do not form a separate layer, but allow the application to access the services of the underlying layer, usually the transport layer. The operating system manages all sockets and their associated information \cite{sock02}.
 
@@ -440,8 +440,8 @@ In line with the Linux philosophy of '\textit{everything is a file}', sockets in
 There are different types of sockets that vary in their properties. The two most common types are stream sockets and datagram sockets \cite{like03}.
 
 \begin{itemize}
-\item \textbf{Stream sockets} operate in a connection-oriented manner between a client and server application. A connection must be established between the partners before data can be transferred. The TCP protocol is used for this type for Internet sockets.
-\item \textbf{Datagram sockets} enable the exchange of individual messages. The sockets operate without a connection. The User Datagram Protocol (UDP) is utilized as the transport layer protocol, resulting in the provision of unreliable transmission.
+\item \textbf{Stream sockets} operate in a connection-oriented manner between a client and server application. A connection must be established between the partners before data can be transferred. \ac{tcp} is used for this type for Internet sockets.
+\item \textbf{Datagram sockets} enable the exchange of individual messages. The sockets operate without a connection. \ac{udp} is utilized as the transport layer protocol, resulting in the provision of unreliable transmission.
 \end{itemize}
 
 Other socket types, such as Raw sockets or Packet sockets, also exist.
@@ -488,7 +488,7 @@ Raw sockets and Packet sockets are additional types of Internet sockets. These a
     \label{fig:SocketAccessPossib}
 \end{figure}
 
-Figure \ref{fig:SocketAccessPossib} displays the access possibilities with different socket types. Raw sockets provide access to the transport layer (4) and network layer (3) of the network stack \cite{sock08}, including TCP or UDP as well as IP in the case of the TCP/IP reference model. Packet sockets in addition can also be utilized to access the link layer (2), enabling access to almost the entire Ethernet frame, except for the preamble and trailer \cite{sock09}.
+Figure \ref{fig:SocketAccessPossib} displays the access possibilities with different socket types. Raw sockets provide access to the transport layer (4) and network layer (3) of the network stack \cite{sock08}, including TCP or \ac{udp} as well as IP in the case of the TCP/IP reference model. Packet sockets in addition can also be utilized to access the link layer (2), enabling access to almost the entire Ethernet frame, except for the preamble and trailer \cite{sock09}.
 
 The concept underlying Raw and Packet sockets involves the implementation of separate protocol layers in the application. Depending on the chosen socket type, the application can implement layers 2 to 4 \cite{sock08}. Furthermore, Packet sockets can also be used to capture the entire communication of a system, as used by Wireshark, for example.
 
@@ -496,7 +496,7 @@ Raw or Packet sockets eliminate the overhead of the respective protocol layer in
 
 A disadvantage, however, is that in order to maintain compatibility with other TCP/IP implementations, the corresponding protocols must be fully and correctly implemented in the application. Additionally, using Raw or Packet sockets requires that the application be executed with root privileges.
 
-The technical report 'Introduction to RAW sockets' \cite{sock07} provides a comprehensive overview of Raw and Packet sockets and their application. This report was also used for programming in this thesis.
+The technical report `Introduction to RAW sockets' \cite{sock07} provides a comprehensive overview of Raw and Packet sockets and their application. This report was also used for programming in this thesis.
 
 
 
@@ -506,7 +506,7 @@ The networking subsystem of the Linux kernel includes not only sockets but also 
 \paragraph{Protocol Handler}
 The corresponding protocols are implemented in layers 3 and 4, including implementations for protocols from the TCP/IP reference model and other protocols in their respective layers. It is also possible to develop handlers for your own protocols \cite{lins06}.
 
-An important task in the network subsystem is to execute the correct protocol handler for the corresponding layer. For outgoing packets, this is determined by the socket. For instance, an Internet socket that uses the datagram type employs the UDP protocol at layer 4 and the IPv4 protocol at layer 3. The protocol handler to be executed for incoming packets is determined from the header of the underlying layer. Both the Ethernet header and the IP header contain a corresponding field for the service-using protocol \cite{lins06}.
+An important task in the network subsystem is to execute the correct protocol handler for the corresponding layer. For outgoing packets, this is determined by the socket. For instance, an Internet socket that uses the datagram type employs the \ac{udp} protocol at layer 4 and the IPv4 protocol at layer 3. The protocol handler to be executed for incoming packets is determined from the header of the underlying layer. Both the Ethernet header and the IP header contain a corresponding field for the service-using protocol \cite{lins06}.
 
 The protocol handlers of the respective layer implement the standardized behavior for this protocol. These are described in the chapter \ref{chap:ProtosRefModel}. Implementation details will not be discussed further at this point. For more information, please refer to \cite{lins01}.
 
@@ -536,8 +536,8 @@ The network device structure, also known as \texttt{net\_device}, contains infor
 Some important fields of this structure are (according to \cite{lins01}):
 \begin{itemize}
 \item Identifier of the interface
-\item MTU of the network interface
-\item MAC address of the interface
+\item \ac{mtu} of the network interface
+\item \ac{mac} address of the interface
 \item Configurations and flags of the interface
 \item Pointer to the transmit method of the interface
 \end{itemize}
@@ -547,43 +547,43 @@ The network device, also known as the network interface, along with its associat
 
 The main tasks of the device driver are to receive packets addressed to the system and forward them to layer 3 of the network stack, and to send packets generated by the system.
 
-The driver interacts with the network interface, which transmits the data according to the respective transmission standard \cite{lins01}. To exchange data with the interface, the driver creates two ring buffers: the TX\_Ring and the RX\_Ring, which are used for sending and receiving data. These buffers are located in the system memory and contain a fixed number of descriptors pointing to buffers where packets can be stored. They are empty during initialization and accessed by the interface via DMA \cite{lins03, lins14}.
+The driver interacts with the network interface, which transmits the data according to the respective transmission standard \cite{lins01}. To exchange data with the interface, the driver creates two ring buffers: the TX\_Ring and the RX\_Ring, which are used for sending and receiving data. These buffers are located in the system memory and contain a fixed number of descriptors pointing to buffers where packets can be stored. They are empty during initialization and accessed by the interface via \ac{dma} \cite{lins03, lins14}.
 
 The implementation of the driver depends on the hardware and is therefore not standardized. However, the Linux kernel defines how the driver interacts with the networking subsystem.
 
 \subsection{Path of a Network Packet} \label{chap:sedrecpath}
-This section explains how a packet travels through the Linux network stack by examining the interactions of the components described above. Specifically, this section will focus on the reception and transmission of a UDP packet.
+This section explains how a packet travels through the Linux network stack by examining the interactions of the components described above. Specifically, this section will focus on the reception and transmission of a \ac{udp} packet.
 
 The following overview provides a general understanding of the process and will serve as a foundation. For a more detailed explanation of the packet's path, please refer to \cite{lins01} and \cite{lins06}.
 
 \subsubsection{Receiving a Packet} \label{chap:recpath}
-When a frame is received by the network card, it is first checked for errors using the Ethernet frame checksum and then verifies if it is intended for the network interface by using the MAC address. The frame is then written to a free buffer in the RX\_Ring via DMA, which was created by the device driver during initialization. If no buffers are available, the frame is dropped \cite{lins03, lins06, lins14}.
+When a frame is received by the network card, it is first checked for errors using the Ethernet frame checksum and then verifies if it is intended for the network interface by using the \ac{mac} address. The frame is then written to a free buffer in the RX\_Ring via \ac{dma}, which was created by the device driver during initialization. If no buffers are available, the frame is dropped \cite{lins03, lins06, lins14}.
 
 Interrupts are utilized to notify the system about a packet. Different strategies can be employed for this purpose. In the simplest case, a hardware interrupt is triggered for each received frame \cite{lins06}.
 
-To minimize processing in the interrupt context, softirqs are utilized \cite{lins03}. Softirqs are non-urgent interruptible functions in the Linux kernel that are designed to handle tasks that do not need to be done in the interrupt context. The handlers for the softirqs are executed by ksoftirq kernel threads, with one thread for each CPU core on the system \cite{like02}.
+To minimize processing in the interrupt context, softirqs are utilized \cite{lins03}. Softirqs are non-urgent interruptible functions in the Linux kernel that are designed to handle tasks that do not need to be done in the interrupt context. The handlers for the softirqs are executed by ksoftirq kernel threads, with one thread for each \ac{CPU} core on the system \cite{like02}.
 
 The network driver's hardware interrupt handler schedules a softirq to process packets for the device by adding the it to a poll list. When the corresponding softirq kernel thread is scheduled, it executes the function \texttt{net\_rx\_action} \cite{lins03}.
 
 This function, executed in the context a softirq, processes all devices in the poll list. During the processing of the RX\_Ring of a network device, the hardware interrupts for this device are deactivated. Each  packet is wrapped in an \texttt{sk\_buff} structure and handled by an appropriate Layer 3 protocol handler. In the case of IP packets, the \texttt{ip\_rcv()} function is used. The process is repeated until there are no frames left in the RX\_Ring of the Interface or until a limit, called device weight, is reached. Additionally, a new descriptors are allocated and added to the RX\_Ring \cite{lins03, lins13, lins14}.
 
-The \texttt{ip\_rcv()} function processes the packets as defined in the protocol, including defragmentation and routing. It then calls the appropriate protocol handler of the layer above. For UDP, this is \texttt{udp\_rcv()} \cite{lins01}.
+The \texttt{ip\_rcv()} function processes the packets as defined in the protocol, including defragmentation and routing. It then calls the appropriate protocol handler of the layer above. For \ac{udp}, this is \texttt{udp\_rcv()} \cite{lins01}.
 
-During processing by UDP, the system verifies the availability of a socket with the corresponding port number. If available, the packet is copied into the receive buffer of the socket. If no corresponding socket is found, the packet is dropped \cite{lins01}.
+During processing by \ac{udp}, the system verifies the availability of a socket with the corresponding port number. If available, the packet is copied into the receive buffer of the socket. If no corresponding socket is found, the packet is dropped \cite{lins01}.
 
 Processing of the packet in the context of the softirq is now complete. The application can retrieve the packet from the receive buffer of the socket using the \texttt{receive()} call.
 
 
 \subsubsection{Sending a Packet}
-To send a packet, an application needs an appropriate socket, in the case of UDP packets an Internet socket of type datagram. The \texttt{sendto()} function is used to send the data, which contains the actual data as well as the address of the socket to which the data should be sent.
+To send a packet, an application needs an appropriate socket, in the case of \ac{udp} packets an Internet socket of type datagram. The \texttt{sendto()} function is used to send the data, which contains the actual data as well as the address of the socket to which the data should be sent.
 
-In the Linux kernel, calls to \texttt{sendto()} for a UDP socket are handled by the \texttt{udp\_sendmsg()} function in context of the application. This creates a socket buffer for the packet. Additionally, the UDP packet undergoes initial checks such as the compliance with the maximum length, and the UDP header is generated. Subsequently, the packet is forwarded to the IP protocol handler \cite{lins01}.
+In the Linux kernel, calls to \texttt{sendto()} for a \ac{udp} socket are handled by the \texttt{udp\_sendmsg()} function in context of the application. This creates a socket buffer for the packet. Additionally, the \ac{udp} packet undergoes initial checks such as the compliance with the maximum length, and the \ac{udp} header is generated. Subsequently, the packet is forwarded to the IP protocol handler \cite{lins01}.
 
 The Internet Protocol handler generates the IP header and fragments the packet if required. In addition, the protocol handler performs routing to determine which network device the packet should be sent to. This process is also performed in the context of the application \cite{lins01, lins03}.
 
-To implement traffic management and prioritization, a layer called queueing discipline (QDisc) is placed between the protocol handler of layer 3 and the device driver. By default, a QDisc called 'pfifo\_fast' is used, which is essentially a FIFO queue. The queuing of the packet is also handled in the context of the application \cite{lins03, lins12}.
+To implement traffic management and prioritization, a layer called \ac{qdisc} is placed between the protocol handler of layer 3 and the device driver. By default, a \ac{qdisc} called 'pfifo\_fast' is used, which is essentially a \ac{fifo} queue. The queuing of the packet is also handled in the context of the application \cite{lins03, lins12}.
 
-The actual transmission of the packet over the network interface card is usually done in the context of a softirq. The device driver for the interface adds the Ethernet header and places it in the transmission queue of the interface, known as the TX\_Ring. The NIC hardware then fetches the packets from the TX\_Ring using DMA and transmits them over the physical medium. An interrupt is generated by the interface to indicate a successful transmission \cite{lins06, lins14}.
+The actual transmission of the packet over the \ac{nic} is usually done in the context of a softirq. The device driver for the interface adds the Ethernet header and places it in the transmission queue of the interface, known as the TX\_Ring. The NIC hardware then fetches the packets from the TX\_Ring using \ac{dma} and transmits them over the physical medium. An interrupt is generated by the interface to indicate a successful transmission \cite{lins06, lins14}.
 
 
 \clearpage
@@ -591,29 +591,29 @@ The actual transmission of the packet over the network interface card is usually
 \section{Advanced Networking Options}
 
 \subsection{Hardware Offloading} \label{chap:HWOffload}
-Hardware offloading enables specialized hardware to perform compute-intensive tasks instead of the system's CPU, reducing its workload. In terms of networking, this specialized hardware is integrated into the network interface \cite{tuning01}. Linux distinguishes between two types of offload: Checksum Offload and Segmentation Offload \cite{tuning02, tuning03}.
+Hardware offloading enables specialized hardware to perform compute-intensive tasks instead of the system's \ac{CPU}, reducing its workload. In terms of networking, this specialized hardware is integrated into the network interface \cite{tuning01}. Linux distinguishes between two types of offload: Checksum Offload and Segmentation Offload \cite{tuning02, tuning03}.
 
-Checksum Offload refers to the ability to calculate various checksums of the protocols in the TCP/IP reference model, including the checksum in the Ethernet frame and the checksum in the IP or UDP header \cite{tuning02}.
+Checksum Offload refers to the ability to calculate various checksums of the protocols in the TCP/IP reference model, including the checksum in the Ethernet frame and the checksum in the IP or \ac{udp} header \cite{tuning02}.
 
-Segmentation Offload can be used to fragment a UDP packet using the network interface. A similar technique also exists for TCP \cite{tuning03}.
+Segmentation Offload can be used to fragment a \ac{udp} packet using the network interface. A similar technique also exists for \ac{tcp} \cite{tuning03}.
 
 
 \subsection{Receive Side Scaling} \label{chap:ReceiveSideScaling}
-Receive Side Scaling, or RSS for short, is a technology used to improve network performance. The procedure for receiving a packet is described in \ref{chap:recpath}. The interrupt and softirq described there, which carry out the processing of the received packet, are handled by a single CPU \cite{rss01}.
+\ac{rss} is a technology used to improve network performance. The procedure for receiving a packet is described in \ref{chap:recpath}. The interrupt and softirq described there, which carry out the processing of the received packet, are handled by a single \ac{CPU} \cite{rss01}.
 
-The concept behind RSS is to distribute network data processing across multiple CPU cores instead of keeping it confined to a single core. Incoming network packets are distributed to different processor cores based on a hash function \cite{rss02}.
+The concept behind \ac{rss} is to distribute network data processing across multiple \ac{CPU} cores instead of keeping it confined to a single core. Incoming network packets are distributed to different processor cores based on a hash function \cite{rss02}.
 
-For Intel network cards, the hash is calculated based on the packet type. The network interface parses all packet headers and uses specific fields as input values for the hash function. In the case of a non-fragmented UDP packet, the destination and source IP addresses, along with the destination and source port, are used to calculate a 32-bit hash value. This hash value determines the queue and CPU core for processing the packet. All packets with the same input parameters are considered a related communication flow and have the same hash value. As a result, they are processed by the same CPU \cite{rss03}.
+For Intel network cards, the hash is calculated based on the packet type. The network interface parses all packet headers and uses specific fields as input values for the hash function. In the case of a non-fragmented \ac{udp} packet, the destination and source IP addresses, along with the destination and source port, are used to calculate a 32-bit hash value. This hash value determines the queue and \ac{CPU} core for processing the packet. All packets with the same input parameters are considered a related communication flow and have the same hash value. As a result, they are processed by the same \ac{CPU} \cite{rss03}.
 
 \subsection{Interrupt Moderation} \label{chap:InterMod}
-As explained in \ref{chap:sedrecpath}, the system generates an interrupt for both incoming and outgoing packets, which can negatively impact performance, particularly at high transmission rates due to the high number of interrupts generated \cite{intermod01}. Interrupt moderation can be used to mitigate this issue by delaying the generation of interrupts until multiple packets have been sent or received, or a timeout has occurred, thereby reducing CPU utilization \cite{intermod02}.
+As explained in \ref{chap:sedrecpath}, the system generates an interrupt for both incoming and outgoing packets, which can negatively impact performance, particularly at high transmission rates due to the high number of interrupts generated \cite{intermod01}. Interrupt moderation can be used to mitigate this issue by delaying the generation of interrupts until multiple packets have been sent or received, or a timeout has occurred, thereby reducing \ac{CPU} utilization \cite{intermod02}.
 
-The Intel network interface drivers enable the configuration of a fixed timeout value for interrupt moderation or the complete deactivation of interrupt moderation. By default, adaptive interrupt moderation is active, which, according to Intel, provides a balanced approach between low CPU utilization and high performance \cite{intermod03}. The interrupt rate is dynamically set based on the number of packets, packet size, and number of connections. The associated patent \cite{intermod04} provides a detailed description of this process. Typically, the interrupt rate is set to achieve either low latency or high throughput, depending on the type of traffic. For small datagrams, a low interrupt rate (i.e., a high number of interrupts/s) is selected, while for large datagrams, a high interrupt rate (i.e., a lower number of interrupts/s) is selected. Additionally, the interrupt rate also depends on the number of connections, with a high interrupt rate selected for a low number of connections and a low interrupt rate selected for a high number of connections.
+The Intel network interface drivers enable the configuration of a fixed timeout value for interrupt moderation or the complete deactivation of interrupt moderation. By default, adaptive interrupt moderation is active, which, according to Intel, provides a balanced approach between low \ac{CPU} utilization and high performance \cite{intermod03}. The interrupt rate is dynamically set based on the number of packets, packet size, and number of connections. The associated patent \cite{intermod04} provides a detailed description of this process. Typically, the interrupt rate is set to achieve either low latency or high throughput, depending on the type of traffic. For small datagrams, a low interrupt timeout (i.e., a high number of interrupts/s) is selected, while for large datagrams, a high interrupt timeout (i.e., a lower number of interrupts/s) is selected. Additionally, the interrupt rate also depends on the number of connections, with a high interrupt rate selected for a low number of connections and a low interrupt rate selected for a high number of connections.
 
-The interrupt moderation rate of Intel network interfaces can be configured using the 'ethtool' configuration tool within the range of 0 to 235 µs. A value of 0 µs deactivates interrupt moderation.
+The interrupt moderation timeout of Intel network interfaces can be configured using the 'ethtool' configuration tool within the range of 0 to 235 µs. A value of 0 µs deactivates interrupt moderation.
 
 \subsection{Quality of Service} \label{background:tuning:qualityofservice}
-Quality of Service (QoS) comprises different mechanisms to provide distinct service levels for various network traffic. A service level includes statements about bandwidth, jitter, or reliability \cite{qos01}. To achieve a service level, QoS consists of various components and measures, including packet marking methods, traffic shaping methods, and the implementation of various queues in network devices \cite{qos02}. Due to the broad scope of Quality of Service and its related technologies, this section only briefly introduces key technologies used.
+\acf{qos} comprises different mechanisms to provide distinct service levels for various network traffic. A service level includes statements about bandwidth, jitter, or reliability \cite{qos01}. To achieve a service level, \ac{qos} consists of various components and measures, including packet marking methods, traffic shaping methods, and the implementation of various queues in network devices \cite{qos02}. Due to the broad scope of \ac{qos} and its related technologies, this section only briefly introduces key technologies used.
 
 One way to classify traffic is by using the Differentiated Services field in the IP header (refer to \ref{chap:ipheader}). This field enables the specification of a Differentiated Services Field Codepoint, which can be interpreted as a priority. The values range from 0 to 63, with 63 being the highest priority \cite{qos02}.
 
