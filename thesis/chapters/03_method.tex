@@ -239,7 +239,7 @@ Listing \ref{lst:jumbocongif} shows the configuration of jumbo frames with a max
 
 
 \paragraph{Real-time Process} \label{chap:RTProcess}
-The tests, specifically the test program described in the following section \ref{chap:TestSuite}, were executed as a real-time process with the highest priority. This was done in order to obtain realistic test conditions, as the communication layer is also executed as a real-time process in the Distributed Test Support System. \\
+The tests, specifically the test program described in the following Chapter \ref{chap:TestSuite}, were executed as a real-time process with the highest priority. This was done in order to obtain realistic test conditions, as the communication layer is also executed as a real-time process in the Distributed Test Support System. \\
 
 \begin{lstlisting}[language=Bash, caption=Modification of the real-time Attributes of a Process., label=lst:rtprocess]
 chrt -f -p 99 [PID]
@@ -293,7 +293,7 @@ The HPC1 and HPC2 systems are both equipped with the Intel X710-T2L network card
     \label{fig:startopoIHawk}
 \end{figure}
 
-As the first topology presented proved to be unsuitable in the course of the tests carried out (see Section \ref{chap:switchtest}), a new topology as shown in Figure \ref{fig:startopoIHawk} was developed.
+As the first topology presented proved to be unsuitable in the course of the tests carried out (see Chapter \ref{chap:switchtest}), a new topology as shown in Figure \ref{fig:startopoIHawk} was developed.
 
 This new topology features an iHawk computer system at the center of the star, equipped with four Intel X710-T2L network interfaces. The High-Performance PCs in this topology also have Intel X710-T2L network interfaces, while the Traffic PCs systems use Intel X520-T2 network interfaces. Each node is connected to the iHawk in the center via two bidirectional 10 GbE links.
 
@@ -412,7 +412,7 @@ The output data also contains statistics of the network interface or network sta
 	These statistics contain information about the protocol layer of the system. The information about \ac{udp} and IP is stored in the output data. This includes the number of packets sent and received by each protocol layer, as well as counters for dropped packets. The information about receive errors, such as insufficient buffer space, is particularly relevant for testing.
 \end{itemize}
 
-The output data also includes logs from the nmon tool. This is described in more detail in Section \ref{chap:metricsNmon}. The data includes minute-by-minute records of the system's \ac{CPU} usage, memory usage, network interface data, and disk usage information.
+The output data also includes logs from the nmon tool. This is described in more detail in Chapter \ref{chap:metricsNmon}. The data includes minute-by-minute records of the system's \ac{CPU} usage, memory usage, network interface data, and disk usage information.
 
 \paragraph{Classes}
 TestSuite has 5 central classes, the functionality of which is briefly explained below.
@@ -442,7 +442,7 @@ The data measured during a test is then processed and saved as an \ac{xml} file.
 \subparagraph{Stress}
 The `Stress' class is responsible for controlling the generation of additional system load during testing. This includes areas such as \ac{CPU} load, \ac{io} load, or network load.
 
-The two programs `stress-ng' and `iPerf2' are used to generate these loads. These are described in more detail in Section \ref{chap:loadgeneration}. The `Stress' class of TestSuite controls these external programs, including starting, stopping, and configuring them.
+The two programs `stress-ng' and `iPerf2' are used to generate these loads. These are described in more detail in Chapter \ref{chap:loadgeneration}. The `Stress' class of TestSuite controls these external programs, including starting, stopping, and configuring them.
 
 The additional system load can be executed during a test on the client PC or the server PC, or on both systems simultaneously.
 
@@ -688,7 +688,7 @@ Stress-ng is a command line program that can also be called from other programs,
 In order to generate the additional system load in the \ac{CPU}, memory, \ac{io} and timer areas during a test, stress-ng was used as it is a proven tool for generating stress with easy control. The stressors used are briefly introduced and described below. A more detailed description of all stressors and options of stress-ng can be found in its manual \cite{stress03}.
 
 \subsubsection{CPU Load} \label{chap:stressngCPU}
-As per the requirements, the \ac{CPU} load must be generated in both user space and kernel space for which different stressors have to be used. Additionally, section \ref{chap:loadgeneration} specifies the need to create a load through real-time processes.
+As per the requirements, the \ac{CPU} load must be generated in both user space and kernel space for which different stressors have to be used. Additionally, Chapter \ref{chap:loadgeneration} specifies the need to create a load through real-time processes.
 
 \paragraph{Generation of \ac{CPU} Load in User Space} \label{chap:CPUStressor}
 To generate \ac{CPU} load in the user space of the system, the stressor `cpu' from stress-ng is used. This stressor performs complex mathematical calculations, including integer and floating-point calculations, matrix operations, and checksum calculations, which place a heavy load on the \ac{CPU}.
@@ -720,7 +720,7 @@ As can be derived from Figure \ref{fig:stressGET}, this stressor does not fully 
 
 \paragraph{Generation of CPU Load by Real-Time Processes}
 
-stress-ng allows for the specification of a scheduling policy and priority as additional options. This allows each stressor to be executed as a real-time process. For generating load, the \ac{CPU} stressor described in section \ref{chap:CPUStressor} was used with the \texttt{SCHED\_FIFO} scheduling policy described in section \ref{chap:RTProcess} and a scheduling priority of 50. The scheduling priority was intentionally set lower than that of the TestSuite because communication processes have a higher priority in the Distributed Test Support System.
+stress-ng allows for the specification of a scheduling policy and priority as additional options. This allows each stressor to be executed as a real-time process. For generating load, the \ac{CPU} stressor described in Chapter \ref{chap:CPUStressor} was used with the \texttt{SCHED\_FIFO} scheduling policy described in Chapter \ref{chap:RTProcess} and a scheduling priority of 50. The scheduling priority was intentionally set lower than that of the TestSuite because communication processes have a higher priority in the Distributed Test Support System.
 
 \subsubsection{Memory Load} \label{chap:stressngMemeory}
 To generate memory load, the stress-ng `bigheap' stressor is utilized. The stressor grows its heap by reallocating memory. In situations where low memory is available on the system, Linux employs an \ac{oomk}. This is a process executed by the kernel when the system runs out of memory that kills one or more processes to remedy this situation \cite{stress09}. If the process is killed by the \ac{oomk} or if an allocation fails, the stressor will start again.

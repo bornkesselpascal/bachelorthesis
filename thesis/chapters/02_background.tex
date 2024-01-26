@@ -3,7 +3,7 @@
 \chapter{Background}
 
 \section{Data Management Layer} \label{chap:DML}
-A Distributed Test Support System consists of multiple independent computer systems called nodes. A node may have hardware interfaces to communicate with different bus systems. Additionally, processes, called \ac{pu} are executed on a node to process data from the hardware interfaces or to generate data for transmission. The nodes collaborate in a common test environment, therefore it is necessary to exchange data between them. The exchange of data between hardware interfaces and Processing Units, including the exchange between different nodes is facilitated by the \ac{dml}.
+A Distributed Test Support System consists of multiple independent computer systems called nodes. A node may have hardware interfaces to communicate with different bus systems. Additionally, processes called \ac{pu} are executed on a node to process data from the hardware interfaces or to generate data for transmission. The nodes collaborate in a common test environment, therefore it is necessary to exchange data between them. The exchange of data between hardware interfaces and Processing Units, including the exchange between different nodes is facilitated by the \ac{dml}.
 
 This chapter provides an overview of the DML and explains the process of sending and receiving data according to \cite{dml01}.
 
@@ -96,7 +96,7 @@ Protocols are the basis for communication between instances in a network. They s
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.7\linewidth]{figures/tcpip_refmodel/image1.png}
-    \caption[Relationship between service and protocol]{Relationship between service and protocol. Source: \cite{Tanenbaum2010}.}
+    \caption[Relationship between Service and Protocol]{Relationship between Service and Protocol. Source: \cite{Tanenbaum2010}.}
     \label{fig:ServiceProtRelation}
 \end{figure}
 
@@ -142,7 +142,7 @@ The following section presents a explanation of the TCP/IP reference model. Comp
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\linewidth]{figures/tcpip_refmodel/image4.pdf}
-    \caption[Selection of important protocols of the hybrid TCP/IP Reference Model]{Selection of important protocols of the hybrid TCP/IP Reference Model. Adapted from: \cite{Weigel2021}.}
+    \caption[Selection of important Protocols of the hybrid TCP/IP Reference Model]{Selection of important Protocols of the hybrid TCP/IP Reference Model. Adapted from: \cite{Weigel2021}.}
     \label{fig:RefModelProtos}
 \end{figure}
 
@@ -218,7 +218,7 @@ The first field in the header is the 4-bit \textit{Version} field. This indicate
 
 The \textit{IHL} (Internet Header Length) field specifies the number of 32-bit words in the header. This is necessary because the header can contain options and therefore has a variable length. The minimum value of the field is 5 if there are no options.
 
-The \textit{Differenciated Services} field specifies the service class of a packet, allowing for prioritisation of certain data traffic using \ac{qos}. For a more detailed description of \ac{qos}, please refer to section \ref{background:tuning:qualityofservice}.
+The \textit{Differenciated Services} field specifies the service class of a packet, allowing for prioritisation of certain data traffic using \ac{qos}. For a more detailed description of \ac{qos}, please refer to Chapter \ref{background:tuning:qualityofservice}.
 
 The \textit{Total Length} field indicates the total length of the datagram, including the header. Due to the field size of 16 bits, the maximum length is 65535 bytes. However, a packet's length is also limited by the Layer 2 \ac{mtu} \cite{Weigel2021}, resulting in datagrams being split into multiple packets, known as fragmentation. 
 
@@ -234,7 +234,7 @@ The \textit{Protocol} field identifies the Layer 4 protocol used for the service
 
 The \textit{Header checksum} field contains the checksum of the fields in the IP header. The IP datagram's user data is not verified for efficiency reasons \cite{Holtkamp2024Internet}. The checksum is calculated by taking the 1's complement of the sum of all 16-bit half-words in the header. It is assumed that the checksum is zero at the start of the calculation for the purpose of this algorithm.
 
-The two 32-bit fields \textit{Source Address} and \textit{Destination Address} contain the Internet Protocol address, called the IP address. Section \ref{chap:IPandRouting} provides further details on this topic.
+The two 32-bit fields \textit{Source Address} and \textit{Destination Address} contain the Internet Protocol address, called the IP address. Chapter \ref{chap:IPandRouting} provides further details on this topic.
 
 The \textit{Options} field can be used to add additional information to the IP protocol. For example, there are options to mark the route of a packet.
 
@@ -274,7 +274,7 @@ The IP header (refer to Figure \ref{fig:IPHeader}) contains information necessar
 Fragmentation has the advantage of allowing IPv4 datagrams larger than the \ac{mtu} to be sent, but the disadvantage is that the loss of a single fragment results in the loss of the entire datagram. Additionally, fragmentation can cause packet reordering \cite{IPFragDetail}.
 
 \subsubsection{TCP and UDP}
-TPC and \ac{ieee} are transport layer protocols. As a service, they provide the transmission of a data stream of any length between two application processes. The services of the network layer are used for this purpose.
+\ac{tcp} and \ac{udp} are transport layer protocols. As a service, they provide the transmission of a data stream of any length between two application processes. The services of the network layer are used for this purpose.
 
 \paragraph{TCP}
 
@@ -319,7 +319,7 @@ An operating system kernel serves as the interface between the hardware and the 
 \begin{figure}[h]
     \centering
     \includegraphics[width=1\linewidth]{figures/linux_kernel/image01.pdf}
-    \caption[Simplified representation of the Linux Kernel with selected Subsystems]{Simplified representation of the Linux Kernel with selected Subsystems.}
+    \caption[Simplified Representation of the Linux Kernel with selected Subsystems]{Simplified Representation of the Linux Kernel with selected Subsystems.}
     \label{fig:LinuxKernel}
 \end{figure}
 
@@ -416,7 +416,7 @@ The purpose of this chapter is to explain \ac{udp} communication using a Linux o
     \label{fig:NWStack}
 \end{figure}
 
-Figure \ref{fig:NWStack} presents a simplified schematic of the components of the Linux network stack and how they relate to the layers of the hybrid TCP/IP reference model presented in Section \ref{chap:RefModel}. This section provides a simplified representation, based on \cite{lins06}, that illustrates the relationship between the components of the network stack. 
+Figure \ref{fig:NWStack} presents a simplified schematic of the components of the Linux network stack and how they relate to the layers of the hybrid TCP/IP reference model presented in Chapter \ref{chap:RefModel}. This chapter provides a simplified representation, based on \cite{lins06}, that illustrates the relationship between the components of the network stack. 
 
 First, the components of the network stack will be presented, with a focus on the protocols represented in the TCP/IP reference model. Then, the interaction between the components will be explained by following the path of a packet through the network stack during transmission and reception.
 
@@ -434,7 +434,7 @@ Sockets serve as the interface between the application layer and the transport l
 A socket is a generic interface that supports various protocols and protocol families, also known as communication domains. This section focuses on sockets for the TCP/IP protocol family, also known as Internet sockets \cite{like03}.
 
 \subparagraph{Socket Descriptor}
-In line with the Linux philosophy of '\textit{everything is a file}', sockets in a system are also represented by an integer, called a socket descriptor in this context. This descriptor can be obtained through a specific call to the operating system and can be used to perform operations such as \texttt{write()} or \texttt{read()}, similar to handling files. Additionally, there are specialized methods like \texttt{send()} or \texttt{receive()} that provide further options.
+In line with the Linux philosophy of `\textit{everything is a file}', sockets in a system are also represented by an integer, called a socket descriptor in this context. This descriptor can be obtained through a specific call to the operating system and can be used to perform operations such as \texttt{write()} or \texttt{read()}, similar to handling files. Additionally, there are specialized methods like \texttt{send()} or \texttt{receive()} that provide further options.
 
 \subparagraph{Socket Types}
 There are different types of sockets that vary in their properties. The two most common types are stream sockets and datagram sockets \cite{like03}.

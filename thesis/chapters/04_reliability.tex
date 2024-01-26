@@ -260,22 +260,22 @@ For the test setup, the High-Performance PCs and Traffic PCs serve as endpoints,
 
 The system under test for subsequent test campaigns is no longer a single communication that is examined. Instead, the TestSuite examines each bidirectional link in the topology. Since each of the four endpoints is connected to the center by two bidirectional links, there are 16 \ac{udp} communications generated and measured by the TestSuite.
 
-\begin{figure}[h!]
-    \centering
-    \includegraphics[width=0.8\linewidth]{figures/reliability/ihawk/topo.pdf}
-    \caption{Structure and Nomenclature of Communication Channels of the Test Setup with the iHawk in the Center of the Star.}
-    \label{fig:topoihawknaming}
-\end{figure}
-
 To distinguish between communications more easily, the nomenclature scheme depicted in Figure \ref{fig:topoihawknaming} was designed. The two physical 10 GbE links that connect each endpoint to the centers are referred to as link `\textbf{A}' and `\textbf{B}'. A separate TestSuite process generates and measures \ac{udp} communication in both directions across each of these links simultaneously. These directions are referred to as `\textbf{H}' and `\textbf{R}'. Direction `H' refers to communication channels where the center is the sender and the endpoint is the receiver. Conversely, direction `R' refers to communication channels where the center is the receiver and the endpoint is the sender.
 
-Because 16 bidirectional communications lead to a high network load, especially in the center, the settings recommended by Intel for high performance and reliability in the Linux Performance Tuning Guide for the Ethernet 700 Series \cite{intermod03} were used. These settings were chosen based on experiments conducted with the High-Performance PCs prior to this campaign. These settings include:
+Because 16 bidirectional communications lead to a high network load, especially in the center, settings recommended by Intel for high performance and reliability in the Linux Performance Tuning Guide for the Ethernet 700 Series \cite{intermod03} were used. These settings were chosen based on experiments conducted with the High-Performance PCs prior to this campaign. These settings include:
 \begin{itemize}
   \item Disabling of Energy Efficient Ethernet
   \item Enlargement of the RX\_Ring and TX\_Ring to 4096 slots
   \item Deactivation of Interrupt Moderation (unless otherwise specified)
   \item \ac{udp} Receive Buffer Size of 25 MB
 \end{itemize}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.8\linewidth]{figures/reliability/ihawk/topo.pdf}
+    \caption{Structure and Nomenclature of Communication Channels of the Test Setup with the iHawk in the Center of the Star.}
+    \label{fig:topoihawknaming}
+\end{figure}
 
 \subsection{Test Campaigns}
 In the investigation of a star topology with an iHawk in the center, a test campaign was conducted using all 16 communication channels without additional system load. Subsequently, the reliability was examined with additional system load in the center. Further campaigns were carried out to investigate \ac{CPU} affinity and interrupt moderation. Finally, the reliability was examined when using the Intel X540-T2 network interfaces.
@@ -560,7 +560,7 @@ The campaign has shown that all examined interruption moderation rates exhibit c
 
 Although adaptive interrupt moderation was found to be as reliable as other settings, it should not be used in the Distributed Test Support System at this time due to the uncontrollability of its implementation. While the function is described in \cite{intermod04}, the behavior of the implementation may be unpredictable if used without closer examination.
 
-However, the interrupt moderation in connection with the selected interrupt rate also has an influence on the latency, which is considered in section \ref{chap:perfAnalysis}.
+However, the interrupt moderation in connection with the selected interrupt rate also has an influence on the latency, which is considered in Chapter \ref{chap:perfAnalysis}.
 
 \subsubsection{Tests with the Intel X540-T2 Network Interfaces in the Center} \label{chap:IntelRel540}
 This campaign investigates the reliability of the Intel X540-T2 network interface in the iHawk in the center of the star and compares it to the Intel X710-T2L network interface examined so far. Both interfaces are presented in \ref{chap:NicTypes} and have two RJ45 ports and are both 10 GbE capable. The X540 chipset network cards were released in 2012, which means they are 7 years older than the X710 chipset network cards, which were released in 2019 \cite{setupnw02, setupnw03}. In addition, interfaces use different drivers (see Table \ref{tab:drivernic}). Both devices offer comparable offloading mechanisms.

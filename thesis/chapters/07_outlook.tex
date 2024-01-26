@@ -4,12 +4,12 @@ This chapter outlines important aspects that should be considered when further r
 \section{Implementation in the DML}
 Since the investigations have shown that a UDP-based solution is feasible, the next step is to implement it in the \acf{dml} (see \ref{chap:DML}). This will be done by the author after the thesis.
 
-This involves replacing the \ac{fifo} buffers in the \ac{dml} for the remote nodes with UDP sockets. The Data Manager will then poll these sockets instead of the \ac{fifo} buffers. In addition, data transmission to remote nodes of the distributed test support system must also be implemented using sockets instead of \ac{dma}.
+This involves replacing the \ac{fifo} buffers in the \ac{dml} for the remote nodes with UDP sockets. The Data Manager will then poll these sockets instead of the \ac{fifo} buffers. In addition, data transmission to remote nodes of the Distributed Test Support System must also be implemented using sockets instead of \ac{dma}.
 
 After implementation, extensive testing with the UDP-based \ac{dml} solution should be performed.
 
 \section{Detection of Network Overload}
-According to the key results (see Section \ref{chap:KeyResults}), high network loads can have a negative impact on the reliability and performance of computer systems. To inform the user of the test support system that the system is operating at a load limit and degradation might be experienced, a network overlaod detection mechanism should be implemented.
+According to the key results (see Chapter \ref{chap:KeyResults}), high network loads can have a negative impact on the reliability and performance of computer systems. To inform the user of the Test Support System that the system is operating at a load limit and degradation might be experienced, a network overlaod detection mechanism should be implemented.
 
 This mechanism could be implemented in the Data Manager of the \ac{dml}. A possible solution is to monitor the average throughput of all UDP communications of the system and to issue a warning message to the user at a certain threshold, which depends on the type of system.
 
