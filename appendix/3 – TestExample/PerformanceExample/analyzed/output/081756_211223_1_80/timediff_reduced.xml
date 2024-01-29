@@ -1,0 +1,43 @@
+?xml version='1.0' encoding='utf-8'?>
+<timestamps>
+  <record>
+    <sequence>1</sequence>
+    <difference>0.000132605</difference>
+  </record>
+  <record>
+    <sequence>2</sequence>
+    <difference>0.00011818</difference>
+  </record>
+  <record>
+    <sequence>3</sequence>
+    <difference>0.000106902</difference>
+  </record>
+  <record>
+    <sequence>4</sequence>
+    <difference>0.000100627</difference>
+  </record>
+  <record>
+    <sequence>5</sequence>
+    <difference>9.6767e-05</difference>
+  </record>
+  <record>
+    <sequence>6</sequence>
+    <difference>9.1426e-05</difference>
+  </record>
+  <record>
+    <sequence>7</sequence>
+    <difference>8.6713e-05</difference>
+  </record>
+  <record>
+    <sequence>8</sequence>
+    <difference>8.1565e-05</difference>
+  </record>
+  <record>
+    <sequence>9</sequence>
+    <difference>7.6292e-05</difference>
+  </record>
+  <record>
+    <sequence>10</sequence>
+    <difference>7.0967e-05</difference>
+  </record>
+</timestamps>

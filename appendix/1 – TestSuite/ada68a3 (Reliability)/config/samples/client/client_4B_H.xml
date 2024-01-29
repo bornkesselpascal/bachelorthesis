@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='utf-8'?>
+<client_description>
+	<method>CUSTOM</method>
+	<path>/testsuite/client_4B_H/gen</path>
+	<duration>
+		<short_duration>5000</short_duration>
+		<long_duration>0</long_duration>
+	</duration>
+	<target_connection>
+		<client_ip>10.4.1.50</client_ip>
+		<server_ip>10.4.1.51</server_ip>
+		<bandwidth_limit />
+		<port>8410</port>
+		<gap>1</gap>
+		<datagram>
+			<sizes>
+				<value>8900</value>
+			</sizes>
+			<random>false</random>
+		</datagram>
+	</target_connection>
+	<interface>
+		<client>enp175s0f1</client>
+		<server>enp1s0f1</server>
+	</interface>
+	<service_connection>
+		<server_ip>10.4.1.51</server_ip>
+		<port>9310</port>
+	</service_connection>
+	<client_only>false</client_only>
+	<stress>
+		<type>NONE</type>
+		<location>LOC_BOTH</location>
+	</stress>
+</client_description>
